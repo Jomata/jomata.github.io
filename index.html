@@ -215,7 +215,7 @@ function rollElement(diceElement)
 	{
 		total += Math.ceil(Math.random() * sides);
 	}
-	console.log(dice+"d"+sides+"+"+(mod+modvar),"=",total);
+	//console.log(dice+"d"+sides+"+"+(mod+modvar),"=",total);
 	return total;
 }
 
@@ -609,18 +609,18 @@ $(document).ready(function()
 </script>
 <script id="RandomPCClass" title="Class and Reason" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Class
-01|07|<span data-subtable>Barbarian</span>
-08|14|<span data-subtable>Bard</span>
-15|29|<span data-subtable>Cleric</span>
-30|36|<span data-subtable>Druid</span>
-37|52|<span data-subtable>Fighter</span>
-53|58|<span data-subtable>Monk</span>
-59|64|<span data-subtable>Paladin</span>
-65|70|<span data-subtable>Ranger</span>
-71|84|<span data-subtable>Rogue</span>
-85|89|<span data-subtable>Sorcerer</span>
-90|94|<span data-subtable>Warlock</span>
-95|100|<span data-subtable>Wizard</span>
+01|07|<span data-subtable  data-caption="Reason">Barbarian</span>
+08|14|<span data-subtable  data-caption="Reason">Bard</span>
+15|29|<span data-subtable  data-caption="Reason">Cleric</span>
+30|36|<span data-subtable  data-caption="Reason">Druid</span>
+37|52|<span data-subtable  data-caption="Reason">Fighter</span>
+53|58|<span data-subtable  data-caption="Reason">Monk</span>
+59|64|<span data-subtable  data-caption="Reason">Paladin</span>
+65|70|<span data-subtable  data-caption="Reason">Ranger</span>
+71|84|<span data-subtable  data-caption="Reason">Rogue</span>
+85|89|<span data-subtable  data-caption="Reason">Sorcerer</span>
+90|94|<span data-subtable  data-caption="Reason">Warlock</span>
+95|100|<span data-subtable data-caption="Reason">Wizard</span>
 </script>
 <script id="Occupation" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Occupation
