@@ -49,7 +49,7 @@
 
 <div class="content-wrapper">
     <div class="content" style="padding:1em;">
-	
+
 		<form class="pure-form pure-form-aligned">
 			<fieldset>
 				<legend>My Choices</legend>
@@ -114,8 +114,8 @@
 
 				<!--<div class="pure-controls">-->
 				<div class="pure-controls-group">
-					<a onclick="rollAll()" 
-					   class="pure-button pure-button-primary" 
+					<a onclick="rollAll()"
+					   class="pure-button pure-button-primary"
 					   style="width: 100%;">
 					This is your life
 					</a>
@@ -161,20 +161,33 @@ function rollAll()
 			racial_siblings_mod = -2;
 		break;
 	}
-	
+
 	var root = $('#your-life');
 	root.empty();
-	
+
 	var parents = getTable("Parents");
 	var alignment = getTable("Alignment");
 	//var classes = getTable("Class");
 	var occupations = getTable("Occupation");
 	//var siblings = getTable();
+
+	var nodeRace = $("<li>").append($("<a>").text("Race"));
+	root.append(nodeRace);
+	rollTable(getTable($('[name="myrace"]').val()),nodeRace);
 	
-	rollTable(getTable($('[name="myrace"]').val()),root,"Race");
-	rollTable(getTable($('[name="myclass"]').val()),root,"Class");
-	rollTable(getTable($('[name="mybackground"]').val()),root,"Background");
+	var nodeClass = $("<li>").append($("<a>").text("Class"));
+	root.append(nodeClass);
+	rollTable(getTable($('[name="myclass"]').val()),nodeClass);
 	
+	var nodeBG = $("<li>").append($("<a>").text("Background"));
+	root.append(nodeBG);
+	var myBGval = $('[name="mybackground"]').val();
+	rollTable(getTable(myBGval),nodeBG);
+	rollTable(getTable(myBGval+" Personality"),nodeBG,"Personality");
+	rollTable(getTable(myBGval+" Ideal"),nodeBG,"Ideal");
+	rollTable(getTable(myBGval+" Bond"),nodeBG,"Bond");
+	rollTable(getTable(myBGval+" Flaw"),nodeBG,"Flaw");
+
 	var parentsTable = getTable(myrace+" Parents");
 	if(parentsTable)
 	{
@@ -190,8 +203,8 @@ function rollAll()
 		rollTable(parents,sublist);
 		rollTable(alignment,sublist);
 		rollTable(occupations,sublist);
-	});	
-	
+	});
+
 	[
 	,"Family"
 	,"Family Lifestyle"
@@ -232,14 +245,14 @@ function rollTable(table,root,caption)
 		table = $(table);
 		root = $(root);;
 	}
-	
+
 	var title = /*caption ||*/ table.find("caption").text();
-	
+
 	var diceElement = table.find('th [data-type="roll"]').first();
 	//console.log("Dice",diceElement);
-	
+
 	var total = rollElement(diceElement);
-	
+
 	var options = table.find("tbody tr");
 	options.each(function (n,row)
 	{
@@ -250,7 +263,7 @@ function rollTable(table,root,caption)
 		{
 			//console.log(prefix,title,total,$(row).children().last().text());
 			var text = row.children().last().clone();
-			
+
 			var variables = text.find('[data-type="variable"]');
 			if(variables.length > 0)
 			{
@@ -263,7 +276,7 @@ function rollTable(table,root,caption)
 					eval(varName+"="+varValue);
 				});
 			}
-			
+
 			var subrolls = text.find('[data-type="roll"]');
 			if(subrolls.length > 0)
 			{
@@ -275,11 +288,11 @@ function rollTable(table,root,caption)
 					subroll.data("roll",result);
 				});
 			}
-			
+
 			//root.append($("<li>").html((caption||title)+" ("+total+"): " + text.html()));
 			var thisItem = $("<li>").append($("<a>").html((caption||title)+" ("+total+"): " + text.html()));
 			root.append(thisItem);
-			
+
 			var subtables = text.find('[data-subtable]');
 			if(subtables.length > 0)
 			{
@@ -288,19 +301,19 @@ function rollTable(table,root,caption)
 				subtables.each(function(m,sub)
 				{
 					var subtable = $(sub);
-					//we default to wrapped text if there's no subtable data, 
+					//we default to wrapped text if there's no subtable data,
 					//so either of the following work:
 					//<span data-subtable="foo" />
 					//or <span data-subtable>foo</span>
 					var subtablenames = subtable.data("subtable") || subtable.text();
 					var totalrolls = subtable.data("roll") || 1;
 					var subtitle = subtable.data("caption");
-					
+
 					if(!(subtablenames instanceof Array))
 					{
 						subtablenames = [subtablenames];
 					}
-					
+
 					for(var i=1;i<=totalrolls;i++)
 					{
 						var appendTo;
@@ -309,7 +322,7 @@ function rollTable(table,root,caption)
 							//var subitem = $("<li>").text(subtitle+" "+i);
 							var subitem = $("<li>").append($("<a>").text(subtitle+" "+i));
 							subroot.append(subitem);
-						
+
 							var subsubroot = $("<ul>");
 							subitem.append(subsubroot);
 							appendTo = subsubroot;
@@ -321,7 +334,7 @@ function rollTable(table,root,caption)
 								subtitle + (totalrolls == 1 ? '' : " " + i)
 							));
 							subroot.append(subitem);
-							
+
 							var subsubroot = $("<ul>");
 							subitem.append(subsubroot);
 							appendTo = subsubroot;
@@ -330,11 +343,11 @@ function rollTable(table,root,caption)
 						{
 							appendTo = subroot;
 						}
-					
+
 						subtablenames.forEach(function(subtablename)
 						{
 							var element = getTable(subtablename);
-							if(element) 
+							if(element)
 							{
 								if(totalrolls > 1 && subtablenames.length == 1)
 								{
@@ -348,11 +361,11 @@ function rollTable(table,root,caption)
 								{
 									rollTable(element,appendTo,subtitle);
 								}
-							
+
 								/*if(totalrolls > 1 || subtablenames.length > 1)
 									rollTable(element,appendTo); //no need to use the subtitle, since we already display it beforehand
 								else
-									rollTable(element,appendTo,subtitle); 
+									rollTable(element,appendTo,subtitle);
 									*/
 							}
 						});
@@ -364,7 +377,7 @@ function rollTable(table,root,caption)
 	});
 }
 
-function processCSV(allText) 
+function processCSV(allText)
 {
     var allTextLines = allText.split(/\r\n|\n/);
     var headers = allTextLines[0].split('|');
@@ -378,9 +391,9 @@ function processCSV(allText)
 		var foundQuotes = false;
 		for (n=0;n<line.length;n++)
 		{
-			
+
 		}*/
-		
+
 		lines.push(data);
         /*if (data.length == headers.length) {
 
@@ -429,7 +442,7 @@ function setupInputs()
 		"Warlock",
 		"Wizard"
 	];
-	
+
 	addOptions('#myclass',classes);
 	addOptions('#mybackground',backgrounds);
 }
@@ -455,28 +468,28 @@ $(document).ready(function()
 		var lines = processCSV(csv);
 		//console.log(lines);
 		var baseID = element.id.replace(" ","_");
-		
+
 		var table = $("<table>",
 		{
 			"id":"Table_"+baseID,
 			"name":element.id,
 			"class":"pure-table pure-table-striped pure-table-horizontal"
 		});
-		
+
 		table.append($("<caption>",
 		{
 			"text" :(element.title || element.id),
 			"click":function(){rollTable(table)}
 		}).hide());
-		
+
 		var thead = $("<thead>");
 		var headers = $("<tr>");
 		table.append(thead);
 		thead.append(headers);
-		
+
 		var tbody = $("<tbody>");
 		table.append(tbody);
-		
+
 		lines.forEach(function (line,lineN)
 		{
 			var appendTo;
@@ -493,11 +506,11 @@ $(document).ready(function()
 				appendTo = row;
 				cellType = "<td>";
 			}
-			
+
 			line.forEach(function (attr,attrN)
 			{
 				if(attr == '') return;
-				
+
 				var colspan = 1;
 				var style = '';
 				while(attrN+colspan < line.length && line[attrN+colspan] == '')
@@ -512,15 +525,15 @@ $(document).ready(function()
 				appendTo.append($(cellType,{"colspan":colspan,"style":style}).html(attr));
 			});
 		});
-		
+
 		//$('body').append(table);
-		
+
 		var listRoot = $("<ul>",{"class":"sitemap","id":"List_" + baseID});
-		
+
 		var lastHeader = table.find("th:last()");
 		var lastHeaderText = lastHeader.text();
 		lastHeader.text(null);
-		
+
 		var roll = $("<a>",{"href":"#","style":"text-decoration: none;"});
 		//move text to <a> so we can roll in the whole caption
 		roll.append(lastHeaderText);
@@ -531,10 +544,10 @@ $(document).ready(function()
 			//alert("foo");
 			//console.log(listRoot);
 			rollTable(table,listRoot);
-			
+
 			return false;
 		});
-		
+
 		var collapse = $("<a>",{"href":"#","style":"float:right;"});
 		collapse.append('<i class="fa fa-caret-square-o-down" aria-hidden="true"></i>');
 		collapse.click(function()
@@ -543,23 +556,23 @@ $(document).ready(function()
 			tbody.children().not(':first').toggle()
 			return false;
 		});
-		
+
 		lastHeader.append(roll).append(collapse);
-		
+
 		$( "#accordion" ).append($("<h3>").text((element.title || element.id)));
-		
+
 		var cont = $("<div>",{"class":"pure-g"});
 		var left = $("<div>",{"class":"pure-u-1 pure-u-md-1-2"});
 		var rght = $("<div>",{"class":"pure-u-1 pure-u-md-1-2"});
-		
+
 		cont.append(left);
 		left.append(table);
 		cont.append(rght);
 		rght.append($("<div>",{"class":"l-box"}).append(listRoot));
-		
+
 		//$( "#accordion" ).append($("<div>").append(table).append(listRoot));
 		$( "#accordion" ).append(cont);
-		
+
 		//var tab_id = "TableTab_" + element.id.replace(" ","_");
 		//var tab_name = element.id;
 		//$('#TableTabs ul').append($("<li>").append($("<a>",{"href":"#"+tab_id,"text":tab_name})));
@@ -1164,6 +1177,54 @@ $(document).ready(function()
 10|11|You escaped the battle unscathed, though many of your Friends were injured or lost.
 12|12|You acquitted yourself well in battle and are remembered as a hero. You might have received a medal for your bravery
 </script>
+<script id="RandomPCBG" title="Background" type="text/csv">
+<span data-type="roll" data-sides="1">d45</span>|Background and reason (unofficial)
+1|<span  data-subtable='["Acolyte Personality","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Acolyte</span>
+2|<span  data-subtable data-caption="Details">Charlatan</span>
+3|<span  data-subtable data-caption="Details">Criminal</span>
+4|<span  data-subtable data-caption="Details">Entertainer</span>
+5|<span  data-subtable data-caption="Details">Folk Hero</span>
+6|<span  data-subtable data-caption="Details">Guild Artisan</span>
+7|<span  data-subtable data-caption="Details">Hermit</span>
+8|<span  data-subtable data-caption="Details">Noble</span>
+9|<span  data-subtable data-caption="Details">Outlander</span>
+10|<span data-subtable data-caption="Details">Sage</span>
+11|<span data-subtable data-caption="Details">Sailor</span>
+12|<span data-subtable data-caption="Details">Soldier</span>
+13|<span data-subtable data-caption="Details">Urchin</span>
+14|Amonkhet Initiate
+15|Amonkhet Vizier
+16|Anthropologist
+17|Archaeologist
+18|Aristocrat
+19|Caravan Specialist
+20|City Watch
+21|Clan Crafter
+22|Cloistered Scholar
+23|Courtier
+24|Dragon Casualty
+25|Elven Refugee
+26|Faction Agent
+27|Far Traveler
+28|Harborfolk
+29|Haunted One
+30|Heretic
+31|Inheritor
+32|Inquisitor
+33|Insurgent
+34|Knight Of The Order
+35|Livestock Bandit
+36|Mercenary Veteran
+37|Merchant
+38|Miner
+39|Prisoner Of War
+40|Refugee
+41|Secret Identity
+42|Touched By The Fey
+43|Trade Sheriff
+44|Tribe Member
+45|Urban Bounty Hunter
+</script>
 <script id="Weird Stuff" type="text/csv">
 <span data-type="roll" data-sides="12">d12</span>|What Happened
 1|You were turned into a toad and remained in that form for <span data-type="roll" data-sides="4">1d4</span> weeks.
@@ -1178,6 +1239,104 @@ $(document).ready(function()
 10|You met a demigod, an archdevil, an archfey, a demon lord, or a titan, and you lived to tell the tale.
 11|You were swallowed by a giant fish and spent a month in its gullet before you escaped.
 12|A powerful being granted you a wish, but you squandered it on something frivolous
+</script>
+<script id="Acolyte Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I idolize a particular hero of my faith, and constantly refer to that person’s deeds and example.
+2|I can find common ground between the fiercest enemies, empathizing with them and always working toward peace
+3|I see omens in every event and action. The gods try to speak to us, we just need to listen
+4|Nothing can shake my optimistic attitude.
+5|I quote (or misquote) sacred texts and proverbs in almost every situation.
+6|I am tolerant (or intolerant) of other faiths and respect (or condemn) the worship of other gods.
+7|I've enjoyed fine food, drink, and high society among my temple’s elite. Rough living grates on me.
+8|I've spent so long in the temple that I have little practical experience dealing with people in the outside world.
+</script>
+<script id="Acolyte Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Tradition. The ancient traditions of worship and sacrifice must be preserved and upheld. (Lawful)
+2|Charity. I always try to help those in need, no matter what the personal cost. (Good)
+3|Change. We must help bring about the changes the gods are constantly working in the world. (Chaotic)
+4|Power. I hope to one day rise to the top of my faith’s religious hierarchy. (Lawful)
+5|Faith. I trust that my deity will guide my actions, I have faith that if I work hard, things will go well. (Lawful)
+6|Aspiration. I seek to prove myself worthy of my god's favor by matching my actions against his or her teachings. (Any)
+</script>
+<script id="Acolyte Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I would die to recover an ancient relic of my faith that was lost long ago.
+2|I will someday get revenge on the corrupt temple hierarchy who branded me a heretic.
+3|I owe my life to the priest who took me in when my parents died.
+4|Everything I do is for the common people.
+5|I will do anything to protect the temple where I served.
+6|I seek to preserve a sacred text that my enemies consider heretical and seek to destroy.
+</script>
+<script id="Acolyte Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I judge others harshly, and myself even more severely.
+2|I put too much trust in those who wield power within my temple's hierarchy.
+3|My piety sometimes leads me to blindly trust those that profess faith in my god.
+4|I am inflexible in my thinking.
+5|I am suspicious of strangers and expect the worst of them.
+6|Once I pick a goal, I become obsessed with it to the detriment of everything else in my life.
+</script>
+<script id=" Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+</script>
+<script id=" Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+</script>
+<script id=" Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+</script>
+<script id=" Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+</script>
+<script id=" Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+</script>
+<script id=" Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+</script>
+<script id=" Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+</script>
+<script id=" Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+</script>
+<script id=" Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+</script>
+<script id=" Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+</script>
+<script id=" Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+</script>
+<script id=" Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+</script>
+<script id=" Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+</script>
+<script id=" Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+</script>
+<script id=" Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+</script>
+<script id=" Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+</script>
+<script id=" Personality" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+</script>
+<script id=" Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+</script>
+<script id=" Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+</script>
+<script id=" Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
 </script>
 <style>
 .l-box {
