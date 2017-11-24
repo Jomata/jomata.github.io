@@ -1,0 +1,1191 @@
+
+<head>
+<title>This is your life</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+
+<link rel="stylesheet" href="http://maxdesign.com.au/jobs/example-folder-metaphor/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+</style>
+
+</head>
+
+<body>
+
+<!--
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">Cube Stuff</a>
+
+		<ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Tour</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Sign Up</a></li>
+        </ul>
+    </div>
+</div>
+-->
+
+<!--
+<h3>Defaults</h3>
+<ul>
+<li>Roll separate on Parents table for mother and father</li>
+<li>Rolling class, occupation and alignment for both even if you don't know them</li>
+<li></li>
+<li></li>
+</ul>
+-->
+
+<div class="content-wrapper">
+    <div class="content" style="padding:1em;">
+	
+		<form class="pure-form pure-form-aligned">
+			<fieldset>
+				<legend>My Choices</legend>
+				<div class="pure-control-group">
+					<label for="myrace">My Race: </label>
+					<select id="myrace" name="myrace">
+						<option value="RandomPCRace">Random</option>
+						<option value="Other">Other</option>
+						<option value="Half-Elf">Half-Elf</option>
+						<option value="Half-Orc">Half-Orc</option>
+						<option value="Tiefling">Tiefling</option>
+						<option value="Dwarf">Dwarf</option>
+						<option value="Elf">Elf</option>
+					</select>
+				</div>
+
+				<div class="pure-control-group">
+					<label for="myCHA">Charisma Modifier: </label>
+					<input type="number" id="myCHA" name="myCHA" value="0" style="width:66px;" />
+				</div>
+
+				<div class="pure-control-group">
+					<label for="myclass">My Class: </label>
+					<select id="myclass" name="myclass">
+						<option value="RandomPCClass">Random</option>
+						<option value="Other">Other</option>
+						<option value="Barbarian">Barbarian</option>
+						<option value="Bard">Bard</option>
+						<option value="Cleric">Cleric</option>
+						<option value="Druid">Druid</option>
+						<option value="Fighter">Fighter</option>
+						<option value="Monk">Monk</option>
+						<option value="Paladin">Paladin</option>
+						<option value="Ranger">Ranger</option>
+						<option value="Rogue">Rogue</option>
+						<option value="Sorcerer">Sorcerer</option>
+						<option value="Warlock">Warlock</option>
+						<option value="Wizard">Wizard</option>
+					</select>
+				</div>
+
+				<div class="pure-control-group">
+					<label for="mybackground">My Background: </label>
+					<select id="mybackground" name="mybackground">
+						<option value="RandomPCBG">Random</option>
+						<option value="Other">Other</option>
+						<option value="Acolyte">Acolyte</option>
+						<option value="Charlatan">Charlatan</option>
+						<option value="Criminal">Criminal</option>
+						<option value="Entertainer">Entertainer</option>
+						<option value="Folk Hero">Folk Hero</option>
+						<option value="Guild Artisan">Guild Artisan</option>
+						<option value="Hermit">Hermit</option>
+						<option value="Noble">Noble</option>
+						<option value="Outlander">Outlander</option>
+						<option value="Sage">Sage</option>
+						<option value="Sailor">Sailor</option>
+						<option value="Soldier">Soldier</option>
+						<option value="Urchin">Urchin</option>
+					</select>
+				</div>
+
+				<!--<div class="pure-controls">-->
+				<div class="pure-controls-group">
+					<a onclick="rollAll()" 
+					   class="pure-button pure-button-primary" 
+					   style="width: 100%;">
+					This is your life
+					</a>
+				</div>
+			</fieldset>
+		</form>
+
+		<ul id="your-life" class="sitemap">
+		</ul>
+
+		<div id="accordion">
+		</div>
+
+		<div id="TableTabs">
+			<ul/>
+		</div>
+	</div>
+</div>
+
+<div class="footer l-box is-center">
+	Last updated on 23/11/2017 23:16.
+</div>
+
+<script>
+var racial_siblings_mod = 0;
+
+function getTable(name)
+{
+	return $('table[name="'+name+'"]').first();
+}
+
+function rollAll()
+{
+	var myrace = $('[name="myrace"]').val();
+	racial_siblings_mod = 0;
+	cha_mod = $('[name="myCHA"]').val();
+	switch(myrace)
+	{
+		case "Elf":
+			racial_siblings_mod = -2;
+		break;
+		case "Dwarf":
+			racial_siblings_mod = -2;
+		break;
+	}
+	
+	var root = $('#your-life');
+	root.empty();
+	
+	var parents = getTable("Parents");
+	var alignment = getTable("Alignment");
+	//var classes = getTable("Class");
+	var occupations = getTable("Occupation");
+	//var siblings = getTable();
+	
+	rollTable(getTable($('[name="myrace"]').val()),root,"Race");
+	rollTable(getTable($('[name="myclass"]').val()),root,"Class");
+	rollTable(getTable($('[name="mybackground"]').val()),root,"Background");
+	
+	var parentsTable = getTable(myrace+" Parents");
+	if(parentsTable)
+	{
+		rollTable(parentsTable,root);
+	}
+	["Mother","Father"].forEach(function(parent)
+	{
+		//var subnode = $("<li>").text(parent);
+		var subnode = $("<li>").append($("<a>").text(parent));
+		var sublist = $("<ul>");
+		root.append(subnode);
+		subnode.append(sublist);
+		rollTable(parents,sublist);
+		rollTable(alignment,sublist);
+		rollTable(occupations,sublist);
+	});	
+	
+	[
+	,"Family"
+	,"Family Lifestyle"
+	,"Childhood Home"
+	,"Childhood Memories"
+	,"Number of Siblings"
+	,"Life events by age"
+	].forEach(function(tableName)
+	{
+		rollTable(getTable(tableName),root);
+	});
+}
+function rollElement(diceElement)
+{
+	var dice   = parseInt(diceElement.data("dice"))   || 1;
+	var sides  = parseInt(diceElement.data("sides"))  || 100;
+	var mod    = parseInt(diceElement.data("mod"))    || 0;
+	var modvar = diceElement.data("modvar")           || 0;
+	var total  = mod+parseInt(eval(modvar));
+	for(i=0;i<dice;i++)
+	{
+		total += Math.ceil(Math.random() * sides);
+	}
+	console.log(dice+"d"+sides+"+"+(mod+modvar),"=",total);
+	return total;
+}
+
+function rollTable(table,root,caption)
+{
+	//console.log("Rolling table",table);
+	if(!table || !root)
+	{
+		console.log("No table or root element received");
+		return;
+	}
+	else
+	{
+		table = $(table);
+		root = $(root);;
+	}
+	
+	var title = /*caption ||*/ table.find("caption").text();
+	
+	var diceElement = table.find('th [data-type="roll"]').first();
+	//console.log("Dice",diceElement);
+	
+	var total = rollElement(diceElement);
+	
+	var options = table.find("tbody tr");
+	options.each(function (n,row)
+	{
+		var row = $(row);
+		var from = parseInt(row.children("td:eq(0)").text());
+		var to = parseInt(row.children("td:eq(1)").text());
+		if((from == total && !to) || (from <= total && to >= total))
+		{
+			//console.log(prefix,title,total,$(row).children().last().text());
+			var text = row.children().last().clone();
+			
+			var variables = text.find('[data-type="variable"]');
+			if(variables.length > 0)
+			{
+				variables.each(function(m,sub)
+				{
+					var variable = $(sub);
+					var varName = variable.data("name");
+					var varValue = variable.data("value");
+					console.log(varName+"="+varValue);
+					eval(varName+"="+varValue);
+				});
+			}
+			
+			var subrolls = text.find('[data-type="roll"]');
+			if(subrolls.length > 0)
+			{
+				subrolls.each(function(m,sub)
+				{
+					var subroll = $(sub);
+					var result = rollElement(subroll);
+					subroll.append("="+result);
+					subroll.data("roll",result);
+				});
+			}
+			
+			//root.append($("<li>").html((caption||title)+" ("+total+"): " + text.html()));
+			var thisItem = $("<li>").append($("<a>").html((caption||title)+" ("+total+"): " + text.html()));
+			root.append(thisItem);
+			
+			var subtables = text.find('[data-subtable]');
+			if(subtables.length > 0)
+			{
+				var subroot = $("<ul>");
+				thisItem.append(subroot);
+				subtables.each(function(m,sub)
+				{
+					var subtable = $(sub);
+					//we default to wrapped text if there's no subtable data, 
+					//so either of the following work:
+					//<span data-subtable="foo" />
+					//or <span data-subtable>foo</span>
+					var subtablenames = subtable.data("subtable") || subtable.text();
+					var totalrolls = subtable.data("roll") || 1;
+					var subtitle = subtable.data("caption");
+					
+					if(!(subtablenames instanceof Array))
+					{
+						subtablenames = [subtablenames];
+					}
+					
+					for(var i=1;i<=totalrolls;i++)
+					{
+						var appendTo;
+						if(totalrolls > 1 && subtablenames.length > 1)
+						{
+							//var subitem = $("<li>").text(subtitle+" "+i);
+							var subitem = $("<li>").append($("<a>").text(subtitle+" "+i));
+							subroot.append(subitem);
+						
+							var subsubroot = $("<ul>");
+							subitem.append(subsubroot);
+							appendTo = subsubroot;
+						}
+						else if(subtablenames.length > 1)
+						{
+							var subitem = $("<li>").append($("<a>").text
+							(
+								subtitle + (totalrolls == 1 ? '' : " " + i)
+							));
+							subroot.append(subitem);
+							
+							var subsubroot = $("<ul>");
+							subitem.append(subsubroot);
+							appendTo = subsubroot;
+						}
+						else
+						{
+							appendTo = subroot;
+						}
+					
+						subtablenames.forEach(function(subtablename)
+						{
+							var element = getTable(subtablename);
+							if(element) 
+							{
+								if(totalrolls > 1 && subtablenames.length == 1)
+								{
+									rollTable(element,appendTo,subtitle + " " + i);
+								}
+								else if(subtablenames.length > 1)
+								{
+									rollTable(element,appendTo);
+								}
+								else
+								{
+									rollTable(element,appendTo,subtitle);
+								}
+							
+								/*if(totalrolls > 1 || subtablenames.length > 1)
+									rollTable(element,appendTo); //no need to use the subtitle, since we already display it beforehand
+								else
+									rollTable(element,appendTo,subtitle); 
+									*/
+							}
+						});
+					}
+				});
+			}
+		}
+		//$(row).effect('highlight',{},3000);
+	});
+}
+
+function processCSV(allText) 
+{
+    var allTextLines = allText.split(/\r\n|\n/);
+    var headers = allTextLines[0].split('|');
+    var lines = [];
+	lines.push(headers);
+
+    for (var i=1; i<allTextLines.length; i++) {
+        var data = allTextLines[i].split('|');
+		/*var line = allTextLines[i];
+		var data = [];
+		var foundQuotes = false;
+		for (n=0;n<line.length;n++)
+		{
+			
+		}*/
+		
+		lines.push(data);
+        /*if (data.length == headers.length) {
+
+            var tarr = [];
+            for (var j=0; j<headers.length; j++) {
+                tarr.push(headers[j]+":"+data[j]);
+            }
+			tarr.push(headers[j]+":"+data[j]);
+            lines.push(tarr);
+        }*/
+    }
+    // alert(lines);
+	return lines;
+}
+
+function setupInputs()
+{
+	var backgrounds = [
+		"Other",
+		"Acolyte",
+		"Charlatan",
+		"Criminal",
+		"Entertainer",
+		"Folk Hero",
+		"Guild Artisan",
+		"Hermit",
+		"Noble",
+		"Outlander",
+		"Sage",
+		"Sailor",
+		"Soldier",
+		"Urchin"
+	];
+	var classes = [
+		"Other",
+		"Barbarian",
+		"Bard",
+		"Cleric",
+		"Druid",
+		"Fighter",
+		"Monk",
+		"Paladin",
+		"Ranger",
+		"Rogue",
+		"Sorcerer",
+		"Warlock",
+		"Wizard"
+	];
+	
+	addOptions('#myclass',classes);
+	addOptions('#mybackground',backgrounds);
+}
+
+function addOptions(toSelect,options)
+{
+	var toSelect = $(toSelect);
+	options.forEach(function(opt)
+	{
+		toSelect.append($("<option>",{"value":opt,"text":opt}));
+	});
+}
+
+$(document).ready(function()
+{
+
+	//setupInputs();
+
+	$('script[type="text/csv"]').each(function(n,element)
+	{
+		var csv = element.innerHTML.trim();
+		//console.log(csv);
+		var lines = processCSV(csv);
+		//console.log(lines);
+		var baseID = element.id.replace(" ","_");
+		
+		var table = $("<table>",
+		{
+			"id":"Table_"+baseID,
+			"name":element.id,
+			"class":"pure-table pure-table-striped pure-table-horizontal"
+		});
+		
+		table.append($("<caption>",
+		{
+			"text" :(element.title || element.id),
+			"click":function(){rollTable(table)}
+		}).hide());
+		
+		var thead = $("<thead>");
+		var headers = $("<tr>");
+		table.append(thead);
+		thead.append(headers);
+		
+		var tbody = $("<tbody>");
+		table.append(tbody);
+		
+		lines.forEach(function (line,lineN)
+		{
+			var appendTo;
+			var cellType;
+			if(lineN == 0)
+			{
+				appendTo = headers;
+				cellType = "<th>";
+			}
+			else
+			{
+				var row = $("<tr>");
+				tbody.append(row);
+				appendTo = row;
+				cellType = "<td>";
+			}
+			
+			line.forEach(function (attr,attrN)
+			{
+				if(attr == '') return;
+				
+				var colspan = 1;
+				var style = '';
+				while(attrN+colspan < line.length && line[attrN+colspan] == '')
+				{
+					colspan++;
+				}
+				if(colspan > 1)
+				{
+					style = "text-align: center;";
+				}
+				//appendTo.append('<'+cellType+' colspan='+colspan+'>'+attr+'</'cellType+'>');
+				appendTo.append($(cellType,{"colspan":colspan,"style":style}).html(attr));
+			});
+		});
+		
+		//$('body').append(table);
+		
+		var listRoot = $("<ul>",{"class":"sitemap","id":"List_" + baseID});
+		
+		var lastHeader = table.find("th:last()");
+		var lastHeaderText = lastHeader.text();
+		lastHeader.text(null);
+		
+		var roll = $("<a>",{"href":"#","style":"text-decoration: none;"});
+		//move text to <a> so we can roll in the whole caption
+		roll.append(lastHeaderText);
+		roll.append(' ');
+		roll.append('<i class="fa fa-random" aria-hidden="true"></i>');
+		roll.click(function()
+		{
+			//alert("foo");
+			//console.log(listRoot);
+			rollTable(table,listRoot);
+			
+			return false;
+		});
+		
+		var collapse = $("<a>",{"href":"#","style":"float:right;"});
+		collapse.append('<i class="fa fa-caret-square-o-down" aria-hidden="true"></i>');
+		collapse.click(function()
+		{
+			//tbody.toggle();
+			tbody.children().not(':first').toggle()
+			return false;
+		});
+		
+		lastHeader.append(roll).append(collapse);
+		
+		$( "#accordion" ).append($("<h3>").text((element.title || element.id)));
+		
+		var cont = $("<div>",{"class":"pure-g"});
+		var left = $("<div>",{"class":"pure-u-1 pure-u-md-1-2"});
+		var rght = $("<div>",{"class":"pure-u-1 pure-u-md-1-2"});
+		
+		cont.append(left);
+		left.append(table);
+		cont.append(rght);
+		rght.append($("<div>",{"class":"l-box"}).append(listRoot));
+		
+		//$( "#accordion" ).append($("<div>").append(table).append(listRoot));
+		$( "#accordion" ).append(cont);
+		
+		//var tab_id = "TableTab_" + element.id.replace(" ","_");
+		//var tab_name = element.id;
+		//$('#TableTabs ul').append($("<li>").append($("<a>",{"href":"#"+tab_id,"text":tab_name})));
+		//$('#TableTabs').append($("<div>",{"id":tab_id}).append(table));
+	});
+
+	//$( "#TableTabs" ).tabs();
+	$( "#accordion" ).accordion({
+      heightStyle: "content",
+	  active: false,
+	  collapsible: true,
+    });
+});
+
+</script>
+
+<script id="Parents" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Parents
+01|95|You know who your parents are or were.
+96|100|You do not know who your parents were.
+</script>
+<script id="Alignment" type="text/csv">
+<span data-type="roll" data-dice="3" data-sides="6">3d6</span>||Alignment
+3|3|Chaotic evil (50%) or chaotic neutral (50%)
+4|5|Lawful evil
+6|8|Neutral evil
+9|12|Neutral
+13|15|Neutral good
+16|16|Lawful good
+17|17|Lawful neutral
+18|18|Chaotic good (50%) or chaotic neutral (50%)
+</script>
+<script id="Class" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Class
+01|07|Barbarian
+08|14|Bard
+15|29|Cleric
+30|36|Druid
+37|52|Fighter
+53|58|Monk
+59|64|Paladin
+65|70|Ranger
+71|84|Rogue
+85|89|Sorcerer
+90|94|Warlock
+95|100|Wizard
+</script>
+<script id="RandomPCClass" title="Class and Reason" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Class
+01|07|<span data-subtable>Barbarian</span>
+08|14|<span data-subtable>Bard</span>
+15|29|<span data-subtable>Cleric</span>
+30|36|<span data-subtable>Druid</span>
+37|52|<span data-subtable>Fighter</span>
+53|58|<span data-subtable>Monk</span>
+59|64|<span data-subtable>Paladin</span>
+65|70|<span data-subtable>Ranger</span>
+71|84|<span data-subtable>Rogue</span>
+85|89|<span data-subtable>Sorcerer</span>
+90|94|<span data-subtable>Warlock</span>
+95|100|<span data-subtable>Wizard</span>
+</script>
+<script id="Occupation" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Occupation
+01|05|Academic
+06|10|Adventurer (roll on the <span data-subtable="Class" data-caption="Class">Class</span> table)
+11|11|Aristocrat
+12|26|Artisan or guild member
+27|31|Criminal
+32|36|Entertainer
+37|38|Exile, hermit, or refugee
+39|43|Explorer or wanderer
+44|55|Farmer or herder
+56|60|Hunter or trapper
+61|75|Laborer
+76|80|Merchant
+81|85|Politician or bureaucrat
+86|90|Priest
+91|95|Sailor
+96|100|Soldier
+</script>
+<script id="Half-Elf Parents" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>||Parents
+1|5|One parent was an elf and the other was a human.
+6|6|One parent was an elf and the other was a half-elf.
+7|7|One parent was a human and the other was a half-elf.
+8|8|Both parents were half-elves.
+</script>
+<script id="Half-Orc Parents" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>||Parents
+1|3|One parent was an orc and the other was a human.
+4|5|One parent was an ore and the other was a half-orc.
+6|7|One parent was a human and the other was a half-orc.
+8|8|Both parents were half-orcs.
+</script>
+<script id="Tiefling Parents" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>||Parents
+1|4|Both parents were humans, their infernal heritage dormant until you came along.
+5|6|One parent was a tiefling and the other was a human.
+7|7|One parent was a tiefling and the other was a devil.
+8|8|One parent was a human and the other was a devil.
+</script>
+<script id="Birthplace" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Location
+01|50|Home
+51|55|Home of a family friend
+56|63|Home of a healer or midwife
+64|65|Carriage, cart, or wagon
+66|68|Barn, shed, or other outbuilding
+69|70|Cave
+71|72|Field
+73|74|Forest
+75|77|Temple
+78|78|Battlefield
+79|80|Alley or street
+81|82|Brothel, tavern, or inn
+83|84|Castle, keep, tower, or palace
+85|85|Sewer or rubbish heap
+86|88|Among people of a different race
+89|91|On board a boat or a ship
+92|93|In a prison or in the headquarters of a secret organization
+94|95|In a sage’s laboratory
+96|96|In the Feywild
+97|97|In the Shadowfell
+98|98|On the Astral Plane or the Ethereal Plane
+99|99|On an Inner Plane of your choice
+100|100|On an Outer Plane of your choice
+</script>
+<script id="Number of Siblings" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>||Siblings
+1|2|None
+3|4|<span  data-type="roll" data-caption="Sibling" data-subtable='["Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-modvar="racial_siblings_mod">1d3+racial adjustment</span>
+5|6|<span  data-type="roll" data-caption="Sibling" data-subtable='["Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="4" data-mod="1" data-modvar="racial_siblings_mod">1d4+1+racial adjustment</span>
+7|8|<span  data-type="roll" data-caption="Sibling" data-subtable='["Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="6" data-mod="2" data-modvar="racial_siblings_mod">1d6+2+racial adjustment</span>
+9|10|<span data-type="roll" data-caption="Sibling" data-subtable='["Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-mod="3" data-modvar="racial_siblings_mod">1d3+3+racial adjustment</span>
+</script>
+<script id="Relationship" type="text/csv">
+<span data-type="roll" data-dice="3" data-sides="4">3d4</span>||Attitude
+3|4|Hostile
+5|10|Friendly
+11|12|Indifferent
+</script>
+<script id="Status" type="text/csv">
+<span data-type="roll" data-dice="3" data-sides="6">3d6</span>||Status
+3|3|Dead (roll on the <span data-subtable="Cause of Death">Cause of Death</span> table)
+4|5|Missing or unknown
+6|8|Alive, but doing poorly due to injury, financial trouble, or relationship difficulties
+9|12|Alive and well
+13|15|Alive and quite successful
+16|17|Alive and infamous
+18|18|Alive and famous
+</script>
+<script id="Cause of Death" type="text/csv">
+<span data-type="roll" data-sides="12">d12</span>|Cause of Death
+1|Unknown
+2|Murdered
+3|Killed in battle
+4|Accident related to class or occupation
+5|Accident unrelated to class or occupation
+6|Natural causes, such as disease or old age
+7|Natural causes, such as disease or old age
+8|Apparent suicide
+9|Torn apart by an animal or a natural disaster
+10|Consumed by a monster
+11|Executed for a crime or tortured to death
+12|Bizarre event, such as being hit by a meteorite, struck down by an angry god, or killed by a hatching slaad egg
+</script>
+<script id="Birth Order" type="text/csv">
+<span data-type="roll" data-dice="2" data-sides="6">2d6</span>||Birth Order
+2|2|Twin, triplet, or quadruplet
+3|7|Older
+8|12|Younger
+</script>
+<script id="Family" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Family
+01|01|None<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+02|02|Institution, such as an asylum<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+03|03|Temple<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+04|05|Orphanage<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+06|07|Guardian<span data-subtable='["Race","Alignment","Occupation"]'/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+08|15|Paternal or maternal aunt, uncle, or both; or extended family such as a tribe or clan<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Aunt"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Uncle"/><span data-subtable="Absent Parent" data-caption="Missing Mother"/><span data-subtable="Absent Parent" data-caption="Missing Father"/>
+16|25|Paternal or maternal grandparent(s)<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandmother"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandfather"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+26|35|<span data-subtable="Race" data-caption="Adoptive Family Race"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>Adoptive family (same or different race)
+36|45|<span data-subtable="Absent Parent" data-caption="Absent Mother"/>Single father
+46|55|<span data-subtable='["Race","Alignment","Occupation"]' data-caption="Stepfather"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>Stepfather and mother
+56|65|<span data-subtable="Absent Parent" data-caption="Absent Father"/>Single mother
+66|75|<span data-subtable='["Race","Alignment","Occupation"]' data-caption="Stepmother"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/>Stepmother and father
+76|100|Mother and father
+</script>
+<script id="Absent Parent" type="text/csv">
+<span data-type="roll" data-sides="4">d4</span>|Fate
+1|Your parent died (roll on the <span data-subtable="Cause of Death" data-caption="Cause of Death">Cause of Death</span> supplemental table).
+2|Your parent was imprisoned, enslaved, or otherwise taken away.
+3|Your parent abandoned you.
+4|Your parent disappeared to an unknown fate.
+</script>
+<script id="Race" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Race
+01|40|Human
+41|50|Dwarf
+51|60|Elf
+61|70|Halfling
+71|75|Dragonborn
+76|80|Gnome
+81|85|Half-elf
+86|90|Half-orc
+91|95|Tiefling
+96|100|DM's choice
+</script>
+<script id="RandomPCRace" title="Race and Parents (if needed)" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Race
+01|40|Human
+41|50|Dwarf<span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
+51|60|Elf<span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
+61|70|Halfling
+71|75|Dragonborn
+76|80|Gnome
+81|85|Half-elf<span data-subtable="Half-Elf Parents" />
+86|90|Half-orc<span data-subtable="Half-Orc Parents" />
+91|95|Tiefling<span data-subtable="Tiefling Parents" />
+96|100|DM's choice
+</script>
+<script id="Family Lifestyle" type="text/csv">
+<span data-type="roll" data-dice="3" data-sides="6">3d6</span>||Lifestyle
+3|3|Wretched (-40)<span data-type="variable" data-name="lifestyle_mod" data-value="-40"/>
+4|5|Squalid (-20)<span data-type="variable" data-name="lifestyle_mod" data-value="-20"/>
+6|8|Poor (-10)<span data-type="variable" data-name="lifestyle_mod" data-value="-10"/>
+9|12|Modest (+0)<span data-type="variable" data-name="lifestyle_mod" data-value="0"/>
+13|15|Comfortable (+10)<span data-type="variable" data-name="lifestyle_mod" data-value="10"/>
+16|17|Wealthy (+20)<span data-type="variable" data-name="lifestyle_mod" data-value="20"/>
+18|18|Aristocratic (+40)<span data-type="variable" data-name="lifestyle_mod" data-value="40"/>
+</script>
+<script id="Childhood Home" type="text/csv">
+<span data-type="roll" data-sides="100" data-modvar="lifestyle_mod">d100</span>||Home
+0|0|On the streets
+1|20|Rundown shack
+21|30|No permanent residence; you moved around a lot
+31|40|Encampment or village in the wilderness
+41|50|Apartment in a rundown neighborhood
+51|70|Small house
+71|90|Large house
+91|110|Mansion
+111|200|Palace or castle
+</script>
+<script id="Childhood Memories" type="text/csv">
+<span data-type="roll" data-dice="3" data-sides="6" data-modvar="cha_mod">3d6+Cha mod</span>||Memory
+0|3|I am still haunted by my childhood, when I was treated badly by my peers.
+4|5|I spent most of my childhood alone, with no close friends.
+6|8|Others saw me as being different or strange, and so I had few companions.
+9|12|I had a few close friends and lived an ordinary childhood.
+13|15|I had several friends, and my childhood was generally a happy one.
+16|17|I always found it easy to make Friends, and I loved being around people.
+18|30|Everyone knew who I was, and I had friends everywhere I went
+</script>
+<script id="Acolyte" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became an acolyte because...
+1|I ran away from home at an early age and found refuge in a temple.
+2|My family gave me to a temple, since they were unable or unwilling to care for me.
+3|I grew up in a household with strong religious convictions. Entering the service of one or more gods seemed natural.
+4|An impassioned sermon struck a chord deep in my soul and moved me to serve the faith.
+5|I followed a childhood friend, a respected acquaintance, or someone I loved into religious service.
+6|After encountering a true servant of the gods, l was so inspired that I immediately entered the service of a religious group
+</script>
+<script id="Charlatan" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a charlatan because...
+1|I was left to my own devices, and my knack for manipulating others helped me survive.
+2|I learned early on that people are gullible and easy to exploit.
+3|I often got in trouble, but I managed to talk my way out of it every time.
+4|I took up with a confidence artist, from whom I learned my craft.
+5|After a charlatan fleeced my family, I decided to learn the trade so I would never be fooled by such deception again.
+6|I was poor or I feared becoming poor, so I learned the tricks I needed to keep myself out of poverty
+</script>
+<script id="Criminal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a criminal because...
+1|I resented authority in my younger days and saw a life of crime as the best way to fight against tyranny and oppression.
+2|Necessity forced me to take up the life, since it was the only way I could survive.
+3|I fell in with a gang of reprobates and ne'er-dowells, and I learned my specialty from them.
+4|A parent or relative taught me my criminal specialty to prepare me for the family business.
+5|I left home and found a place in a thieves' guild or some other criminal organization.
+6|I was always bored, so I turned to crime to pass the time and discovered I was quite good at it
+</script>
+<script id="Entertainer" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became an entertainer because...
+1|Members of my family made ends meet by performing, so it was fitting for me to follow their example.
+2|I always had a keen insight into other people, enough so that I could make them laugh or cry with my stories or songs.
+3|I ran away from home to follow a minstrel troupe.
+4|I saw a bard perform once, and I knew from that moment on what I was born to do.
+5|I earned coin by performing on street corners and eventually made a name for myself.
+6|A traveling entertainer took me in and taught me the trade.
+</script>
+<script id="Folk Hero" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a folk hero because...
+1|I learned what was right and wrong from my family.
+2|I was always enamored by tales of heroes and wished I could be something more than ordinary.
+3|I hated my mundane life, so when it was time for someone to step up and do the right thing, I took my chance.
+4|A parent or one of my relatives was an adventurer, and l was inspired by that person’s courage.
+5|A mad old hermit spoke a prophecy when I was born, saying that I would accomplish great things.
+6|I have always stood up for those who are weaker than I am.
+</script>
+<script id="Guild Artisan" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a guild artisan because...
+1|I was apprenticed to a master who taught me the guild’s business.
+2|I helped a guild artisan keep a secret or complete a task, and in return I was taken on as an apprentice.
+3|One of my family members who belonged to the guild made a place for me.
+4|I was always good with my hands, so I took the opportunity to learn a trade.
+5|I wanted to get away from my home situation and start a new life.
+6|I learned the essentials of my craft from a mentor but had to join the guild to finish my training
+</script>
+<script id="Hermit" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a hermit because...
+1|My enemies ruined my reputation, and I fled to the wilds to avoid further disparagement.
+2|I am comfortable with being isolated, as I seek inner peace.
+3|I never liked the people I called my friends, so it was easy for me to strike out on my own.
+4|I felt compelled to forsake my past, but did so with great reluctance, and sometimes I regret making that decision.
+5|I lost everything—my home, my family, my friends. Going it alone was all I could do.
+6|Society's decadence disgusted me, so I decided to leave it behind
+</script>
+<script id="Noble" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a noble because...
+1|I come from an old and storied family, and it fell to me to preserve the family name.
+2|My family has been disgraced, and I intend to clear our name.
+3|My family recently came by its title, and that elevation thrust us into a new and strange world.
+4|My family has a title, but none of my ancestors have distinguished themselves since we gained it.
+5|My family is filled with remarkable people. I hope to live up to their example.
+6|I hope to increase my family’s power and influence
+</script>
+<script id="Outlander" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became an outlander because...
+1|I spent a lot of time in the wilderness as a youngster, and I came to love that way of life.
+2|From a young age, I couldn't abide the stink of the cities and preferred to spend my time in nature.
+3|I came to understand the darkness that lurks in the wilds, and I vowed to combat it.
+4|My people lived on the edges of civilization, and I learned the methods of survival from my family.
+5|After a tragedy l retreated to the wilderness, leaving my old life behind.
+6|My family moved away from civilization, and I learned to adapt to my new environment.
+</script>
+<script id="Sage" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a sage because...
+1|I was naturally curious, so I packed up and went to a university to learn more about the world.
+2|My mentor’s teachings opened my mind to new possibilities in that field of study.
+3|I was always an avid reader, and I learned much about my favorite topic on my own.
+4|I discovered an old library and pored over the texts I found there. That experience awakened a hunger for more knowledge.
+5|I impressed a wizard who told me I was squandering my talents and should seek out an education to take advantage of my gifts.
+6|One of my parents or a relative gave me a basic education that whetted my appetite, and I left home to build on what I had learned
+</script>
+<script id="Sailor" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a sailor because...
+1|I was press-ganged by pirates and forced to serve on their ship until I finally escaped.
+2|I wanted to see the world, so I signed on as a deckhand for a merchant ship.
+3|One of my relatives was a sailor who took me to sea
+4|I needed to escape my community quickly, so I stowed away on a ship. When the crew found me, I was forced to work for my passage.
+5|Reavers attacked my community, so I found refuge on a ship until I could seek vengeance.
+6|I had few prospects where l was living, so I left to find my fortune elsewhere
+</script>
+<script id="Soldier" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a soldier because...
+1|I joined the militia to help protect my community from monsters.
+2|A relative of mine was a soldier, and I wanted to carry on the family tradition.
+3|The local lord forced me to enlist in the army.
+4|War ravaged my homeland while I was growing up. Fighting was the only life i ever knew.
+5|I wanted fame and fortune, so I joined a mercenary company, selling my sword to the highest bidder.
+6|Invaders attacked my homeland. It was my duty to take up arms in defense of my people.
+</script>
+<script id="Urchin" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became an urchin because...
+1|Wanderlust caused me to leave my family to see the world. I look after myself.
+2|I ran away from a bad situation at home and made my own way in the world.
+3|Monsters wiped out my village, and I was the sole survivor. I had to find a way to survive.
+4|A notorious thief looked after me and other orphans, and we spied and stole to earn our keep.
+5|One day I woke up on the streets, alone and hungry, with no memory of my early childhood.
+6|My parents died, leaving no one to look after me. I raised myself.
+</script>
+<script id="Barbarian" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a barbarian because...
+1|My devotion to my people lifted me in battle, making me powerful and dangerous.
+2|The spirits of my ancestors called on me to carry out a great task.
+3|I lost control in battle one day, and it was as if something else was manipulating my body, forcing it to kill every foe I could reach.
+4|I went on a spiritual journey to find myself and instead found a spirit animal to guide, protect, and inspire me.
+5|I was struck by lightning and lived. Afterward, I found a new strength within me that let me push beyond my limitations.
+6|My anger needed to be channeled into battle, or i risked becoming an indiscriminate killer
+</script>
+<script id="Bard" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a bard because...
+1|I awakened my latent bardic abilities through trial and error.
+2|I was a gifted performer and attracted the attention of a master bard who schooled me in the old techniques.
+3|I joined a loose society of scholars and orators to learn new techniques of performance and magic.
+4|I felt a calling to recount the deeds of champions and heroes, to bring them alive in song and story.
+5|I joined one of the great colleges to learn old lore, the secrets of magic, and the art of performance.
+6|I picked up a musical instrument one day and instantly discovered that I could play it
+</script>
+<script id="Cleric" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a cleric because...
+1|A supernatural being in service to the gods called me to become a divine agent in the world.
+2|I saw the injustice and horror in the world and felt moved to take a stand against them.
+3|My god gave me an unmistakable sign. I dropped everything to serve the divine.
+4|Although I was always devout, it wasn't until I completed a pilgrimage that I knew my true calling.
+5|I used to serve in my religion's bureaucracy but found I needed to work in the world, to bring the message of my faith to the darkest corners of the land.
+6|I realize that my god works through me, and I do as commanded, even though I don’t know why I was chosen to serve
+</script>
+<script id="Druid" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a druid because...
+1|I saw too much devastation in the wild places, too much of nature’s splendor ruined by the despoilers. I joined a circle of druids to fight back against the enemies of nature.
+2|I found a place among a group of druids after I fled a catastrophe.
+3|I have always had an affinity for animals, so I explored my talent to see how I could best use it.
+4|I befriended a druid and was moved by druidic teachings. i decided to follow my friend’s guidance and give something back to the world.
+5|While I was growing up, I saw spirits all around me—entities no one else could perceive. I sought out the druids to help me understand the visions and communicate with these beings.
+6|I have always felt disgust for creatures of unnatural origin. For this reason, I immersed myself in the study of the druidic mysteries and became a champion of the natural order
+</script>
+<script id="Fighter" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a fighter because...
+1|I wanted to hone my combat skills, and so I joined a war college.
+2|I squired for a knight who taught me how to fight, care for a steed, and conduct myself with honor. I decided to take up that path for myself.
+3|Horrible monsters descended on my community, killing someone I loved. I took up arms to destroy those creatures and others of a similar nature.
+4|I joined the army and learned how to fight as part of a group.
+5|I grew up fighting, and I refined my talents by defending myself against people who crossed me.
+6|I could always pick up just about any weapon and know how to use it effectively
+</script>
+<script id="Monk" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a monk because...
+1|I was chosen to study at a secluded monastery. There, I was taught the fundamental techniques required to eventually master a tradition.
+2|I sought instruction to gain a deeper understanding of existence and my place in the world.
+3|I stumbled into a portal to the Shadowfell and took refuge in a strange monastery, where I learned how to defend myself against the forces of darkness.
+4|I was overwhelmed with grief after losing someone close to me, and I sought the advice of philosophers to help me cope with my loss.
+5|I could feel that a special sort of power lay within me, so I sought out those who could help me call it forth and master it.
+6|I was wild and undisciplined as a youngster, but then I realized the error of my ways. I applied to a monastery and became a monk as a way to live a life of discipline
+</script>
+<script id="Paladin" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a paladin because...
+1|A fantastical being appeared before me and called on me to undertake a holy quest.
+2|One of my ancestors left a holy quest unfulfilled, so I intend to finish that work.
+3|The world is a dark and terrible place. I decided to serve as a beacon of light shining out against the gathering shadows.
+4|I served as a paladin’s squire, learning all I needed to swear my own sacred oath.
+5|Evil must be opposed on all fronts. I feel compelled to seek out wickedness and purge it from the world.
+6|Becoming a paladin was a natural consequence of my unwavering faith. In taking my vows, I became the holy sword of my religion
+</script>
+<script id="Ranger" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a ranger because...
+1|I found purpose while I honed my hunting skills by bringing down dangerous animals at the edge of civilization.
+2|I always had a way with animals, able to calm them with a soothing word and a touch.
+3|I suffer from terrible wanderlust, so being a ranger gave me a reason not to remain in one place for too long.
+4|I have seen what happens when the monsters come out from the dark. I took it upon myself to become the first line of defense against the evils that lie beyond civilization's borders.
+5|I met a grizzled ranger who taught me woodcraft and the secrets of the wild lands.
+6|I served in an army, learning the precepts of my profession while blazing trails and scouting enemy encampments
+</script>
+<script id="Rogue" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a rogue because...
+1|I've always been nimble and quick of wit, so 1 decided to use those talents to help me make my way in the world.
+2|An assassin or a thief wronged me, so I focused my training on mastering the skills of my enemy to better combat foes of that sort.
+3|An experienced rogue saw something in me and taught me several useful tricks.
+4|I decided to turn my natural lucky streak into the basis of a career, though I still realize that improving my skills is essential.
+5|I took up with a group of ruffians who showed me how to get what I want through sneakiness rather than direct confrontation.
+6|I'm a sucker for a shiny bauble or a sack of coins, as long as I can get my hands on it without risking life and limb
+</script>
+<script id="Sorcerer" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a sorcerer because...
+1|When I was born, all the water in the house froze solid, the milk spoiled, or all the iron turned to copper. My family is convinced that this event was a harbinger of stranger things to come for me.
+2|I suffered a terrible emotional or physical strain, which brought forth my latent magical power. I have fought to control it ever since.
+3|My immediate family never spoke of my ancestors, and when I asked, they would change the subject. It wasn't until I started displaying strange talents that the full truth of my heritage came out.
+4|When a monster threatened one of my friends, I became filled with anxiety. I lashed out instinctively and blasted the wretched thing with a force that came from within me.
+5|Sensing something special in me, a stranger taught me how to control my gift.
+6|After I escaped from a magical conflagration, I realized that though I was unharmed, I was not unchanged. I began to exhibit unusual abilities that I am just beginning to understand.
+</script>
+<script id="Warlock" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a warlock because...
+1|While wandering around in a forbidden place, I encountered an otherworldly being that offered to enter into a pact with me.
+2|I was examining a strange tome I found in an abandoned library when the entity that would become my patron suddenly appeared before me
+3|I stumbled into the clutches of my patron after I accidentally stepped through a magical doorway.
+4|When I was faced with a terrible crisis, I prayed to any being who would listen, and the creature that answered became my patron.
+5|My future patron visited me in my dreams and offered great power in exchange for my service.
+6|One of my ancestors had a pact with my patron, so that entity was determined to bind me to the same agreement
+</script>
+<script id="Wizard" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|I became a wizard because...
+1|An old wizard chose me from among several candidates to serve an apprenticeship.
+2|When I became lost in a forest, a hedge wizard found me, took me in, and taught me the rudiments of magic.
+3|I grew up listening to tales of great wizards and knew I wanted to follow their path. I strove to be accepted at an academy of magic and succeeded.
+4|One of my relatives was an accomplished wizard who decided l was smart enough to learn the craft.
+5|While exploring an old tomb, library, or temple, I found a spellbook. I was immediately driven to learn all I could about becoming a wizard.
+6|I was a prodigy who demonstrated mastery of the arcane arts at an early age. When I became old enough to set out on my own, I did so to learn more magic and expand my power
+</script>
+<script id="Life events by age" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Current age and life events
+01|20|<span data-type="roll" data-sides="10" data-mod="10">20 years or younger</span>, <span data-subtable="Life Events" data-caption="Event">1</span> event
+21|59|<span data-type="roll" data-sides="10" data-mod="20">21~30</span> years, <span data-type="roll" data-sides=" 4" data-caption="Event" data-subtable="Life Events">1d4</span> events
+60|69|<span data-type="roll" data-sides="10" data-mod="30">31~40</span> years, <span data-type="roll" data-sides=" 6" data-caption="Event" data-subtable="Life Events">1d6</span> events
+70|89|<span data-type="roll" data-sides="10" data-mod="40">41~50</span> years, <span data-type="roll" data-sides=" 8" data-caption="Event" data-subtable="Life Events">1d8</span> events
+90|99|<span data-type="roll" data-sides="10" data-mod="50">51~60</span> years, <span data-type="roll" data-sides="10" data-caption="Event" data-subtable="Life Events">1d10</span> events
+100|100|61 years or older, <span data-type="roll" data-sides="12" data-subtable="Life Events" data-caption="Event">1d12</span> events
+</script>
+<script id="Life Events" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Event
+01|10|You suffered a tragedy. Roll on the <span data-subtable="Tragedies">Tragedies</span> table.
+11|20|You gained a bit of good fortune. Roll on the <span data-subtable="Boons">Boons</span> table.
+21|30|You fell in love or got married. If you get this result more than once, you can choose to have a child instead. Work with your DM to determine the identity of your love interest.<span data-caption="Partner or Child" data-subtable='["Race","Alignment","Occupation","Status","Relationship"]'>
+31|40|You made an enemy of an adventurer. Roll a <span data-type="roll" data-sides="6">d6</span>. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character's identity and the danger this enemy poses to you.<span data-caption="Enemy" data-subtable='["Race","Alignment","Class","Status"]'/>
+41|50|You made a friend of an adventurer. Use the supplemental tables and work with your DM to add more detail to this friendly character and establish how your friendship began.<span data-caption="Friend" data-subtable='["Race","Alignment","Class","Status"]'/>
+51|70|You spent time working in a job related to your background. Start the game with an extra <span data-type="roll" data-dice="2" data-sides="6">2d6</span> gp.
+71|75|You met someone important. Use the supplemental tables to determine this character's identity and how this individual feels about you. Work out additional details with your DM as needed to fit this character into your backstory.<span data-caption="VIP" data-subtable='["Race","Alignment","Occupation","Status"]'/>
+76|80|You went on an adventure. Roll on the Adventures table to see what happened to you. Work with your DM to determine the nature of the adventure and the creatures you encountered.<span data-caption="Adventure" data-subtable='Adventures'/>
+81|85|You had a supernatural experience. Roll on the <span data-subtable='Supernatural Events'>Supernatural Events</span> table to find out what it was.
+86|90|You fought in a battle. Roll on the <span data-subtable="War"/>War table to learn what happened to you. Work with your DM to come up with the reason for the battle and the factions involved. It might have been a small conflict between your community and a band of orcs, or it could have been a major battle in a larger war.
+91|95|You committed a crime or were wrongly accused of doing so. Roll on the <span data-subtable="Crime"/>Crime table to determine the nature of the offense and on the <span data-subtable="Punishment"/>Punishment table to see what became of you.
+96|99|You encountered something magical. Roll on the <span data-subtable="Arcane Matters"/>Arcane Matters table.
+100|100|Something truly strange happened to you. Roll on the <span data-subtable="Weird Stuff"/>Weird Stuff table.
+</script>
+<script id="Adventures" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Outcome
+01|10|You nearly died. You have nasty scars on your body, and you are missing an ear, <span data-type="roll" data-sides="3">ld3</span> fingers, or <span data-type="roll" data-sides="4">ld4</span> toes.
+11|20|You suffered a grievous injury. Although the wound healed, it still pains you from time to time.
+21|30|You were wounded, but in time you fully recovered.
+31|40|You contracted a disease while exploring a filthy warren. You recovered from the disease, but you have a persistent cough, pockmarks on your skin, or prematurely gray hair.
+41|50|You were poisoned by a trap or a monster. You recovered, but the next time you must make a saving throw against poison, you make the saving throw with disadvantage.
+51|60|You lost something of sentimental value to you during your adventure. Remove one trinket from your possessions.
+61|70|You were terribly frightened by something you encountered and ran away, abandoning your companions to their fate.
+71|80|You learned a great deal during your adventure. The next time you make an ability check or a saving throw, you have advantage on the roll.
+81|90|You found some treasure on your adventure. You have <span data-type="roll" data-dice="2" data-sides="6">2d6</span> gp left from your share of it.
+91|99|You found a considerable amount of treasure on your adventure. You have <span data-type="roll" data-sides="20" data-mod="50">ld20+50</span> gp left from your share of it.
+100|100|You came across a common magic item (of the DM’s choice)
+</script>
+<script id="Arcane Matters" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Magical Event
+1|You were charmed or frightened by a spell.
+2|You were injured by the effect of a spell.
+3|You witnessed a powerful spell being cast by a cleric, a druid, a sorcerer, a warlock, or a wizard.
+4|You drank a potion (of the DM's choice).
+5|You found a spell scroll (of the DM's choice) and succeeded in casting the Spell it contained.
+6|You were affected by teleportation magic.
+7|You turned invisible for a time.
+8|You identified an illusion for what it was.
+9|You saw a creature being conjured by magic.
+10|Your fortune was read by a diviner. Roll twice on the Life Events table, but don’t apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true).<span data-subtable="Life Events" data-roll="2" data-caption="Portent"/>
+</script>
+<script id="Boons" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Boon
+1|A friendly wizard gave you a spell scroll containing one cantrip (of the DM's choice).
+2|You saved the life of a commoner, who now owes you a life debt. This individual accompanies you on your travels and performs mundane tasks for you, but will leave if neglected, abused, or imperiled. Determine details about this character by using the supplemental tables and working with your DM.
+3|You found a riding horse.
+4|You found some money. You have <span data-type="roll" data-sides="20">1d20</span> gp in addition to your regular starting funds.
+5|A relative bequeathed you a simple weapon of your choice.
+6|You found something interesting. You gain one additional trinket.
+7|You once performed a service for a local temple. The next time you visit the temple, you can receive healing up to your hit point maximum.
+8|A friendly alchemist gifted you with a potion of healing or a flask of acid, as you choose.
+9|You found a treasure map.
+10|A distant relative left you a stipend that enables you to live at the comfortable lifestyle for <span data-type="roll" data-sides="20">1d20</span> years. If you choose to live at a higher lifestyle, you reduce the price of the lifestyle by 2 gp during that time period
+</script>
+<script id="Crime" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Crime
+1|Murder
+2|Theft
+3|Burglary
+4|Assault
+5|Smuggling
+6|Kidnapping
+7|Extortion
+8|Counterfeiting
+</script>
+<script id="Punishment" type="text/csv">
+<span data-type="roll" data-sides="12">d12</span>||Punishment
+1|3|You did not commit the crime and were exonerated after being accused.
+4|6|You committed the crime or helped do so, but nonetheless the authorities found you not guilty.
+7|8|You were nearly caught in the act. You had to flee and are wanted in the community where the crime occurred.
+9|12|You were caught and convicted. You spent time in jail, chained to an oar, or performing hard labor. You served a sentence of <span data-type="roll" data-sides="4">1d4</span> years or succeeded in escaping after that much time.
+</script>
+<script id="Supernatural Events" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Event
+01|05|You were ensorcelled by a fey and enslaved for <span data-type="roll" data-sides="6">1d6</span> years before you escaped.
+06|10|You saw a demon and ran away before it could do anything to you.
+11|15|A devil tempted you. Make a DC 10 Wisdom saving throw. On a failed save, your alignment shifts one step toward evil (if it's not evil already), and you start the game with an additional <span data-type="roll" data-sides="20" data-mod="50">1d20+50</span> gp.
+16|20|You woke up one morning miles from your home, with no idea how you got there.
+21|30|You visited a holy site and felt the presence of the divine there.
+31|40|You witnessed a falling red star, a face appearing in the frost, or some other bizarre happening. You are certain that it was an omen of some sort.
+41|50|You escaped certain death and believe it was the intervention of a god that saved you.
+51|60|You witnessed a minor miracle.
+61|70|You explored an empty house and found it to be haunted.
+71|75|You were briefly possessed. Roll a <span data-type="roll" data-sides="6">d6</span> to determine what type of creature possessed you: 1, celestial; 2, devil; 3, demon; 4, fey; 5, elemental; 6, undead.
+76|80|You saw a ghost.
+81|85|You saw a ghoul feeding on a corpse.
+86|90|A celestial or a fiend visited you in your dreams to give a warning of dangers to come.
+91|95|You briefly visited the Feywild or the Shadowfell.
+96|100|You saw a portal that you believe leads to another plane of existence
+</script>
+<script id="Tragedies" type="text/csv">
+<span data-type="roll" data-sides="12">d12</span>||Tragedy
+1|2|A family member or a close friend died. Roll on the <span data-subtable="Cause of Death">Cause of Death</span> supplemental table to find out how.
+3|3|A friendship ended bitterly, and the other person is now hostile to you. The cause might have been a misunderstanding or something you or the former friend did.
+4|4|You lost all your possessions in a disaster, and you had to rebuild your life.
+5|5|You were imprisoned for a crime you didn’t commit and spent <span data-type="roll" data-sides="6">1d6</span> years at hard labor, in jail, or shackled to an oar in a slave galley.
+6|6|War ravaged your home community, reducing everything to rubble and ruin. in the aftermath, you either helped your town rebuild or moved somewhere else.
+7|7|A lover disappeared without a trace. You have been looking for that person ever since
+8|8|A terrible blight in your home community caused crops to fail, and many starved. You lost a sibling or some other family member.
+9|9|You did something that brought terrible shame to you in the eyes of your family. You might have been involved in a scandal, dabbled in dark magic, or offended someone important. The attitude of your family members toward you becomes indifferent at best, though they might eventually forgive you.
+10|10|For a reason you were never told, you were exiled from your community. You then either wandered in the wilderness for a time or promptly found a new place to live.
+11|11|A romantic relationship ended. Roll <span data-type="roll" data-dice="3" data-sides="6">3d6</span>. An odd number means it ended with bad feelings, while an even number means it ended amicably.
+12|12|A current or prospective romantic partner of yours died. Roll on the <span data-subtable="Cause of Death">Cause of Death</span> supplemental table to find out how. If the result is murder, roll a <span data-type="roll" data-sides="12">d12</span>. On a 1, you were responsible, whether directly or indirectly
+</script>
+<script id="War" type="text/csv">
+<span data-type="roll" data-sides="12">d12</span>||War Outcome
+1|1|You were knocked out and left for dead. You woke up hours later with no recollection of the battle.
+2|3|You were badly injured in the fight, and you still bear the awful scars of those wounds.
+4|4|You ran away from the battle to save your life, but you still feel shame for your cowardice.
+5|7|You suffered only minor injuries, and the wounds all healed without leaving scars.
+8|9|You survived the battle, but you suffer from terrible nightmares in which you relive the experience.
+10|11|You escaped the battle unscathed, though many of your Friends were injured or lost.
+12|12|You acquitted yourself well in battle and are remembered as a hero. You might have received a medal for your bravery
+</script>
+<script id="Weird Stuff" type="text/csv">
+<span data-type="roll" data-sides="12">d12</span>|What Happened
+1|You were turned into a toad and remained in that form for <span data-type="roll" data-sides="4">1d4</span> weeks.
+2|You were petrified and remained a stone statue for a time until someone freed you.
+3|You were enslaved by a hag, a satyr, or some other being and lived in that creature’s thrall for <span data-type="roll" data-sides="6">1d6</span> years.
+4|A dragon held you as a prisoner for <span data-type="roll" data-sides="4">1d4</span> months until adventurers killed it.
+5|You were taken captive by a race of evil humanoids such as drow, kuo-toa, or quaggoths. You lived as a slave in the Underdark until you escaped.
+6|You served a powerful adventurer as a hireling. You have only recently left that service. Use the supplemental tables and work with your DM to determine the basic details about your former employer.
+7|You went insane for <span data-type="roll" data-sides="6">1d6</span> years and recently regained your sanity. A tic or some other bit of odd behavior might linger.
+8|A lover of yours was secretly a silver dragon.
+9|You were captured by a cult and nearly sacrificed on an altar to the foul being the cultists served. You escaped, but you fear they will find you.
+10|You met a demigod, an archdevil, an archfey, a demon lord, or a titan, and you lived to tell the tale.
+11|You were swallowed by a giant fish and spent a month in its gullet before you escaped.
+12|A powerful being granted you a wish, but you squandered it on something frivolous
+</script>
+<style>
+.l-box {
+	padding: 0 0 0 1em;
+}
+.sitemap{
+	margin: 0;
+}
+
+table {width:100%}
+
+</style>
+</body>
