@@ -21,6 +21,11 @@
 </head>
 
 <body>
+<!--
+TODOs:
+* Download as TXT
+* Reroll a single option
+-->
 
 <!--
 <div class="header">
@@ -250,7 +255,13 @@ function rollAll()
 	
 	var nodeClass = $("<li>").append($("<a>").text("Class"));
 	root.append(nodeClass);
-	rollTable(getTable($('[name="myclass"]').val()),nodeClass);
+	var myClassval = $('[name="myclass"]').val();
+	var classTables = $('[name^="'+myClassval+'"]');
+	classTables.each(function(n,table)
+	{
+		rollTable(table,nodeClass);
+	});
+	//rollTable(getTable($('[name="myclass"]').val()),nodeClass);
 	
 	[
 	 "Life events by age"
@@ -671,20 +682,20 @@ $(document).ready(function()
 90|94|Warlock
 95|100|Wizard
 </script>
-<script id="RandomPCClass" title="Class and Reason" type="text/csv">
+<script id="RandomPCClass" title="Class and Details" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Class
-01|07|<span  data-subtable data-caption="Reason">Barbarian</span>
-08|14|<span  data-subtable data-caption="Reason">Bard</span>
-15|29|<span  data-subtable data-caption="Reason">Cleric</span>
-30|36|<span  data-subtable data-caption="Reason">Druid</span>
-37|52|<span  data-subtable data-caption="Reason">Fighter</span>
-53|58|<span  data-subtable data-caption="Reason">Monk</span>
-59|64|<span  data-subtable data-caption="Reason">Paladin</span>
-65|70|<span  data-subtable data-caption="Reason">Ranger</span>
-71|84|<span  data-subtable data-caption="Reason">Rogue</span>
-85|89|<span  data-subtable data-caption="Reason">Sorcerer</span>
-90|94|<span  data-subtable data-caption="Reason">Warlock</span>
-95|100|<span data-subtable data-caption="Reason">Wizard</span>
+01|07|<span  data-subtable='["Barbarian","Barbarian Personal Totem","Barbarian Tattoo","Barbarian Superstition"]'>Barbarian</span>
+08|14|<span  data-subtable='["Bard","Bard Defining Work","Bard Instrument","Bard Embarrassment","Bard&#39;s Muse"]'>Bard</span>
+15|29|<span  data-subtable='["Cleric","Cleric Temple","Cleric Keepsake","Cleric Secret"]'>Cleric</span>
+30|36|<span  data-subtable='["Druid","Druid Treasured Item","Druid Guiding Aspect","Druid Mentor"]'>Druid</span>
+37|52|<span  data-subtable='["Fighter","Fighter Heraldic Sign","Fighter Instructor","Fighter Signature Style"]'>Fighter</span>
+53|58|<span  data-subtable='["Monk","Monk Monastery","Monk Monastic Icon","Monk Master"]'>Monk</span>
+59|64|<span  data-subtable='["Paladin","Paladin Personal Goal","Paladin Symbol","Paladin Nemesis,"Paladin Temptation"]'>Paladin</span>
+65|70|<span  data-subtable='["Ranger","Ranger View of the World","Ranger Homeland","Ranger Sworn Enemy"]'>Ranger</span>
+71|84|<span  data-subtable='["Rogue","Rogue Guilty Pleasure","Rogue Adversary","Rogue Benefactor"]'>Rogue</span>
+85|89|<span  data-subtable='["Sorcerer","Sorcerer Arcane Origin","Sorcerer Reaction","Sorcerer Supernatural Mark","Sorcerer Sign of Sorcery"]'>Sorcerer</span>
+90|94|<span  data-subtable='["Warlock","Warlock Patron Attitude","Warlock Pact Terms","Warlock Binding Mark"]'>Warlock</span>
+95|100|<span data-subtable='["Wizard","Wizard Spellbook","Wizard Ambition","Wizard Eccentricity"]'>Wizard</span>
 </script>
 <script id="Occupation" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Occupation
@@ -3385,6 +3396,391 @@ $(document).ready(function()
 98|A glass jar containing lard with a label that reads, "Griffon Grease"
 99|A wooden box with a ceramic bottom that holds a living worm with a head on each end of its body
 100|A metal urn containing the ashes of a hero
+</script>
+<script id="Barbarian Personal Totem" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Totem
+1|A tuft of fur from a solitary wolf that you befriended during a hunt
+2|Three eagle feathers given to you by a wise shaman, who told you they would play a role in determining your fate
+3|A necklace made from the claws of a young cave bear that you slew singlehandedly as a child
+4|A small leather pouch holding three stones that represent your ancestors
+5|A few small bones from the first beast you killed, tied together with colored wool
+6|An egg-sized stone in the shape of your spirit animal that appeared one day in your belt pouch
+</script>
+</script>
+<script id="Barbarian Tattoo" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Tattoo
+1|The wings of an eagle are spread wide across your upper back.
+2|Etched on the backs of your hands are the paws of a cave bear.
+3|The symbols of your clan are displayed in viny patterns along your arms. The antlers of an elk are inked across your back.
+5|Images of your spirit animal are tattooed along your weapon arm and hand.
+6|The eyes of a wolf are marked on your back to help you see and ward off evil spirits.
+</script>
+
+<script id="Barbarian Superstition" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Superstition
+1|If you disturb the bones of the dead, you inherit all the troubles that plagued them in life.
+2|Never trust a wizard. They’re all devils in disguise, especially the friendly ones.
+3|Dwarves have lost their spirits, and are almost like the undead. That's why they live underground.
+4|Magical things bring trouble. Never sleep with a magic object within ten feet of you.
+5|When you walk through a graveyard, be sure to wear silver, or a ghost might jump into your body.
+6|If an elf looks you in the eyes, she’s trying to read your thoughts.
+</script>
+
+<script id="Bard Defining Work" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Defining Work
+1|“The Three Flambinis”, a ribald song concerning mistaken identities and unfettered desire
+2|“Walt: ofthe Myconids”, an upbeat tune that children in particular enjoy
+3|“Asmodeus's Golden Arse”, a dramatic poem you claim was inspired by your personal visit to Avernus
+4|“The Pirates of Luskan”, your firsthand account of being kidnapped by sea reavers as a child
+5|“A Hoop, Two Pigeons”, and a Hell Hound,” a subtle parody of an incompetent noble
+6|“A Fool in the Abyss”, a comedic poem about a jester's travels among demons
+</script>
+
+<script id="Bard Instrument" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Instrument
+1|A masterfully crafted halfling fiddle
+2|A mithral horn made by elves
+3|A zither made with drow spider silk
+4|An orcish drum
+5|A wooden bullywug croak box
+6|A tinker’s harp ofgnomish design
+</script>
+
+<script id="Bard Embarrassment" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Embarrassment
+1|The time when your comedic song, “Big Tom's Hijinks”—which, by the way, you thought was brilliant—did not go over well with Big Tom
+2|The matinee performance when a circus's owlbear got loose and terrorized the crowd
+3|When your opening song was your enthusiastic but universally hated rendition of “Song ofthe Froghemoth”
+4|The first and last public performance of “Mirt, Man about Town”
+5|The time on stage when your wig caught fire and you threw it down——which set fire to the stage
+6|When you sat on your lute by mistake during the final stanza of “Starlight Serenade”
+</script>
+
+<script id="Bard's Muse" type="text/csv">
+<span data-type="roll" data-sides="3">d3</span>|Muse
+1|Nature
+2|Love
+3|Conflict
+</script>
+
+<script id="Cleric Temple" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Temple
+1|Your temple is said to be the oldest surviving structure built to honor your god.
+2|Acolytes of several like—minded deities all received instruction together in your temple.
+3|You come from a temple famed for the brewery it operates. Some say you smell like one of its ales.
+4|Your temple is a fortress and a proving ground that trains warrior-priests.
+5|Your temple is a peaceful, humble place, filled with vegetable gardens and simple priests.
+6|You served in a temple in the Outer Planes.
+</script>
+
+<script id="Cleric Keepsake" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Keepsake
+1|The finger bone of a saint
+2|A metal-bound book that tells how to hunt and destroy infernal creatures
+3|A pig's whistle that reminds you of your humble and beloved mentor
+4|braid of hair woven from the tail of a unicorn
+5|A scroll that describes how best to rid the world of necromancers
+6|A runestone said to be blessed by your god
+</script>
+
+<script id="Cleric Secret" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Secret
+1|An imp offers you counsel. You try to ignore the creature, but sometimes its advice is helpful.
+2|You believe that, in the final analysis, the gods are nothing more than ultrapowerful mortal creatures.
+3|You acknowledge the power of the gods, but you think that most events are dictated by pure chance.
+4|Even though you can work divine magic, you have never truly felt the presence ofa divine essence within yourself.
+5|You are plagued by nightmares that you believe are sent by your god as punishment for some unknown transgression.
+6|In times of despair, you feel that you are but a plaything ofthe gods, and you resent their remoteness.
+</script>
+
+<script id="Druid Treasured Item" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Item
+1|A twig from the meeting tree that stands in the center of your village
+2|A vial of water from the source of a sacred river 
+3|Special herbs tied together in a bundle
+4|A small bronze bowl engraved with animal images
+5|A rattle made from a dried gourd and holly berries
+6|A miniature golden sickle handed down to you by your mentor
+</script>
+
+<script id="Druid Guiding Aspect" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Guiding Aspect
+1|Yew trees remind you of renewing your mind and spirit, letting the old die and the new spring forth.
+2|Oak trees represent strength and vitality. Meditating under an oak fills your body and mind with resolve and fortitude.
+3|The river’s endless flow reminds you of the great span of the world. You seek to act with the longterm interests of nature in mind.
+4|The sea is a constant, churning cauldron of power and chaos. It reminds you that accepting change is necessary to sustain yourselfin the world.
+5|The birds in the sky are evidence that even the smallest creatures can survive ifthey remain above the fray.
+6|As demonstrated by the actions of the wolf, an individual’s strength is nothing compared to the power ofthe pack.
+</script>
+
+<script id="Druid Mentor" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Mentor
+1|Your mentor was a wise treant who taught you to think in terms ofyears and decades rather than days or months.
+2|You were tutored by a dryad who watched over a slumbering portal to the Abyss. During your training, you were tasked with watching for hidden threats to the world.
+3|Your tutor always interacted with you in the form of a falcon. You never saw the tutor’s humanoid form.
+4|You were one of several youngsters who were mentored by an old druid, until one ofyour fellow pupils betrayed your group and killed your master.
+5|Your mentor has appeared to you only in visions. You have yet to meet this person, and you are not sure such a person exists in mortal form.
+6|Your mentor was a werebear who taught you to treat all living things with equal regard.
+</script>
+
+<script id="Fighter Heraldic Sign" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Sign
+1|A rampant golden dragon on a green field, representing valor and a quest for wealth
+2|The fist of a storm giant clutching lightning before a storm cloud, symbolizing wrath and power
+3|Crossed greatswords in front ofa castle gate, signifying the defense ofa city or kingdom
+4|A skull with a dagger through it, representing the doom you bring to your enemies
+5|A phoenix in a ring of fire, an expression of an indomitable spirit
+6|Three drops of blood beneath a horizontal sword blade on a black background, symbolizing three foes you have sworn to kill
+</script>
+
+<script id="Fighter Instructor" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Instructor
+1|Gladiator. Your instructor was a slave who fought for freedom in the arena, or one who willingly chose the gladiator’s life to earn money and fame.
+2|Military. Your trainer served with a group ofsoldiers and knows much about working as a team.
+3|City Watch. Crowd control and peacekeeping are your instructor’s specialties.
+4|Tribal Warrior. Your instructor grew up in a tribe, where fighting for one's life was practically an everyday occurrence.
+5|Street Fighter. Your trainer excels at urban combat, combining close-quarters work with silence and efficiency.
+6|Weapon Master. Your mentor helped you to become one with your chosen weapon, by imparting highly specialized knowledge of how to wield it most effectively.
+</script>
+
+<script id="Fighter Signature Style" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Style
+1|Elegant. You move with precise grace and total control, never using more energy than you need.
+2|Brutal. Your attacks rain down like hammer blows, meant to splinter bone or send blood flying.
+3|Cunning. You dart in to attack at just the right moment and use small-scale tactics to tilt the odds in your favor.
+4|Effortless. You rarely perspire or display anything other than a stoic expression in battle.
+5|Energetic. You sing and laugh during combat as your spirit soars. You are happiest when you have a foe in front ofyou and a weapon in hand.
+6|Sinister. You scowl and sneer while fighting, and you enjoy mocking your foes as you defeat them.
+</script>
+
+<script id="Monk Monastery" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Monastery
+1|Your monastery is carved out of a mountainside, where it looms over a treacherous pass.
+2|Your monastery is high in the branches of an immense tree in the Feywild.
+3|Your monastery was founded long ago by a cloud giant and is inside a cloud castle that can be reached only by flying.
+4|Your monastery is built beside a volcanic system of hot springs, geysers, and sulfur pools. You regularly received visits from azer traders.
+5|Your monastery was founded by gnomes and is an underground labyrinth oftunnels and rooms.
+6|Your monastery was carved from an iceberg in the frozen reaches ofthe world.
+</script>
+
+<script id="Monk Monastic Icon" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Icon
+1|Monkey. Quick reflexes and the ability to travel through the treetops are two ofthe reasons why your order admires the monkey.
+2|Dragon Turtle. The monks of your seaside monastery venerate the dragon turtle, reciting ancient prayers and offering garlands offlowers to honor this living spirit ofthe sea.
+3|Ki-rin. Your monastery sees its main purpose as watching over and protecting the land in the manner ofthe ki-rin.
+4|Owlbear. The monks of your monastery revere a family of owlbears and have coexisted with them for generations.
+5|Hydra. Your order singles out the hydra for its ability to unleash several attacks simultaneously.
+6|Dragon. A dragon once laired within your monastery. Its influence remains long after its departure.
+</script>
+
+<script id="Monk Master" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Master
+1|Your master was a tyrant whom you had to defeat in single combat to complete your instruction.
+2|Your master was kindly and taught you to pursue the cause of peace.
+3|Your master was merciless in pushing you to your limits. You nearly lost an eye during one especially brutal practice session.
+4|Your master seemed goodhearted while tutoring you, but betrayed your monastery in the end.
+5|Your master was cold and distant. You suspect that the two of you might be related.
+6|Your master was kind and generous, never critical of your progress. Nevertheless, you feel you never fully lived up to the expectations placed on you.
+</script>
+
+<script id="Paladin Personal Goal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Goal
+1|Peace. You fight so that future generations will not have to.
+2|Revenge. Your oath is the vehicle through which you will right an ancient wrong.
+3|Duty. You will live up to what you have sworn to do, or die trying.
+4|Leadership. You will win a great battle that bards will sing about, and in so doing, you will become an example to inspire others.
+5|Faith. You know your path is righteous, or else the gods would not have set you upon it.
+6|Glory. You will lead the world into a grand new era, one that will be branded with your name.
+</script>
+
+<script id="Paladin Symbol" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Symbol
+1|A dragon, emblematic of your nobility in peace and your ferocity in combat
+2|A clenched fist, because you are always ready to fight for your beliefs
+3|An upraised open hand, indicating your preference for diplomacy over combat
+4|A red heart, showing the world your commitment to justice
+5|A black heart, signifying that emotions such as pity do not sway your dedication to your oath
+6|An unblinking eye, meaning that you are ever alert to all threats against your cause
+</script>
+
+<script id="Paladin Nemesis" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Nemesis
+1|A mighty orc war chief who threatens to overrun and destroy everything you hold sacred
+2|A fiend or a celestial, the agent of a power of the Outer Planes, who has been charged with corrupting or redeeming you, as appropriate
+3|A dragon whose servants dog your steps
+4|A high priest who sees you as a misguided fool and wants you to abandon your religion
+5|A rival paladin who trained with you but became an oath—breaker and holds you responsible
+6|A vampire who has sworn revenge against all paladins after being defeated by one
+</script>
+
+<script id="Paladin Temptation" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Temptation
+1|Fury. When your anger is roused, you have trouble thinking straight, and you fear you might do something you’ll regret.
+2|Pride. Your deeds are noteworthy, and no one takes note of them more often than you.
+3|Lust. You can't resist an attractive face and a pleasant smile.
+4|Envy. You are mindful of what some famous folk have accomplished, and you feel inadequate when your deeds don't compare to theirs.
+5|Despair. You consider the great strength of the enemies you must defeat, and at times you see no way to achieve final victory.
+6|Greed. Regardless of how much glory and treasure you amass, it’s never enough for you.
+</script>
+
+<script id="Ranger View of the World" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|View
+1 Towns and cities are the best places for those who can't survive on their own.
+2 The advancement of civilization is the best way to thwart chaos, but its reach must be monitored.
+3 Towns and cities are a necessary evil, but once the wilderness is purged ofsupernatural threats, we is.) will need them no more.
+4 Walls are for cowards, who huddle behind them while others do the work ofmaking the world safe.
+5 Visiting a town is not unpleasant, but after a few days I feel the irresistible call to return to the wild.
+6 Cities breed weakness by isolating folk from the harsh lessons of the wild.
+</script>
+
+<script id="Ranger Homeland" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Homeland
+1|You patrolled an ancient forest, darkened and corrupted by several crossings to the Shadowfell.
+2|As part of a group of nomads, you acquired the skills for surviving in the desert.
+3|Your early life in the Underdark prepared you for the challenges of cornbating its denizens.
+4|You dwelled on the edge ofa swamp, in an area imperiled by land creatures as well as aquatic ones.
+5|Because you grew up among the peaks, finding the best path through the mountains is second nature to you.
+6|You wandered the far north, learning how to protect yourself and prosper in a realm overrun by ice.
+</script>
+
+<script id="Ranger Sworn Enemy" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Enemy
+1 You seek revenge on nature’s behalf for the great transgressions your foe has committed.
+2 Your forebears or predecessors fought these creatures, and so shall you.
+3 You hear no enmity toward your foe. You stalk such creatures as a hunter tracks down a wild animal.
+4 You find your foe fascinating, and you collect books of tales and history concerning it.
+5 You collect tokens of your fallen enemies to remind you of each kill.
+6 You respect your chosen enemy, and you see your battles as a test of respective skills.
+</script>
+
+<script id="Rogue Guilty Pleasure" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Pleasure
+1|Large gems
+2|A smile from a pretty face
+3|A new ring for your finger
+4|The chance to deflate someone’s ego
+5|The finest food and drink
+6|Adding to your collection of exotic coins
+</script>
+
+<script id="Rogue Adversary" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Adversary
+1|The pirate captain on whose ship you once served; what you call moving on, the captain calls mutiny
+2|A master spy to whom you unwittingly fed bad information, which led to the assassination of the wrong target
+3|The master of the local thieves' guild, who wants you to join the organization or leave town
+4|An art collector who uses illegal means to acquire masterpieces
+5|A fence who uses you as a messenger to set up illicit meetings
+6|The proprietor of an illegal pit fighting arena where you once took bets
+</script>
+
+<script id="Rogue Benefactor" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Benefactor
+1|A smuggler kept you from getting caught but lost a valuable shipment in doing so. Now you owe that person an equally valuable favor.
+2|The Beggar King has hidden you from your pursuers many times, in return for future considerations.
+3|A magistrate once kept you out of jail in return for information on a powerful crime lord.
+4|Your parents used their savings to bail you out of trouble in your younger days and are now destitute.
+5|A dragon didn't eat you when it had a chance, and in return you promised to set aside choice pieces of treasure for it.
+6|A druid once helped you out of a tight spot; now any random animal you see could be that benefactor, perhaps come to claim a return favor
+</script>
+
+<script id="Sorcerer Arcane Origin" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Origin
+1|Your power arises from your family's bloodline. You are related to some powerful creature, or you inherited a blessing or a curse.
+2|You are the reincarnation ofa being from another plane of existence.
+3|A powerful entity entered the world. Its magic changed you.
+4|Your birth was prophesied in an ancient text, and you are foretold to use your power for terrible ends.
+5|You are the product of generations of careful, selective breeding.
+6|You were made in a vat by an alchemist.
+</script>
+
+<script id="Sorcerer Reaction" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Reaction
+1|Your powers are seen as a great blessing by those around you, and you are expected to use them in service to your community.
+2|Your powers caused destruction and even a death when they became evident, and you were treated as a criminal.
+3|Your neighbors hate and fear your power, causing them to shun you.
+4|You came to the attention of a sinister cult that plans on exploiting your abilities.
+5|People around you believe that your powers are a curse levied on your family for a past transgression.
+6|Your powers are believed to be tied to an ancient line of mad kings that supposedly ended in a bloody revolt over a century ago
+</script>
+
+<script id="Sorcerer Supernatural Mark" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Mark
+1|Your eyes are an unusual color, such as red.
+2|You have an extra toe on one foot.
+3|One of your ears is noticeably larger than the other.
+4|Your hair grows at a prodigious rate.
+5|You wrinkle your nose repeatedly while you are chewing.
+6|A red splotch appears on your neck once a day, then vanishes after an hour
+</script>
+
+<script id="Sorcerer Sign of Sorcery" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Sign
+1|You deliver the verbal components of your spells in the booming voice ofa titan.
+2|For a moment after you cast a spell, the area around you grows dark and gloomy.
+3|You sweat profusely while casting a spell and for a few seconds thereafter.
+4|Your hair and garments are briefly buffeted about, as if by a breeze, whenever you call forth a spell.
+5|If you are standing when you cast a spell, you rise six inches into the air and gently float back down.
+6|Illusory blue flames wreathe your head as you begin your casting, then abruptly disappear.
+</script>
+
+<script id="Warlock Patron Attitude" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Attitude
+1|Your patron has guided and helped your family for generations and is kindly toward you.
+2|Each interaction with your capricious patron is a surprise, whether pleasant or painful.
+3|Your patron is the spirit of a long-dead hero who sees your pact as a way for it to continue to influence the world.
+4|Your patron is a strict disciplinarian but treats you with a measure of respect.
+5|Your patron tricked you into a pact and treats you as a slave.
+6|You are mostly left to your own devices with no interference from your patron. Sometimes you dread the demands it will make when it does appear.
+</script>
+
+<script id="Warlock Pact Terms" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Term
+1|When directed, you must take immediate action against a specific enemy ofyour patron.
+2|Your pact tests your willpower; you are required to abstain from alcohol and other intoxicants.
+3|At least once a day, you must inscribe or carve your patron’s name or symbol on the wall of a building.
+4|You must occasionally conduct bizarre rituals to maintain your pact.
+5|You can never wear the same outfit twice, since your patron finds such predictability to be boring.
+6|When you use an eldritch invocation, you must speak your patron’s name aloud or risk incurring its displeasure.
+</script>
+
+<script id="Warlock Binding Mark" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Mark
+1|One of your eyes looks the same as one of your patron's eyes.
+2|Each time you wake up, the small blemish on your face appears in a different place.
+3|You display outward symptoms of a disease but suffer no ill effects from it.
+4|Your tongue is an unnatural color.
+5|You have a vestigial tail.
+6|Your nose glows in the dark.
+</script>
+
+<script id="Wizard Spellbook" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Spellbook
+1|A tome with pages that are thin sheets of metal, spells etched into them with acid
+2|Long straps of leather on which spells are written, wrapped around a staff for ease of transport
+3|A battered tome filled with pictographs that only you can understand
+4|Small stones inscribed with spells and kept in a cloth bag
+5|A scorched book, ravaged by dragon fire, with the script of your spells barely visible on its pages
+6|A tome full of black pages whose writing is visible only in dim light or darkness
+</script>
+
+<script id="Wizard Ambition" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ambition
+1|You will prove that the gods aren't as powerful as folk believe.
+2|Immortality is the end goal of your studies.
+3|If you can fully understand magic, you can unlock its use for all and usher in an era of equality.
+4|Magic is a dangerous tool. You use it to protect what you treasure.
+5|Arcane power must be taken away from those who would abuse it.
+6|You will become the greatest wizard the world has seen in generations.
+</script>
+
+<script id="Wizard Eccentricity" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Eccentricity
+1|You have the habit of tapping your foot incessantly, which often annoys those around you.
+2|Your memory is quite good, but you have no trouble pretending to be absentminded when it suits your purposes.
+3|You never enter a room without looking to see what’s hanging from the ceiling.
+4|Your most prized possession is a dead worm that you keep inside a potion vial.
+5|When you want people to leave you alone, you start talking to yourself. That usually does the trick.
+6|Your fashion sense and grooming, or more accurately lack thereof, sometimes cause others to assume you are a beggar.
 </script>
 
 
