@@ -93,7 +93,8 @@
 				<div class="pure-control-group">
 					<label for="mybackground">My Background: </label>
 					<select id="mybackground" name="mybackground">
-						<option value="RandomPCBG">Random</option>
+						<option value="RandomPCBGcore">Random (PHB)</option>
+						<option value="RandomPCBGall">Random (All)</option>
 						<option value="Other">Other</option>
 						<option value="Acolyte">Acolyte</option>
 						<option value="Charlatan">Charlatan</option>
@@ -202,28 +203,12 @@ function rollAll()
 	var occupations = getTable("Occupation");
 	//var siblings = getTable();
 
+	//1. Race
 	var nodeRace = $("<li>").append($("<a>").text("Race"));
 	root.append(nodeRace);
 	rollTable(getTable($('[name="myrace"]').val()),nodeRace);
 	
-	var nodeClass = $("<li>").append($("<a>").text("Class"));
-	root.append(nodeClass);
-	rollTable(getTable($('[name="myclass"]').val()),nodeClass);
-	
-	var nodeBG = $("<li>").append($("<a>").text("Background"));
-	root.append(nodeBG);
-	var myBGval = $('[name="mybackground"]').val();
-	var bgTables = $('[name^="'+myBGval+'"]');
-	bgTables.each(function(n,table)
-	{
-		rollTable(table,nodeBG);
-	});
-	/*rollTable(getTable(myBGval),nodeBG);
-	rollTable(getTable(myBGval+" Personality"),nodeBG,"Personality");
-	rollTable(getTable(myBGval+" Ideal"),nodeBG,"Ideal");
-	rollTable(getTable(myBGval+" Bond"),nodeBG,"Bond");
-	rollTable(getTable(myBGval+" Flaw"),nodeBG,"Flaw");*/
-
+	//2. Parents
 	var parentsTable = getTable(myrace+" Parents");
 	if(parentsTable)
 	{
@@ -240,7 +225,8 @@ function rollAll()
 		rollTable(alignment,sublist);
 		rollTable(occupations,sublist);
 	});
-
+	
+	//3. Birthplace, 4. Family
 	[
 	 "Birthplace"
 	,"Family"
@@ -248,7 +234,26 @@ function rollAll()
 	,"Childhood Home"
 	,"Childhood Memories"
 	,"Number of Siblings"
-	,"Life events by age"
+	].forEach(function(tableName)
+	{
+		rollTable(getTable(tableName),root);
+	});
+	
+	var nodeBG = $("<li>").append($("<a>").text("Background"));
+	root.append(nodeBG);
+	var myBGval = $('[name="mybackground"]').val();
+	var bgTables = $('[name^="'+myBGval+'"]');
+	bgTables.each(function(n,table)
+	{
+		rollTable(table,nodeBG);
+	});
+	
+	var nodeClass = $("<li>").append($("<a>").text("Class"));
+	root.append(nodeClass);
+	rollTable(getTable($('[name="myclass"]').val()),nodeClass);
+	
+	[
+	 "Life events by age"
 	].forEach(function(tableName)
 	{
 		rollTable(getTable(tableName),root);
@@ -819,8 +824,8 @@ $(document).ready(function()
 91|95|Tiefling
 96|100|DM's choice
 </script>
-<script id="RandomPCRace" title="Race and Parents (if needed)" type="text/csv">
-<span data-type="roll" data-sides="100">d100</span>||Race
+<script id="RandomPCRace" title="Race" type="text/csv">
+<span data-type="roll" data-sides="100">d100</span>||Race and parents race
 01|40|Human
 41|50|Dwarf<span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
 51|60|Elf<span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
@@ -1214,7 +1219,23 @@ $(document).ready(function()
 10|11|You escaped the battle unscathed, though many of your Friends were injured or lost.
 12|12|You acquitted yourself well in battle and are remembered as a hero. You might have received a medal for your bravery
 </script>
-<script id="RandomPCBG" title="Background" type="text/csv">
+<script id="RandomPCBGphb" title="Background (PHB)" type="text/csv">
+<span data-type="roll" data-sides="13">d13</span>|Background and reason (unofficial)
+1|<span  data-caption="Details" data-subtable='["Acolyte", "Acolyte Personality Trait","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Acolyte</span>
+2|<span  data-caption="Details" data-subtable='["Charlatan", "Charlatan Favorite Schemes","Charlatan Personality Trait","Charlatan Ideal","Charlatan Bond","Charlatan Flaw"]'>Charlatan</span>
+3|<span  data-caption="Details" data-subtable='["Criminal", "Criminal Specialty","Criminal Personality Trait","Criminal Ideal","Criminal Bond","Criminal Flaw"]'>Criminal</span>
+4|<span  data-caption="Details" data-subtable='["Entertainer", "Entertainer Routine","Entertainer Personality Trait","Entertainer Ideal"]'>Entertainer</span>
+5|<span data-caption="Details" data-subtable='["Folk Hero","Folk Hero Defining Event","Folk Hero Personality Trait","Folk Hero Ideal","Folk Hero Bond","Folk Hero Flaw"]'>Folk Hero</span>
+6|<span data-caption="Details" data-subtable='["Guild Artisan", "Guild Artisan Guild Business","Guild Artisan Personality Trait","Guild Artisan Ideal","Guild Artisan Bond","Guild Artisan Flaw"]'>Guild Artisan</span>
+7|<span data-caption="Details" data-subtable='["Hermit","Hermit Life of Seclusion","Hermit Personality Trait","Hermit Ideal","Hermit Bond","Hermit Flaw"]'>Hermit</span>
+8|<span data-caption="Details" data-subtable='["Noble","Noble Personality Trait","Noble Ideal","Noble Bond","Noble Flaw"]'>Noble</span>
+9|<span data-caption="Details" data-subtable='["Outlander", "Outlander Origin","Outlander Personality Trait","Outlander Ideal","Outlander Bond","Outlander Flaw"]'>Outlander</span>
+10|<span data-caption="Details" data-subtable='["Sage","Sage Specialty","Sage Personality Trait","Sage Ideal","Sage Bond","Sage Flaw"]'>Sage</span>
+11|<span data-caption="Details" data-subtable='["Sailor","Sailor Personality Trait","Sailor Ideal","Sailor Bond","Sailor Flaw"]'>Sailor</span>
+12|<span data-caption="Details" data-subtable='["Soldier","Soldier Specialty","Soldier Personality Trait","Soldier Ideal","Soldier Bond","Soldier Flaw"]'>Soldier</span>
+13|<span data-caption="Details" data-subtable='["Urchin","Urchin Personality Trait","Urchin Ideal","Urchin Bond","Urchin Flaw"]'>Urchin</span>
+</script>
+<script id="RandomPCBGall" title="Background (All)" type="text/csv">
 <span data-type="roll" data-sides="45">d45</span>|Background and reason (unofficial)
 1|<span  data-caption="Details" data-subtable='["Acolyte", "Acolyte Personality Trait","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Acolyte</span>
 2|<span  data-caption="Details" data-subtable='["Charlatan", "Charlatan Favorite Schemes","Charlatan Personality Trait","Charlatan Ideal","Charlatan Bond","Charlatan Flaw"]'>Charlatan</span>
@@ -3356,6 +3377,7 @@ $(document).ready(function()
 99|A wooden box with a ceramic bottom that holds a living worm with a head on each end of its body
 100|A metal urn containing the ashes of a hero
 </script>
+
 
 <style>
 .l-box {
