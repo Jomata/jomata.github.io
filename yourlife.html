@@ -1,4 +1,3 @@
-
 <head>
 <title>This is your life</title>
 
@@ -109,6 +108,38 @@
 						<option value="Sailor">Sailor</option>
 						<option value="Soldier">Soldier</option>
 						<option value="Urchin">Urchin</option>
+						<option value="Amonkhet Initiate">Amonkhet Initiate</option>
+						<option value="Amonkhet Vizier">Amonkhet Vizier</option>
+						<option value="Anthropologist">Anthropologist</option>
+						<option value="Archaeologist">Archaeologist</option>
+						<option value="Aristocrat">Aristocrat</option>
+						<option value="Caravan Specialist">Caravan Specialist</option>
+						<option value="City Watch">City Watch</option>
+						<option value="Clan Crafter">Clan Crafter</option>
+						<option value="Cloistered Scholar">Cloistered Scholar</option>
+						<option value="Courtier">Courtier</option>
+						<option value="Dragon Casualty">Dragon Casualty</option>
+						<option value="Elven Refugee">Elven Refugee</option>
+						<option value="Faction Agent">Faction Agent</option>
+						<option value="Far Traveler">Far Traveler</option>
+						<option value="Harborfolk">Harborfolk</option>
+						<option value="Haunted One">Haunted One</option>
+						<option value="Heretic">Heretic</option>
+						<option value="Inheritor">Inheritor</option>
+						<option value="Inquisitor">Inquisitor</option>
+						<option value="Insurgent">Insurgent</option>
+						<option value="Knight of the Order">Knight of the Order</option>
+						<option value="Livestock Bandit">Livestock Bandit</option>
+						<option value="Mercenary Veteran">Mercenary Veteran</option>
+						<option value="Merchant">Merchant</option>
+						<option value="Miner">Miner</option>
+						<option value="Prisoner of War">Prisoner of War</option>
+						<option value="Refugee">Refugee</option>
+						<option value="Secret Identity">Secret Identity</option>
+						<option value="Touched by the Fey">Touched by the Fey</option>
+						<option value="Trade Sheriff">Trade Sheriff</option>
+						<option value="Tribe Member">Tribe Member</option>
+						<option value="Urban Bounty Hunter">Urban Bounty Hunter</option>
 					</select>
 				</div>
 
@@ -182,11 +213,16 @@ function rollAll()
 	var nodeBG = $("<li>").append($("<a>").text("Background"));
 	root.append(nodeBG);
 	var myBGval = $('[name="mybackground"]').val();
-	rollTable(getTable(myBGval),nodeBG);
+	var bgTables = $('[name^="'+myBGval+'"]');
+	bgTables.each(function(n,table)
+	{
+		rollTable(table,nodeBG);
+	});
+	/*rollTable(getTable(myBGval),nodeBG);
 	rollTable(getTable(myBGval+" Personality"),nodeBG,"Personality");
 	rollTable(getTable(myBGval+" Ideal"),nodeBG,"Ideal");
 	rollTable(getTable(myBGval+" Bond"),nodeBG,"Bond");
-	rollTable(getTable(myBGval+" Flaw"),nodeBG,"Flaw");
+	rollTable(getTable(myBGval+" Flaw"),nodeBG,"Flaw");*/
 
 	var parentsTable = getTable(myrace+" Parents");
 	if(parentsTable)
@@ -306,7 +342,7 @@ function rollTable(table,root,caption)
 					//<span data-subtable="foo" />
 					//or <span data-subtable>foo</span>
 					var subtablenames = subtable.data("subtable") || subtable.text();
-					var totalrolls = subtable.data("roll") || 1;
+					var totalrolls = subtable.data("roll") === undefined ? 1 : subtable.data("roll");
 					var subtitle = subtable.data("caption");
 
 					if(!(subtablenames instanceof Array))
@@ -327,7 +363,7 @@ function rollTable(table,root,caption)
 							subitem.append(subsubroot);
 							appendTo = subsubroot;
 						}
-						else if(subtablenames.length > 1)
+						/*else if(subtablenames.length > 1)
 						{
 							var subitem = $("<li>").append($("<a>").text
 							(
@@ -338,7 +374,7 @@ function rollTable(table,root,caption)
 							var subsubroot = $("<ul>");
 							subitem.append(subsubroot);
 							appendTo = subsubroot;
-						}
+						}*/
 						else
 						{
 							appendTo = subroot;
@@ -622,17 +658,17 @@ $(document).ready(function()
 </script>
 <script id="RandomPCClass" title="Class and Reason" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Class
-01|07|<span data-subtable  data-caption="Reason">Barbarian</span>
-08|14|<span data-subtable  data-caption="Reason">Bard</span>
-15|29|<span data-subtable  data-caption="Reason">Cleric</span>
-30|36|<span data-subtable  data-caption="Reason">Druid</span>
-37|52|<span data-subtable  data-caption="Reason">Fighter</span>
-53|58|<span data-subtable  data-caption="Reason">Monk</span>
-59|64|<span data-subtable  data-caption="Reason">Paladin</span>
-65|70|<span data-subtable  data-caption="Reason">Ranger</span>
-71|84|<span data-subtable  data-caption="Reason">Rogue</span>
-85|89|<span data-subtable  data-caption="Reason">Sorcerer</span>
-90|94|<span data-subtable  data-caption="Reason">Warlock</span>
+01|07|<span  data-subtable data-caption="Reason">Barbarian</span>
+08|14|<span  data-subtable data-caption="Reason">Bard</span>
+15|29|<span  data-subtable data-caption="Reason">Cleric</span>
+30|36|<span  data-subtable data-caption="Reason">Druid</span>
+37|52|<span  data-subtable data-caption="Reason">Fighter</span>
+53|58|<span  data-subtable data-caption="Reason">Monk</span>
+59|64|<span  data-subtable data-caption="Reason">Paladin</span>
+65|70|<span  data-subtable data-caption="Reason">Ranger</span>
+71|84|<span  data-subtable data-caption="Reason">Rogue</span>
+85|89|<span  data-subtable data-caption="Reason">Sorcerer</span>
+90|94|<span  data-subtable data-caption="Reason">Warlock</span>
 95|100|<span data-subtable data-caption="Reason">Wizard</span>
 </script>
 <script id="Occupation" type="text/csv">
@@ -694,7 +730,7 @@ $(document).ready(function()
 86|88|Among people of a different race
 89|91|On board a boat or a ship
 92|93|In a prison or in the headquarters of a secret organization
-94|95|In a sage’s laboratory
+94|95|In a sage's laboratory
 96|96|In the Feywild
 97|97|In the Shadowfell
 98|98|On the Astral Plane or the Ethereal Plane
@@ -868,13 +904,13 @@ $(document).ready(function()
 1|I learned what was right and wrong from my family.
 2|I was always enamored by tales of heroes and wished I could be something more than ordinary.
 3|I hated my mundane life, so when it was time for someone to step up and do the right thing, I took my chance.
-4|A parent or one of my relatives was an adventurer, and l was inspired by that person’s courage.
+4|A parent or one of my relatives was an adventurer, and l was inspired by that person's courage.
 5|A mad old hermit spoke a prophecy when I was born, saying that I would accomplish great things.
 6|I have always stood up for those who are weaker than I am.
 </script>
 <script id="Guild Artisan" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|I became a guild artisan because...
-1|I was apprenticed to a master who taught me the guild’s business.
+1|I was apprenticed to a master who taught me the guild's business.
 2|I helped a guild artisan keep a secret or complete a task, and in return I was taken on as an apprentice.
 3|One of my family members who belonged to the guild made a place for me.
 4|I was always good with my hands, so I took the opportunity to learn a trade.
@@ -897,7 +933,7 @@ $(document).ready(function()
 3|My family recently came by its title, and that elevation thrust us into a new and strange world.
 4|My family has a title, but none of my ancestors have distinguished themselves since we gained it.
 5|My family is filled with remarkable people. I hope to live up to their example.
-6|I hope to increase my family’s power and influence
+6|I hope to increase my family's power and influence
 </script>
 <script id="Outlander" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|I became an outlander because...
@@ -911,7 +947,7 @@ $(document).ready(function()
 <script id="Sage" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|I became a sage because...
 1|I was naturally curious, so I packed up and went to a university to learn more about the world.
-2|My mentor’s teachings opened my mind to new possibilities in that field of study.
+2|My mentor's teachings opened my mind to new possibilities in that field of study.
 3|I was always an avid reader, and I learned much about my favorite topic on my own.
 4|I discovered an old library and pored over the texts I found there. That experience awakened a hunger for more knowledge.
 5|I impressed a wizard who told me I was squandering my talents and should seek out an education to take advantage of my gifts.
@@ -969,14 +1005,14 @@ $(document).ready(function()
 3|My god gave me an unmistakable sign. I dropped everything to serve the divine.
 4|Although I was always devout, it wasn't until I completed a pilgrimage that I knew my true calling.
 5|I used to serve in my religion's bureaucracy but found I needed to work in the world, to bring the message of my faith to the darkest corners of the land.
-6|I realize that my god works through me, and I do as commanded, even though I don’t know why I was chosen to serve
+6|I realize that my god works through me, and I do as commanded, even though I don't know why I was chosen to serve
 </script>
 <script id="Druid" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|I became a druid because...
-1|I saw too much devastation in the wild places, too much of nature’s splendor ruined by the despoilers. I joined a circle of druids to fight back against the enemies of nature.
+1|I saw too much devastation in the wild places, too much of nature's splendor ruined by the despoilers. I joined a circle of druids to fight back against the enemies of nature.
 2|I found a place among a group of druids after I fled a catastrophe.
 3|I have always had an affinity for animals, so I explored my talent to see how I could best use it.
-4|I befriended a druid and was moved by druidic teachings. i decided to follow my friend’s guidance and give something back to the world.
+4|I befriended a druid and was moved by druidic teachings. i decided to follow my friend's guidance and give something back to the world.
 5|While I was growing up, I saw spirits all around me—entities no one else could perceive. I sought out the druids to help me understand the visions and communicate with these beings.
 6|I have always felt disgust for creatures of unnatural origin. For this reason, I immersed myself in the study of the druidic mysteries and became a champion of the natural order
 </script>
@@ -1003,7 +1039,7 @@ $(document).ready(function()
 1|A fantastical being appeared before me and called on me to undertake a holy quest.
 2|One of my ancestors left a holy quest unfulfilled, so I intend to finish that work.
 3|The world is a dark and terrible place. I decided to serve as a beacon of light shining out against the gathering shadows.
-4|I served as a paladin’s squire, learning all I needed to swear my own sacred oath.
+4|I served as a paladin's squire, learning all I needed to swear my own sacred oath.
 5|Evil must be opposed on all fronts. I feel compelled to seek out wickedness and purge it from the world.
 6|Becoming a paladin was a natural consequence of my unwavering faith. In taking my vows, I became the holy sword of my religion
 </script>
@@ -1089,7 +1125,7 @@ $(document).ready(function()
 71|80|You learned a great deal during your adventure. The next time you make an ability check or a saving throw, you have advantage on the roll.
 81|90|You found some treasure on your adventure. You have <span data-type="roll" data-dice="2" data-sides="6">2d6</span> gp left from your share of it.
 91|99|You found a considerable amount of treasure on your adventure. You have <span data-type="roll" data-sides="20" data-mod="50">ld20+50</span> gp left from your share of it.
-100|100|You came across a common magic item (of the DM’s choice)
+100|100|You came across a common magic item (of the DM's choice)
 </script>
 <script id="Arcane Matters" type="text/csv">
 <span data-type="roll" data-sides="10">d10</span>|Magical Event
@@ -1102,7 +1138,7 @@ $(document).ready(function()
 7|You turned invisible for a time.
 8|You identified an illusion for what it was.
 9|You saw a creature being conjured by magic.
-10|Your fortune was read by a diviner. Roll twice on the Life Events table, but don’t apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true).<span data-subtable="Life Events" data-roll="2" data-caption="Portent"/>
+10|Your fortune was read by a diviner. Roll twice on the Life Events table, but don't apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true).<span data-subtable="Life Events" data-roll="2" data-caption="Portent"/>
 </script>
 <script id="Boons" type="text/csv">
 <span data-type="roll" data-sides="10">d10</span>|Boon
@@ -1158,7 +1194,7 @@ $(document).ready(function()
 1|2|A family member or a close friend died. Roll on the <span data-subtable="Cause of Death">Cause of Death</span> supplemental table to find out how.
 3|3|A friendship ended bitterly, and the other person is now hostile to you. The cause might have been a misunderstanding or something you or the former friend did.
 4|4|You lost all your possessions in a disaster, and you had to rebuild your life.
-5|5|You were imprisoned for a crime you didn’t commit and spent <span data-type="roll" data-sides="6">1d6</span> years at hard labor, in jail, or shackled to an oar in a slave galley.
+5|5|You were imprisoned for a crime you didn't commit and spent <span data-type="roll" data-sides="6">1d6</span> years at hard labor, in jail, or shackled to an oar in a slave galley.
 6|6|War ravaged your home community, reducing everything to rubble and ruin. in the aftermath, you either helped your town rebuild or moved somewhere else.
 7|7|A lover disappeared without a trace. You have been looking for that person ever since
 8|8|A terrible blight in your home community caused crops to fail, and many starved. You lost a sibling or some other family member.
@@ -1178,58 +1214,58 @@ $(document).ready(function()
 12|12|You acquitted yourself well in battle and are remembered as a hero. You might have received a medal for your bravery
 </script>
 <script id="RandomPCBG" title="Background" type="text/csv">
-<span data-type="roll" data-sides="1">d45</span>|Background and reason (unofficial)
-1|<span  data-subtable='["Acolyte Personality","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Acolyte</span>
-2|<span  data-subtable data-caption="Details">Charlatan</span>
-3|<span  data-subtable data-caption="Details">Criminal</span>
-4|<span  data-subtable data-caption="Details">Entertainer</span>
-5|<span  data-subtable data-caption="Details">Folk Hero</span>
-6|<span  data-subtable data-caption="Details">Guild Artisan</span>
-7|<span  data-subtable data-caption="Details">Hermit</span>
-8|<span  data-subtable data-caption="Details">Noble</span>
-9|<span  data-subtable data-caption="Details">Outlander</span>
-10|<span data-subtable data-caption="Details">Sage</span>
-11|<span data-subtable data-caption="Details">Sailor</span>
-12|<span data-subtable data-caption="Details">Soldier</span>
-13|<span data-subtable data-caption="Details">Urchin</span>
-14|Amonkhet Initiate
-15|Amonkhet Vizier
-16|Anthropologist
-17|Archaeologist
-18|Aristocrat
-19|Caravan Specialist
-20|City Watch
-21|Clan Crafter
-22|Cloistered Scholar
-23|Courtier
-24|Dragon Casualty
-25|Elven Refugee
-26|Faction Agent
-27|Far Traveler
-28|Harborfolk
-29|Haunted One
-30|Heretic
-31|Inheritor
-32|Inquisitor
-33|Insurgent
-34|Knight Of The Order
-35|Livestock Bandit
-36|Mercenary Veteran
-37|Merchant
-38|Miner
-39|Prisoner Of War
-40|Refugee
-41|Secret Identity
-42|Touched By The Fey
-43|Trade Sheriff
-44|Tribe Member
-45|Urban Bounty Hunter
+<span data-type="roll" data-sides="45">d45</span>|Background and reason (unofficial)
+1|<span  data-caption="Details" data-subtable='["Acolyte", Acolyte Personality Trait","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Acolyte</span>
+2|<span  data-caption="Details" data-subtable='["Charlatan", "Charlatan Favorite Schemes","Charlatan Personality Trait","Charlatan Ideal","Charlatan Bond","Charlatan Flaw"]'>Charlatan</span>
+3|<span  data-caption="Details" data-subtable='["Criminal", "Criminal Specialty","Criminal Personality Trait","Criminal Ideal","Criminal Bond","Criminal Flaw"]'>Criminal</span>
+4|<span  data-caption="Details" data-subtable='["Entertainer", "Entertainer Routine","Entertainer Personality Trait","Entertainer Ideal"]'>Entertainer</span>
+5|<span data-caption="Details" data-subtable='["Folk Hero","Folk Hero Defining Event","Folk Hero Personality Trait","Folk Hero Ideal","Folk Hero Bond","Folk Hero Flaw"]'>Folk Hero</span>
+6|<span data-caption="Details" data-subtable='["Guild Artisan", "Guild Artisan Guild Business","Guild Artisan Personality Trait","Guild Artisan Ideal","Guild Artisan Bond","Guild Artisan Flaw"]'>Guild Artisan</span>
+7|<span data-caption="Details" data-subtable='["Hermit","Hermit Life of Seclusion","Hermit Personality Trait","Hermit Ideal","Hermit Bond","Hermit Flaw"]'>Hermit</span>
+8|<span data-caption="Details" data-subtable='["Noble","Noble Personality Trait","Noble Ideal","Noble Bond","Noble Flaw"]'>Noble</span>
+9|<span data-caption="Details" data-subtable='["Outlander", "Outlander Origin","Outlander Personality Trait","Outlander Ideal","Outlander Bond","Outlander Flaw"]'>Outlander</span>
+10|<span data-caption="Details" data-subtable='["Sage","Sage Specialty","Sage Personality Trait","Sage Ideal","Sage Bond","Sage Flaw"]'>Sage</span>
+11|<span data-caption="Details" data-subtable='["Sailor","Sailor Personality Trait","Sailor Ideal","Sailor Bond","Sailor Flaw"]'>Sailor</span>
+12|<span data-caption="Details" data-subtable='["Soldier","Soldier Specialty","Soldier Personality Trait","Soldier Ideal","Soldier Bond","Soldier Flaw"]'>Soldier</span>
+13|<span data-caption="Details" data-subtable='["Urchin","Urchin Personality Trait","Urchin Ideal","Urchin Bond","Urchin Flaw"]'>Urchin</span>
+14|<span data-caption="Details" data-subtable='["Amonkhet Initiate Personality Trait","Amonkhet Initiate Ideal","Amonkhet Initiate Bond","Amonkhet Initiate Flaw"]'>Amonkhet Initiate</span>
+15|<span data-caption="Details" data-subtable='["Amonkhet Vizier Personality Trait","Amonkhet Vizier Ideal","Amonkhet Vizier Bond","Amonkhet Vizier Flaw"]'>Amonkhet Vizier</span>
+16|<span data-caption="Details" data-subtable='["Anthropologist Adopted Culture","Anthropologist Personality Trait","Anthropologist Ideal","Anthropologist Bond","Anthropologist Flaw"]'>Anthropologist</span>
+17|<span data-caption="Details" data-subtable='["Archaeologist Signature Item","Archaeologist Personality Trait","Archaeologist Ideal","Archaeologist Bond","Archaeologist Flaw"]'>Archaeologist</span>
+18|<span data-caption="Details" data-subtable='["Aristocrat Personality Trait","Aristocrat Ideal","Aristocrat Bond","Aristocrat Flaw"]'>Aristocrat</span>
+19|<span data-caption="Details" data-subtable='["Caravan Specialist Personality Trait","Caravan Specialist Ideal","Caravan Specialist Bond","Caravan Specialist Flaw"]'>Caravan Specialist</span>
+20|<span data-caption="Details" data-subtable='["City Watch Personality Trait","City Watch Ideal","City Watch Bond","City Watch Flaw"]'>City Watch</span>
+21|<span data-caption="Details" data-subtable='["Clan Crafter Personality Trait","Clan Crafter Ideal","Clan Crafter Bond","Clan Crafter Flaw"]'>Clan Crafter</span>
+22|<span data-caption="Details" data-subtable='["Cloistered Scholar Personality Trait","Cloistered Scholar Ideal","Cloistered Scholar Bond","Cloistered Scholar Flaw"]'>Cloistered Scholar</span>
+23|<span data-caption="Details" data-subtable='["Courtier Personality Trait","Courtier Ideal","Courtier Bond","Courtier Flaw"]'>Courtier</span>
+24|<span data-caption="Details" data-subtable='["Dragon Casualty Origin","Dragon Casualty Disfigurement","Dragon Casualty Personality Trait","Dragon Casualty Ideal","Dragon Casualty Bond","Dragon Casualty Flaw"]'>Dragon Casualty</span>
+25|<span data-caption="Details" data-subtable='["Elven Refugee Personality Trait","Elven Refugee Ideal","Elven Refugee Bond","Elven Refugee Flaw"]'>Elven Refugee</span>
+26|<span data-caption="Details" data-subtable='["Acolyte Personality Trait","Acolyte Ideal","Acolyte Bond","Acolyte Flaw"]'>Faction Agent</span>
+27|<span data-caption="Details" data-subtable='["Far Traveler Travel Reason","Far Traveler Personality Trait","Far Traveler Ideal","Far Traveler Bond","Far Traveler Flaw"]'>Far Traveler</span>
+28|<span data-caption="Details" data-subtable='["Harborfolk Personality Trait","Harborfolk Ideal","Harborfolk Bond","Harborfolk Flaw"]'>Harborfolk</span>
+29|<span data-caption="Details" data-subtable='["Haunted One Harrowing Event","Haunted One Personality Trait","Haunted One Ideal","Haunted One Bond","Haunted One Flaw"]'>Haunted One</span>
+30|<span data-caption="Details" data-subtable='["Heretic Heretical Belief","Heretic Personality Trait","Heretic Ideal","Heretic Bond","Heretic Flaw"]'>Heretic</span>
+31|<span data-caption="Details" data-subtable='["Inheritor Inheritance","Inheritor Personality Trait","Inheritor Ideal","Inheritor Bond","Inheritor Flaw"]'>Inheritor</span>
+32|<span data-caption="Details" data-subtable='["Inquisitor Personality Trait","Inquisitor Ideal","Inquisitor Bond","Inquisitor Flaw"]'>Inquisitor</span>
+33|<span data-caption="Details" data-subtable='["Insurgent Origin","Insurgent Personality Trait","Insurgent Ideal","Insurgent Bond","Insurgent Flaw"]'>Insurgent</span>
+34|<span data-caption="Details" data-subtable='["Knight of the Order Order","Knight of the Order Personality Trait","Knight of the Order Ideal","Knight of the Order Bond","Knight of the Order Flaw"]'>Knight of the Order</span>
+35|<span data-caption="Details" data-subtable='["Livestock Bandit Personality Trait","Livestock Bandit Ideal","Livestock Bandit Bond","Livestock Bandit Flaw"]'>Livestock Bandit</span>
+36|<span data-caption="Details" data-subtable='["Mercenary Veteran Personality Trait","Mercenary Veteran Ideal","Mercenary Veteran Bond","Mercenary Veteran Flaw"]'>Mercenary Veteran</span>
+37|<span data-caption="Details" data-subtable='["Merchant Personality Trait","Merchant Ideal","Merchant Bond","Merchant Flaw"]'>Merchant</span>
+38|<span data-caption="Details" data-subtable='["Miner Personality Trait","Miner Ideal","Miner Bond","Miner Flaw"]'>Miner</span>
+39|<span data-caption="Details" data-subtable='["Prisoner of War Personality Trait","Prisoner of War Ideal","Prisoner of War Bond","Prisoner of War Flaw"]'>Prisoner of War</span>
+40|<span data-caption="Details" data-subtable='["Refugee Personality Trait","Refugee Ideal","Refugee Bond","Refugee Flaw"]'>Refugee</span>
+41|<span data-caption="Details" data-subtable='["Secret Identity Personality Trait","Secret Identity Ideal","Secret Identity Bond","Secret Identity Flaw"]'>Secret Identity</span>
+42|<span data-caption="Details" data-subtable='["Touched by the Fey Fey Encounter","Touched by the Fey Personality Trait","Touched by the Fey Ideal","Touched by the Fey Bond","Touched by the Fey Flaw"]'>Touched by the Fey</span>
+43|<span data-caption="Details" data-subtable='["Trade Sheriff Personality Trait","Trade Sheriff Ideal","Trade Sheriff Bond","Trade Sheriff Flaw"]'>Trade Sheriff</span>
+44|<span data-caption="Details" data-subtable='["Tribe Member Personality Trait","Tribe Member Ideal","Tribe Member Bond","Tribe Member Flaw"]'>Tribe Member</span>
+45|<span data-caption="Details" data-subtable='["Urban Bounty Hunter Personality Trait","Urban Bounty Hunter Ideal","Urban Bounty Hunter Bond","Urban Bounty Hunter Flaw"]'>Urban Bounty Hunter</span>
 </script>
 <script id="Weird Stuff" type="text/csv">
 <span data-type="roll" data-sides="12">d12</span>|What Happened
 1|You were turned into a toad and remained in that form for <span data-type="roll" data-sides="4">1d4</span> weeks.
 2|You were petrified and remained a stone statue for a time until someone freed you.
-3|You were enslaved by a hag, a satyr, or some other being and lived in that creature’s thrall for <span data-type="roll" data-sides="6">1d6</span> years.
+3|You were enslaved by a hag, a satyr, or some other being and lived in that creature's thrall for <span data-type="roll" data-sides="6">1d6</span> years.
 4|A dragon held you as a prisoner for <span data-type="roll" data-sides="4">1d4</span> months until adventurers killed it.
 5|You were taken captive by a race of evil humanoids such as drow, kuo-toa, or quaggoths. You lived as a slave in the Underdark until you escaped.
 6|You served a powerful adventurer as a hireling. You have only recently left that service. Use the supplemental tables and work with your DM to determine the basic details about your former employer.
@@ -1240,15 +1276,15 @@ $(document).ready(function()
 11|You were swallowed by a giant fish and spent a month in its gullet before you escaped.
 12|A powerful being granted you a wish, but you squandered it on something frivolous
 </script>
-<script id="Acolyte Personality" type="text/csv">
+<script id="Acolyte Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
-1|I idolize a particular hero of my faith, and constantly refer to that person’s deeds and example.
+1|I idolize a particular hero of my faith, and constantly refer to that person's deeds and example.
 2|I can find common ground between the fiercest enemies, empathizing with them and always working toward peace
 3|I see omens in every event and action. The gods try to speak to us, we just need to listen
 4|Nothing can shake my optimistic attitude.
 5|I quote (or misquote) sacred texts and proverbs in almost every situation.
 6|I am tolerant (or intolerant) of other faiths and respect (or condemn) the worship of other gods.
-7|I've enjoyed fine food, drink, and high society among my temple’s elite. Rough living grates on me.
+7|I've enjoyed fine food, drink, and high society among my temple's elite. Rough living grates on me.
 8|I've spent so long in the temple that I have little practical experience dealing with people in the outside world.
 </script>
 <script id="Acolyte Ideal" type="text/csv">
@@ -1256,7 +1292,7 @@ $(document).ready(function()
 1|Tradition. The ancient traditions of worship and sacrifice must be preserved and upheld. (Lawful)
 2|Charity. I always try to help those in need, no matter what the personal cost. (Good)
 3|Change. We must help bring about the changes the gods are constantly working in the world. (Chaotic)
-4|Power. I hope to one day rise to the top of my faith’s religious hierarchy. (Lawful)
+4|Power. I hope to one day rise to the top of my faith's religious hierarchy. (Lawful)
 5|Faith. I trust that my deity will guide my actions, I have faith that if I work hard, things will go well. (Lawful)
 6|Aspiration. I seek to prove myself worthy of my god's favor by matching my actions against his or her teachings. (Any)
 </script>
@@ -1278,66 +1314,1945 @@ $(document).ready(function()
 5|I am suspicious of strangers and expect the worst of them.
 6|Once I pick a goal, I become obsessed with it to the detriment of everything else in my life.
 </script>
-<script id=" Personality" type="text/csv">
+<script id="Amonkhet Initiate Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I always have a joke on hand when the mood gets too serious.
+2|I use sarcasm and insults to keep a distance between myself and my crop-mates, because I don't want to get attached to them.
+3|I'll settle for nothing less than perfection—in myself, in my cropmates, in everything.
+4|I'm so focused on the glorious afterlife that nothing in this life can shake my calm resolve.
+5|I enjoy using my skills to help those who lack those same skills.
+6|I train hard so that I can play hard at the end of the day. I fully expect to play even harder in the glorious afterlife, but I'm not in a hurry to get there.
+7|I'm perfectly happy letting others pick up the slack for me while I take it easy.
+8|I'm constantly sizing up everyone around me, thinking about what kind of opponent they'll be in the final trial.
 </script>
-<script id=" Ideal" type="text/csv">
+<script id="Amonkhet Initiate Ideal" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Solidarity. The thing that matters most of all is that we're there for each other. (Lawful)
+2|Knowledge. The world is a puzzle—a mystery waiting to be solved. (Neutral)
+3|Strength. All that matters to me is my own perfection. Let everyone else seek that perfection in their own way. (Any)
+4|Ambition. I'm going to prove that I deserve only the best—of everything. (Evil)
+5|Zeal. Anything worth doing is worth throwing my whole self into. (Any)
+6|Redemption. I will train all the harder to make up for the doubt I entertained when I was younger. (Any)
 </script>
-<script id=" Bond" type="text/csv">
+<script id="Amonkhet Initiate Bond" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Bond
+1|One of my crop-mates is my dearest friend, and I hope we will face each other in the final trial.
+2|I am in love with a vizier.
+3|I am particularly drawn to one of the five gods, and I want nothing more than to win that god's particular favor.
+4|I am more devoted to Naktamun and its people than I am to any of the ideals of the gods.
+5|My weapon was a gift from a beloved trainer who died in an accident.
+6|I carry a memento of my time as an acolyte, and I treasure it above all other things.
 </script>
-<script id=" Flaw" type="text/csv">
+<script id="Amonkhet Initiate Flaw" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'm easily distracted by an attractive person, which could be the death of me in the trials.
+2|I really wanted to be a vizier, and I'm angry at the god who didn't choose me.
+3|Training for a lifetime to die in the end seems like a big waste of energy.
+4|I'm not at all sure I'll be able to grant a glorified death to any of my crop-mates.
+5|I have a lasting grudge against one of my crop-mates, and each of us wants to see the other fail.
+6|I think I've figured out that this world is not what it seems. Something dark is going on here.
 </script>
-<script id=" Personality" type="text/csv">
+<script id="Amonkhet Vizier Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Personality Trait
+1|Everything I do, I do gracefully and deliberately, and withcomplete confidence. (Oketra)
+2|Nothing can shake my rock-hard focus. (Oketra)
+3|When I am at peace, I am an oasis of perfect calm in the world. When I am roused to anger, I am an embodiment of terror. (Kefnet)
+4|I enjoy teasing acolytes and initiates with juicy tidbits of knowledge wrapped up in fiendishly difficult puzzles. (Kefnet)
+5|I have the utmost faith in myself and my abilities. (Rhonas)
+6|I get restless when life in the city feels too tame, too safe. (Rhonas)
+7|I enjoy solitude as an opportunity to plan my victory. (Bontu)
+8|I use satire as a way to undermine the teachings of the other gods. (Bontu)
+9|I love, fight, and feast with equal zeal. (Hazoret)
+10|I think of those in my care as my family, in a way that most people have trouble understanding. (Hazoret)
+</script>
+<script id="Amonkhet Vizier Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Solidarity. The worthy must respect the worthy. In the afterlife, all will be united in goal and action. (Oketra)
+2|Knowledge. The worthy shall cultivate a nimble mind, so as to perceive the wonders beyond imagination that wait in the afterlife. (Kefnet)
+3|Strength. The worthy shall hone a strong body that can withstand the boundless energies of the afterlife. (Rhonas)
+4|Ambition. The worthy shall strive for greatness, for supremacy in life leads to supremacy in the afterlife. (Bontu)
+5|Zeal. The worthy shall rush to the God-Pharaoh's side with relentless passion, rising to overcome every obstacle in their way. (Hazoret)
+6|Naktamun. The life of the city is ordered according to the plan of the God-Pharaoh, and that order must be preserved at all costs 
+</script>
+<script id="Amonkhet Vizier Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My loyalty to my companions embodies the ideal of loyalty to my god. (Oketra)
+2|The teachings of my god are more precious to me than any possession. (Kefnet)
+3|I would do anything to defend the temple of my god from any harm or desecration. (Rhonas)
+4|I am committed to the service of my god—because it's my sure ticket into the afterlife. (Bontu)
+5|I love my god and never want my service to end. (Hazoret)
+6|I have a close friend or lover who is also a vizier. 
+</script>
+<script id="Amonkhet Vizier Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am in love with an initiate, and I want to shield this person from death in the trials.
+2|I secretly wish I had not been chosen as a vizier, so I could participate in the trials as an initiate.
+3|I secretly question whether the gods care at all about us or what we do.
+4|A vizier of another god seeks my death in retribution for a past insult.
+5|I am terrified of what lies beyond the Gate to the Afterlife.
+6|I secretly believe the God-Pharaoh's return will not bring blessing to this world.
+</script>
+<script id="Anthropologist Adopted Culture" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Adopted Culture
+1|Aarakocra
+2|Dwarf
+3|Elf
+4|Goblin
+5|Halfling
+6|Human
+7|Lizardfolk
+8|Orc
+</script>
+<script id="Anthropologist Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Personality Trait
+1|I prefer the company of those who aren't like me, including people of other races.
+2|I'm a stickler when it comes to observing proper etiquette and local customs.
+3|I would rather observe than meddle.
+4|By living among violent people, I have become desensitized to violence.
+5|I would risk life and limb to discover a new culture or unravel the secrets of a dead one.
+6|When I arrive at a new settlement for the first time, I must learn all its customs. 
+</script>
+<script id="Anthropologist Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Discovery. I want to be the first person to discover a lost culture. (Any)
+2|Distance. One must not interfere with the affairs of another culture—even one in need of aid. (Lawful)
+3|Knowledge. By understanding other races and cultures, we learn to understand ourselves. (Any)
+4|Power. Common people crave strong leadership, and I do my utmost to provide it. (Lawful)
+5|Protection. I must do everything possible to save a society facing extinction. (Good)
+6|Indifferent. Life is cruel. What's the point in saving people if they're going to die anyway? (Chaotic) 
+</script>
+<script id="Anthropologist Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My mentor gave me a journal filled with lore and wisdom. Losing it would devastate me.
+2|Having lived among the people of a primeval tribe or clan, I long to return and see how they are faring.
+3|Years ago, tragedy struck the members of an isolated society I befriended, and I will honor them.
+4|I want to learn more about a particular humanoid culture that fascinates me.
+5|I seek to avenge a clan, tribe, kingdom, or empire that was wiped out.
+6|I have a trinket that I believe is the key to finding a long-lost society.
+</script>
+<script id="Anthropologist Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|Boats make me seasick.
+2|I talk to myself, and I don't make friends easily.
+3|I believe that I'm intellectually superior to people from other cultures and have much to teach them.
+4|I've picked up some unpleasant habits living among goblins, lizardfolk, or orcs.
+5|I complain about everything.
+6|I wear a tribal mask and never take it off
+</script>
+<script id="Archaeologist Signature Item" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Signature Item
+1|10-foot pole
+2|Crowbar
+3|Hat
+4|Hooded lantern
+5|Medallion
+6|Shovel
+7|Sledgehammer
+8|Whip
+</script>
+<script id="Archaeologist Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I love a good puzzle or mystery.
+2|I'm a pack rat who never throws anything away.
+3|Fame is more important to me than money.
+4|I have no qualms about stealing from the dead.
+5|I'm happier in a dusty old tomb than I am in the centers of civilization.
+6|Traps don't make me nervous. Idiots who trigger traps make me nervous.
+7|I might fail, but I will never give up.
+8|You might think I'm a scholar, but I love a good brawl. These fists were made for punching 
 </script>
-<script id=" Ideal" type="text/csv">
+<script id="Archaeologist Ideal" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Preservation. That artifact belongs in a museum. (Good)
+2|Greed. I won't risk my life for nothing. I expect some kind of payment. (Any)
+3|Death Wish. Nothing is more exhilarating than a narrow escape from the jaws of death. (Chaotic)
+4|Dignity. The dead and their belongings deserve to be treated with respect. (Lawful)
+5|Immortality. All my exploring is part of a plan to find the secret of everlasting life. (Any)
+6|Danger. With every great discovery comes grave danger. The two walk hand in hand. (Any)
 </script>
-<script id=" Bond" type="text/csv">
+<script id="Archaeologist Bond" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Bond
+1|Ever since I was a child, I've heard stories about a lost city. I aim to find it, learn its secrets, and earn my place in the history books.
+2|I want to find my mentor, who disappeared on an expedition some time ago.
+3|I have a friendly rival. Only one of us can be the best, and I aim to prove it's me.
+4|I won't sell an art object or other treasure that has historical significance or is one of a kind.
+5|I'm secretly in love with the wealthy patron who sponsors my archaeological exploits.
+6|I hope to bring prestige to a library, a museum, or a university.
 </script>
-<script id=" Flaw" type="text/csv">
+<script id="Archaeologist Flaw" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have a secret fear of some common wild animal—and in my work, I see them everywhere.
+2|I can't leave a room without searching it for secret doors.
+3|When I'm not exploring dungeons or ruins, I get jittery and impatient.
+4|I have no time for friends or family. I spend every waking moment thinking about and preparing for my next expedition.
+5|When given the choice of going left or right, I always go left.
+6|I can't sleep except in total darkness.
 </script>
-<script id=" Personality" type="text/csv">
+<script id="Aristocrat Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|My ambitions are boundless. I will be a noble one day!
+2|I must alwayss look my best.
+3|Beauty is everywhere. I can find it in even the homliest person and the most horrible tragedy.
+4|Décorum must be preserved at all costs.
+5|I will not admit I am wrong if I can avoid it.
+6|I am extremely well-educated and frequently remind others of that fact.
+7|I take what I can today, because I do not know what tomorrow holds.
+8|My life is full of dance, song, drink, and love.
 </script>
-<script id=" Ideal" type="text/csv">
+<script id="Aristocrat Ideal" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Generous. I have a responsibility to help and protect the less fortunate. (Good)
+2|Loyal. My word, once given, is my bond. (Lawful)
+3|Callous. I am unconcerned with any negative effects my actions may have on the lives and fortunes of others. (Evil)
+4|Impulsive. I follow my heart. (Chaotic)
+5|Ignorant. Explanations bore me. (Neutral)
+6|Isolationist. I am concerned with the fortunes of my friends and family. Others must see to themselves. (Any)
 </script>
-<script id=" Bond" type="text/csv">
+<script id="Aristocrat Bond" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Bond
+1|I have dedicated my wealth and my talents to the service of one of the city's many temples.
+2|My family and I are loyal supporters of a council member. Our fortunes are inexorably tied to hers. I would do anything to support her.
+3|My family has suffered greatly since the fall of a previous council member. We honor his memory in secret.
+4|My family plotted with someone's brother to usurp a council city seat. Betrayal is the quickest route to power.
+5|Wealth and power are nothing. Fulfillment can only be found in artistic expression.
+6|It's not how you feel, who you know, or what you can do - it's how you look, and I look fabulous.
 </script>
-<script id=" Flaw" type="text/csv">
+<script id="Aristocrat Flaw" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have difficulty caring about anyone or anything other than myself.
+2|Having grown up with wealth, I am careless with my finances. I overspend and am overly generous.
+3|The ends (my advancement) justify any means.
+4|I must have what I want and will brook no delay.
+5|My family has lost everything. I must keep up appearances, lest we become a laughingstock.
+6|I have no artistic sense. I hide that fact behind extreme opinons and have become a trendsetter.
 </script>
-<script id=" Personality" type="text/csv">
+<script id="Caravan Specialist Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|Any group is only as strong as its weakest link. Everyone has to pull their own weight.
+2|There's always someone out there trying to take what I've got. Always be vigilant.
+3|Anything can be learned if you have the right teacher. Most folks just need a chance.
+4|Early to bed and early to rise; this much at least is under my control.
+5|You can listen to me or don't and wish you had. Everyone ends up on one side of that fence.
+6|Eventually my hard work will be rewarded. Maybe that time has finally come.
+7|A strong ox or horse is more reliable than most people I've met.
+8|I never had time for books, but wish I had. I admire folks who have taken the time to learn.
+
+
 </script>
-<script id=" Ideal" type="text/csv">
+<script id="Caravan Specialist Ideal" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Service. Using my talents to help others is the best way of helping myself. (Good)
+2|Selfish. What people don't know WILL hurt them, but why is that my problem? (Evil)
+3|Wanderer. I go where the road takes me. Sometimes that's a good thing… (Chaotic)
+4|Fittest. On the open road, the law of nature wins. Victims are the unprepared. (Lawful)
+5|Focused. I simply have a job to do, and I'm going to do it. (Neutral)
+6|Motivated. There's a reason I'm good at what I do, I pay attention to the details. (Any)
 </script>
-<script id=" Bond" type="text/csv">
+<script id="Caravan Specialist Bond" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Bond
+1|My brother has a farm and I've helped him and his neighbors move their goods to the city and other surrounding towns. Those are good people.
+2|A caravan I lead was attacked by bandits and many innocents died. I swear that I will avenge them by killing any bandits I encounter.
+3|The soldiers are mostly good guys who understand the importance of protecting the roads. The City Watch is who you have to look out for. If they are inspecting your goods, get ready to pay a fine.
+4|The new commander understands the importance of safe roads. He's hired me for several jobs and I'm grateful.
+5|There's always a road I haven't traveled before. I'm always looking for new places to explore.
+6|Wealth and power mean little without the freedom to go where and when you want.
 </script>
-<script id=" Flaw" type="text/csv">
+<script id="Caravan Specialist Flaw" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have trouble trusting people I've just met.
+2|I enjoy the open road. Underground and tight spaces make me very nervous.
+3|I expect others to heed my orders and have little respect or sympathy if they don't.
+4|I am very prideful and have trouble admitting when I'm wrong.
+5|Once I decide on a course of action, I do not waiver.
+6|I like to explore, and my curiosity will sometimes get me into trouble.
 </script>
-<script id=" Personality" type="text/csv">
+<script id="Charlatan Favorite Schemes" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Favorite Schemes
+1|I cheat at games of chance
+2|I shave coins or forge documents
+3|I insinuate myself into people's lives to prey on their weakness and secure their fortunes.
+4|I put on new identities like clothes
+5|I run sleight of hand cons on street corners
+6|I convince people that worthless junk is worth their hard-earned money 
+</script>
+<script id="Charlatan Personality Trait" type="text/csv">
 <span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I fall in and out of love easily, and am always pursuing someone.
+2|I have a joke for every occasion, especially occasions where humor is inappropriate.
+3|Flattery is my preferred trick for getting what I want.
+4|I'm a born gambler who can't resist taking a risk for a potential payoff.
+5|I lie about almost everything, even when there's no good reason to.
+6|Sarcasm and insults are my weapons of choice.
+7|I keep multiple holy symbols on me and invoke whatever deity might come in useful at any given moment.
+8|I pocket anything I see that might have some value.
 </script>
-<script id=" Ideal" type="text/csv">
+<script id="Charlatan Ideal" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Independence. I am a free spirit—no one tells me what to do. (Chaotic)
+2|Fairness. I never target people who can't afford to lose a few coins. (Lawful)
+3|Charity. I distribute the money I acquire to the people who really need it. (Good)
+4|Creativity. I never run the same con twice. (Chaotic)
+5|Friendship. Material goods come and go. Bonds of friendship last forever. (Good)
+6|Aspiration. I'm determined to make something of myself. (Any)
 </script>
-<script id=" Bond" type="text/csv">
+<script id="Charlatan Bond" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Bond
+1|I fleeced the wrong person and must work to ensure that this individual never crosses paths with me or those I care about.
+2|I owe everything to my mentor—a horrible person who's probably rotting in jail somewhere.
+3|Somewhere out there, I have a child who doesn't know me. I'm making the world better for him or her.
+4|I come from a noble family, and one day I'll reclaim my lands and title from those who stole them from me.
+5|A powerful person killed someone I love. Someday soon, I'll have my revenge.
+6|I swindled and ruined a person who didn't deserve it. I seek to atone for my misdeeds but might never be able to forgive myself.
 </script>
-<script id=" Flaw" type="text/csv">
+<script id="Charlatan Flaw" type="text/csv">
 <span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I can't resist a pretty face.
+2|I'm always in debt. I spend my ill-gotten gains on decadent luxuries faster than I bring them in.
+3|I'm convinced that no one could ever fool me the way I fool others.
+4|I'm too greedy for my own good. I can't resist taking a risk if there's money involved.
+5|I can't resist swindling people who are more powerful than me.
+6|I hate to admit it and will hate myself for it, but I'll run and preserve my own hide if the going gets tough
 </script>
+<script id="City Watch Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm always polite and respectful.
+2|I'm haunted by memories of war. I can't get the images of violence out of my mind.
+3|I've lost too many friends, and I'm slow to make new ones.
+4|I'm full of inspiring and cautionary tales from my military experience relevant to almost every combat situation.
+5|I can stare down a hell hound without flinching.
+6|I enjoy being strong and like breaking things.
+7|I have a crude sense of humor.
+8|I face problems head-on. A simple, direct solution is the best path to success.
+</script>
+<script id="City Watch Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Greater Good. Our lot is to lay down our lives in defense of others. (Good)
+2|Responsibility. I do what I must and obey just authority. (Lawful)
+3|Independence. When people follow orders blindly, they embrace a kind of tyranny. (Chaotic)
+4|Might. In life as in war, the stronger force wins. (Evil)
+5|Live and Let Live. Ideals aren't worth killing over or going to war for. (Neutral)
+6|Nation. My city, nation, or people are all that matter. (Any)
+</script>
+<script id="City Watch Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I would still lay down my life for the people I served with.
+2|Someone saved my life on the battlefield. To this day, I will never leave a friend behind.
+3|My honor is my life.
+4|I'll never forget the crushing defeat my company suffered or the enemies who dealt it.
+5|Those who fight beside me are those worth dying for.
+6|I fight for those who cannot fight for themselves.
+</script>
+<script id="City Watch Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The monstrous enemy we faced in battle still leaves me quivering with fear.
+2|I have little respect for anyone who is not a proven warrior.
+3|I made a terrible mistake in battle cost many lives—and I would do anything to keep that mistake secret.
+4|My hatred of my enemies is blind and unreasoning.
+5|I obey the law, even if the law causes misery.
+6|I'd rather eat my armor than admit when I'm wrong.
+</script>
+<script id="Clan Crafter Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I believe that anything worth doing is worth doing right. I can't help it—I'm a perfectionist.
+2|I'm a snob who looks down on those who can't appreciate fine art.
+3|I always want to know how things work and what makes people tick.
+4|I'm full of witty aphorisms and have a proverb for every occasion.
+5|I'm full of witty aphorisms and have a proverb for every occasion.
+6|I like to talk at length about my profession.
+7|I don't part with my money easily and will haggle tirelessly to get the best deal possible.
+8|I'm well known for my work, and I want to make sure everyone appreciates it. I'm always taken aback when people haven't heard of me.
+
+
+</script>
+<script id="Clan Crafter Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Community. It is the duty of all civilized people to strengthen the bonds of community and the security of civilization. (Lawful)
+2|Generosity. My talents were given to me so that I could use them to benefit the world. (Good)
+3|Freedom. Everyone should be free to pursue his or her own livelihood. (Chaotic)
+4|Greed. I'm only in it for the money. (Evil)
+5|People. I'm committed to the people I care about, not to ideals. (Neutral)
+6|Aspiration. I work hard to be the best there is at my craft. (Any)
+</script>
+<script id="Clan Crafter Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The workshop where I learned my trade is the most important place in the world to me.
+2|I created a great work for someone, and then found them unworthy to receive it. I'm still looking for someone worthy.
+3|I owe my clan a great debt for forging me into the person I am today.
+4|I pursue wealth to secure someone's love.
+5|One day I will return to my clan and prove that I am the greatest artisan of them all.
+6|I will get revenge on the evil forces that destroyed my place of business and ruined my livelihood.
+</script>
+<script id="Clan Crafter Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'll do anything to get my hands on something rare or priceless.
+2|I'm quick to assume that someone is trying to cheat me.
+3|No one must ever learn that I once stole money from clan coffers.
+4|I'm never satisfied with what I have—I always want more.
+5|I would kill to acquire a noble title.
+6|I'm horribly jealous of anyone who can outshine my handiwork. Everywhere I go, I'm surrounded by rivals.
+</script>
+<script id="Cloistered Scholar Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I use polysyllabic words that convey the impression of great erudition.
+2|I've read every book in the world's greatest libraries—or I like to boast that I have.
+3|I'm used to helping out those who aren't as smart as I am, and I patiently explain anything and everything to others.
+4|There's nothing I like more than a good mystery.
+5|I'm willing to listen to every side of an argument before I make my own judgment.
+6|I… speak… slowly… when talking… to idiots, … which… almost… everyone… is… compared… to me.
+7|I am horribly, horribly awkward in social situations.
+8|I'm convinced that people are always trying to steal my secrets.
+
+
+</script>
+<script id="Cloistered Scholar Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Knowledge. The path to power and self-improvement is through knowledge. (Neutral)
+2|Beauty. What is beautiful points us beyond itself toward what is true. (Good)
+3|Logic. Emotions must not cloud our logical thinking. (Lawful)
+4|No Limits. Nothing should fetter the infinite possibility inherent in all existence. (Chaotic)
+5|Power. Knowledge is the path to power and domination. (Evil)
+6|Self-Improvement. The goal of a life of study is the betterment of oneself. (Any)
+</script>
+<script id="Cloistered Scholar Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|It is my duty to protect my students.
+2|I have an ancient text that holds terrible secrets that must not fall into the wrong hands.
+3|I work to preserve a library, university, scriptorium, or monastery.
+4|My life's work is a series of tomes related to a specific field of lore.
+5|I've been searching my whole life for the answer to a certain question.
+6|I sold my soul for knowledge. I hope to do great deeds and win it back.
+</script>
+<script id="Cloistered Scholar Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am easily distracted by the promise of information.
+2|Most people scream and run when they see a demon. I stop and take notes on its anatomy.
+3|Unlocking an ancient mystery is worth the price of a civilization.
+4|I overlook obvious solutions in favor of complicated ones.
+5|I speak without really thinking through my words, invariably insulting others.
+6|I can't keep a secret to save my life, or anyone else's.
+</script>
+<script id="Courtier Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I believe that anything worth doing is worth doing right. I can't help it—I'm a perfectionist.
+2|I'm a snob who looks down on those who can't appreciate fine art.
+3|I always want to know how things work and what makes people tick.
+4|I'm full of witty aphorisms and have a proverb for every occasion.
+5|I'm full of witty aphorisms and have a proverb for every occasion.
+6|I like to talk at length about my profession.
+7|I don't part with my money easily and will haggle tirelessly to get the best deal possible.
+8|I'm well known for my work, and I want to make sure everyone appreciates it. I'm always taken aback when people haven't heard of me.
+
+
+</script>
+<script id="Courtier Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Community. It is the duty of all civilized people to strengthen the bonds of community and the security of civilization. (Lawful)
+2|Generosity. My talents were given to me so that I could use them to benefit the world. (Good)
+3|Freedom. Everyone should be free to pursue his or her own livelihood. (Chaotic)
+4|Greed. I'm only in it for the money. (Evil)
+5|People. I'm committed to the people I care about, not to ideals. (Neutral)
+6|Aspiration. I work hard to be the best there is at my craft. (Any)
+</script>
+<script id="Courtier Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The workshop where I learned my trade is the most important place in the world to me.
+2|I created a great work for someone, and then found them unworthy to receive it. I'm still looking for someone worthy.
+3|I owe my court a great debt for forging me into the person I am today.
+4|I pursue wealth to secure someone's love.
+5|One day I will return to my court and prove that I am the greatest artisan of them all.
+6|I will get revenge on the evil forces that destroyed my place of business and ruined my livelihood.
+</script>
+<script id="Courtier Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'll do anything to get my hands on something rare or priceless.
+2|I'm quick to assume that someone is trying to cheat me.
+3|No one must ever learn that I once stole money from court coffers.
+4|I'm never satisfied with what I have—I always want more.
+5|I would kill to acquire a noble title.
+6|I'm horribly jealous of anyone who can outshine my handiwork. Everywhere I go, I'm surrounded by rivals.
+</script>
+<script id="Criminal Specialty" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Specialty
+1|Blackmailer
+2|Burglar
+3|Enforcer
+4|Fence
+5|Highway robber
+6|Hired killer
+7|Pickpocket
+8|Smuggler
+
+
+</script>
+<script id="Criminal Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I always have a plan for what to do when things go wrong
+2|I am always calm, no matter what the situation. I never raise my voice or let my emotions control me.
+3|The first thing I do in a new place is note the locations of everything valuable—or where such things could be hidden
+4|I would rather make a new friend than a new enemy
+5|I am incredibly slow to trust. Those who seem the fairest often have the most to hide
+6|I don't pay attention to the risks in a situation. Never tell me the odds
+7|The best way to get me to do something is to tell me I can't do it
+8|I blow up at the slightest insult.
+
+
+</script>
+<script id="Criminal Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Honor. I don't steal from others in the trade. (Lawful)
+2|Freedom. Chains are meant to be broken, as are those who would forge them. (Chaotic)
+3|Charity. I steal from the wealthy so that I can help people in need. (Good)
+4|Greed. I will do whatever it takes to become wealthy. (Evil)
+5|People. I'm loyal to my friends, not to any ideals, and everyone else can take a trip down the Styx for all I care. (Neutral)
+6|Redemption. There's a spark of good in everyone. (Good)
+</script>
+<script id="Criminal Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I'm trying to pay off an old debt I owe to a generous benefactor.
+2|My ill-gotten gains go to support my family.
+3|Something important was taken from me, and I aim to steal it back.
+4|I will become the greatest thief that ever lived.
+5|I'm guilty of a terrible crime. I hope I can redeem myself for it.
+6|Someone I loved died because of a mistake I made. That will never happen again.
+</script>
+<script id="Criminal Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|When I see something valuable, I can't think about anything but how to steal it.
+2|When faced with a choice between money and my friends, I usually choose the money.
+3|If there's a plan, I'll forget it. If I don't forget it, I'll ignore it.
+4|I have a “tell” that reveals when I'm lying.
+5|I turn tail and run when things look bad.
+6|An innocent person is in prison for a crime that I committed. I'm okay with that.
+</script>
+<script id="Dragon Casualty Origin" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Origin
+1|Dockworker / Fisherman
+2|Tradesperson / Merchant
+3|Soldier
+4|Adventurer
+5|Entertainer
+6|Scholar / Healer
+7|Criminal 
+8|Unskilled laborer
+</script>
+<script id="Dragon Casualty Disfigurement" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Disfigurement
+1|Small non-functional wing(s) or misshapen, wing-like membranes along one or both arms
+2|Elongated, claw-like hand(s) and/or feet
+3|Painful scales randomly embedded in skin
+4|Bulbous, reptilian eye(s)
+5|Enlarged dorsal spines
+6|Hair replaced with small irregular spines 
+</script>
+<script id="Dragon Casualty Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I am driven to escape my past, and rarely stay in one place long.
+2|I know secrets of a dragon, but fear the harm that may befall me should others learn them.
+3|Speaking of my ordeal helps sooth the still open wounds in my soul.
+4|My former life is meaningless, and was ripped to shreds by the claws of the dragon. All that matters now is what I do with the future.
+5|I have faced the worst a dragon can deliver and survived. I am fearless, and my resolve unshakable.
+6|I am haunted my tortured past, and wake at night screaming at half-remembered horrors.
+7|I sleep with my back to a wall or tree, and a weapon within arm's reach.
+8|I am slow to trust, but incredibly loyal to those who have earned it.
+</script>
+<script id="Dragon Casualty Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Survivor. No matter the cost, I will take any action necessary to survive (Any)
+2|Independence. When in trouble, the only person I can rely on is myself (Chaotic)
+3|Compassionate. I have suffered long at the hands of a dragon, and take pitty and compassion on the suffering of others (Good)
+4|Secretive. I am withdrawn, and hide my monstrous appearance for fear of drawing unwanted attention (Chaotic).
+5|Justice. I have been wronged, and will not allow the same fate to befall others (Lawful).
+6|Sycophant. During my ordeal, I became a willing servant of the dragon, and spy on his behalf (Evil)
+</script>
+<script id="Dragon Casualty Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I have sworn vengeance against the evil dragon and those that follow him.
+2|I long to reunite with friends and family who may dwell among the refugees of my hometown, and protect them.
+3|While a prisoner of the dragon, I overheard rumors of an item or treasure the dragon seeks. I will have that treasure for myself!
+4|I seek to reclaim and rebuild my former life to the best of my ability.
+5|I have been reborn as a child of the dragon. I will claim my birthright as his chosen heir and successor.
+6|I attribute my survival to the work of the divine, and seek to prove myself worthy of the honor.
+</script>
+<script id="Dragon Casualty Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have been touched with dragon-greed, and have a lust for wealth which can never be satisfied.
+2|I secretly believe others are plotting to harm me.
+3|I no longer enjoy the simple pleasures in life. Food is but ashes and bile in my throat.
+4|Anyone who refuses to celebrate my celebrity does not deserve my company.
+5|I am paranoid and overly suspicious of others. Anyone may be an agent of the dragon.
+6|Once I make up my mind, I follow my chosen course of action regardless of the consequences.
+</script>
+<script id="Elven Refugee Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I long for a home that never really existed
+2|Though I am not an elf, I am a fervent, radical worshipper of the elven gods
+3|I live in the moment, knowing my life could be turned upside down any day.
+4|I appreciate beauty in all of its forms
+5|I hate the dark elves for driving the elves out of their homes in the past.
+6|I am a forest bumpkin who grew up in a tent in the woods and is wholly ignorant of city life
+7|I was raised alongside children of many other races. I harbor no racial prejudices at all.
+8|The elves have just the right word for so many things that cannot be expressed as well in other languages. I pepper my speech with elven words, phrases, and sayings.
+
+
+</script>
+<script id="Elven Refugee Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Patient. The elves have taught me to think and plan for the longterm. (Lawful)
+2|Rebellious. Governments and politicians drove my family to the camps. I subtly defy authority whenever I think I can get away with it. (Chaotic)
+3|Self-Absorbed. I've had to look out for number one so long that it has become second nature. (Any)
+4|Wanderlust. I want to see as much of the world beyond the camps as I can. (Any)
+5|Generous. I give everything I can to help those in need, regardless of who they are. (Good)
+6|To the Abyss with Them. The people of a neighboring country cast me out. I won't risk my hide to help them. (Evil)
+</script>
+<script id="Elven Refugee Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The elves took me in when I had nowhere else to go. In return, I do what I can to help elves in need
+2|I seek revenge against the people of a neighboring country for driving my family into the forest.
+3|My family lost everything when they were driven from their home. I strive to rebuild that fortune.
+4|The forest has provided me with food and shelter. In return, I protect forests and those who dwell within.
+5|I am deeply, tragically in love with someone whose racial lifespan is far longer or shorter than mine.
+6|Members of my extended family did not make it to the camps or have been kidnapped to fight in the Arena. I search for them tirelessly.
+</script>
+<script id="Elven Refugee Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am very uncomfortable indoors and underground.
+2|I am haughty. I grew up among the elves and emulate them. Other races are crude in comparison.
+3|Elf this, elf that. I am sick and tired of the elves.
+4|I am a miser. Having lost everything once before, I clutch my possessions and wealth very tightly.
+5|I am a moocher. I am so used to others providing for me that I have come to expect everyone to do it.
+6|I believe the gods have cursed me, my family, and all of my fellow refugees. We are all doomed, doomed I tell you!
+</script>
+<script id="Entertainer Routine" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Routine
+1|Actor 
+2|Dancer 
+3|Fire-eater 
+4|Jester 
+5|Juggler 
+6|Instrumentalist
+7|Poet
+8|Singer
+9|Storyteller
+10|Tumbler 
+</script>
+<script id="Entertainer Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I know a story relevant to almost every situation.
+2|Whenever I come to a new place, I collect local rumors and spread gossip.
+3|I'm a hopeless romantic, always searching for that “special someone.”
+4|Nobody stays angry at me or around me for long, since I can defuse any amount of tension.
+5|I love a good insult, even one directed at me.
+6|I get bitter if I'm not the center of attention.
+7|I'll settle for nothing less than perfection.
+8|I change my mood or my mind as quickly as I change key in a song.
+
+
+</script>
+<script id="Entertainer Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Beauty. When I perform, I make the world better than it was. (Good)
+2|Tradition. The stories, legends, and songs of the past must never be forgotten, for they teach us who we are. (Lawful)
+3|Creativity. The world is in need of new ideas and bold action. (Chaotic)
+4|Greed. I'm only in it for the money and fame. (Evil)
+5|People. I like seeing the smiles on people's faces when I perform. That's all that matters. (Neutral)
+6|Honesty. Art should reflect the soul; it should come from within and reveal who we really are. (Any)
+</script>
+<script id="Entertainer Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My instrument is my most treasured possession, and it reminds me of someone I love.
+2|Someone stole my precious instrument, and someday I'll get it back.
+3|I want to be famous, whatever it takes.
+4|I idolize a hero of the old tales and measure my deeds against that person's.
+5|I will do anything to prove myself superior to my hated rival.
+6|I would do anything for the other members of my old troupe.
+</script>
+<script id="Entertainer Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'll do anything to win fame and renown.
+2|I'm a sucker for a pretty face.
+3|A scandal prevents me from ever going home again. That kind of trouble seems to follow me around.
+4|I once satirized a noble who still wants my head. It was a mistake that I will likely repeat.
+5|I have trouble keeping my true feelings hidden. My sharp tongue lands me in trouble.
+6|Despite my best efforts, I am unreliable to my friends.
+</script>
+<script id="Far Traveler Travel Reason" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Travel Reason
+1|Emissary
+2|Exile
+3|Fugitive
+4|Pilgrim
+5|Sightseer
+6|Wanderer
+
+
+
+
+</script>
+<script id="Far Traveler Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Personality Trait
+1|I have different assumptions from those around me concerning personal space, blithely invading others' space in innocence, or reacting to ignorant invasion of my own.
+2|I have my own ideas about what is and is not food, and I find the eating habits of those around me fascinating, confusing, or revolting.
+3|I have a strong code of honor or sense of propriety that others don't comprehend.
+4|I express affection or contempt in ways that are unfamiliar to others.
+5|I honor my deities through practices that are foreign to this land.
+6|I begin or end my day with small traditional rituals that are unfamiliar to those around me.
+
+
+
+
+</script>
+<script id="Far Traveler Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Open. I have much to learn from the kindly folk I meet along my way. (Good)
+2|Reserved. As someone new to these strange lands, I am cautious and respectful in my dealings. (Lawful)
+3|Adventure. I'm far from home, and everything is strange and wonderful! (Chaotic)
+4|Cunning. Though I may not know their ways, neither do they know mine, which can be to my advantage. (Evil)
+5|Inquisitive. Everything is new, but I have a thirst to learn. (Neutral)
+6|Suspicious. I must be careful, for I have no way of telling friend from foe here. (Any)
+</script>
+<script id="Far Traveler Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|So long as I have this token from my homeland, I can face any adversity in this strange land.
+2|The gods of my people are a comfort to me so far from home
+3|I hold no greater cause than my service to my people.
+4|My freedom is my most precious possession. I'll never let anyone take it from me again.
+5|I'm fascinated by the beauty and wonder of this new land.
+6|Though I had no choice, I lament having to leave my loved one(s) behind. I hope to see them again one day.
+</script>
+<script id="Far Traveler Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am secretly (or not so secretly) convinced of the superiority of my own culture over that of this foreign land.
+2|I pretend not to understand the local language in order to avoid interactions I would rather not have.
+3|I have a weakness for the new intoxicants and other pleasures of this land.
+4|I don't take kindly to some of the actions and motivations of the people of this land, because these folk are different from me.
+5|I consider the adherents of other gods to be deluded innocents at best, or ignorant fools at worst.
+6|I have a weakness for the exotic beauty of the people of these lands.
+</script>
+<script id="Folk Hero Defining Event" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Defining Event
+1|I stood up to a tyrant's agents 
+2|I saved people during a natural disaster.
+3|I stood alone against a terrible monster.
+4|I stole from a corrupt merchant to help the poor.
+5|I led a militia to fight off an invading army.
+6|I broke into a tyrant's castle and stole weapons to arm the people.
+7|I trained the peasantry to use farm implements as weapons against a tyrant's soldiers.
+8|A lord rescinded an unpopular decree after I led a symbolic act of protest against it.
+9|A celestial, fey, or similar creature gave me a blessing or revealed my secret origin.
+10|Recruited into a lord's army, I rose to leadership and was commended for my heroism. 
+</script>
+<script id="Folk Hero Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I judge people by their actions, not their words
+2|If someone is in trouble, I'm always ready to lend help
+3|When I set my mind to something, I follow through no matter what gets in my way.
+4|I have a strong sense of fair play and always try to find the most equitable solution to arguments.
+5|I'm confident in my own abilities and do what I can to instill confidence in others
+6|Thinking is for other people. I prefer action
+7|I misuse long words in an attempt to sound smarter.
+8|I get bored easily. When am I going to get on with my destiny?
+
+
+</script>
+<script id="Folk Hero Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Respect. People deserve to be treated with dignity and respect. (Good)
+2|Fairness. No one should get preferential treatment before the law, and no one is above the law. (Lawful)
+3|Freedom. Tyrants must not be allowed to oppress the people. (Chaotic)
+4|Might. If I become strong, I can take what I want—what I deserve. (Evil)
+5|Sincerity. There's no good in pretending to be something I'm not. (Neutral)
+6|Destiny. Nothing and no one can steer me away from my higher calling. (Any)
+</script>
+<script id="Folk Hero Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I have a family, but I have no idea where they are. One day, I hope to see them again
+2|I worked the land, I love the land, and I will protect the land.
+3|A proud noble once gave me a horrible beating, and I will take my revenge on any bully I encounter.
+4|My tools are symbols of my past life, and I carry them so that I will never forget my roots.
+5|I protect those who cannot protect themselves
+6|I wish my childhood sweetheart had come with me to pursue my destiny
+</script>
+<script id="Folk Hero Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The tyrant who rules my land will stop at nothing to see me killed
+2|I'm convinced of the significance of my destiny, and blind to my shortcomings and the risk of failure
+3|The people who knew me when I was young know my shameful secret, so I can never go home again
+4|I have a weakness for the vices of the city, especially hard drink
+5|Secretly, I believe that things would be better if I were a tyrant lording over the land.
+6|I have trouble trusting in my allies.
+</script>
+<script id="Guild Artisan Guild Business" type="text/csv">
+<span data-type="roll" data-sides="20">d20</span>|Guild Business
+1|Alchemists and apothecaries 
+2|Armorers, locksmiths and finesmiths
+3|Brewers, distillers and vintners 
+4|Calligraphers, scribes and scriveners
+5|Carpenters, roofers and plasterers 
+6|Cartographers, surveyors and chart-makers
+7|Cobblers and shoemakers 
+8|Cooks and bakers 
+9|Glassblowers and glaziers 
+10|Jewelers and gemcutters 
+11|Leatherworkers, skinners and tanners
+12|Masons and stonecutters
+13|Painters, limners, and sign-makers
+14|Potters and tile-makers
+15|Shipwrights and sailmakers
+16|Smiths and metal-forgers
+17|Tinkers, pewterers, and casters
+18|Wagon-makers and wheelwrights
+19|Weavers and dyers
+20|Woodcarvers, coopers and bowyers 
+</script>
+<script id="Guild Artisan Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I believe that anything worth doing is worth doing right. I can't help it—I'm a perfectionist.
+2|I'm a snob who looks down on those who can't appreciate fine art.
+3|I always want to know how things work and what makes people tick.
+4|I'm full of witty aphorisms and have a proverb for every occasion.
+5|I'm rude to people who lack my commitment to hard work and fair play.
+6|I like to talk at length about my profession.
+7|I don't part with my money easily and will haggle tirelessly to get the best deal possible.
+8|I'm well known for my work, and I want to make sure everyone appreciates it. I'm always taken aback when people haven't heard of me.
+
+
+</script>
+<script id="Guild Artisan Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Community. It is the duty of all civilized people to strengthen the bonds of community and the security of civilization. (Lawful)
+2|Generosity. My talents were given to me so that I could use them to benefit the world. (Good)
+3|Freedom. Everyone should be free to pursue his or her own livelihood. (Chaotic)
+4|Greed. I'm only in it for the money. (Evil)
+5|People. I'm committed to the people I care about, not to ideals. (Neutral)
+6|Aspiration. I work hard to be the best there is at my craft. (Any)
+</script>
+<script id="Guild Artisan Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The workshop where I learned my trade is the most important place in the world to me.
+2|I created a great work for someone, and then found them unworthy to receive it. I'm still looking for someone worthy.
+3|I owe my guild a great debt for forging me into the person I am today.
+4|I pursue wealth to secure someone's love.
+5|One day I will return to my guild and prove that I am the greatest artisan of them all.
+6|I will get revenge on the evil forces that destroyed my place of business and ruined my livelihood.
+</script>
+<script id="Guild Artisan Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'll do anything to get my hands on something rare or priceless.
+2|I'm quick to assume that someone is trying to cheat me.
+3|No one must ever learn that I once stole money from guild coffers.
+4|I'm never satisfied with what I have—I always want more.
+5|I would kill to acquire a noble title.
+6|I'm horribly jealous of anyone who can outshine my handiwork. Everywhere I go, I'm surrounded by rivals.
+</script>
+<script id="Harborfolk Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I am curious. I want to know why things are the way they are and why people do the things that they do.
+2|I can't sing, but that never stops me from doing it, loudly. Everyone loves a good sea chanty!
+3|I think the city council is doing a terrific job, don't you?
+4|I'm very excited that the temple of the goddess of trade is being restored. I am a zealous worshipper of Waukeen.
+5|I am quite superstitious. I see portents in everyday occurrences.
+6|I resent the rich and enjoy thwarting their plans and spoiling their fun in small ways.
+7|I have a sea story to fit every occasion.
+8|I'm a fisher, but I secretly detest eating fish. I will do anything to avoid it.
+
+
+</script>
+<script id="Harborfolk Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Calm. For all things, there is a tide. I set sail when it is right, and mend my nets when it is not. (Lawful)
+2|Windblown. I go where the winds blow. No man or woman tells me where or when to sail. (Chaotic)
+3|Aspiring. I will gain the favor of a noble patron, maybe even one of the council members! (Any)
+4|Salty. I want people to look to me as an expert on plying the harbor. (Any)
+5|Selfless. We are all children of the sea. I help everyone in peril afloat and ashore. (Good)
+6|Let them Drown. I refuse to risk my hide to help others. They wouldn't help me if roles were reversed. (Evil)
+</script>
+<script id="Harborfolk Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I once lost everything but my rowboat. I'll do anything to protect it.
+2|My brother was in the army, but he was killed. I really look up to the men and women who serve.
+3|A secret society killed my friend for spellcasting. I'll get them back somehow, someday.
+4|The the temple of the goddess of pain helped me when I was hurt and asked nothing in return. I owe them my life.
+5|I was robbed in the ghetto once. It will not happen again.
+6|I would do anything to protect the other harborfolk. They are my family.
+</script>
+<script id="Harborfolk Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I drink too much, which causes me to miss the tide.
+2|I killed a drunk member of the City Watch in a brawl. I am terrified that they might find out.
+3|I oversell myself and make promises I can't keep when I want to impress someone.
+4|Book learning is a waste of time. I have no patience for people who don't speak from experience.
+5|I almost always cheat. I can't help myself.
+6|I am a secret informant for the secret police. I send them reports about everything I see and hear, even what my friends and allies are up to.
+</script>
+<script id="Haunted One Harrowing Event" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Harrowing Event
+1|A monster that slaughtered dozens of innocent people spared your life, and you don't know why.
+2|You were born under a dark star. You can feel it watching you, coldly and distantly. Sometimes it beckons you in the dead of night
+3|An apparition that has haunted your family for generations now haunts you. You don't know what it wants, and it won't leave you alone.
+4|Your family has a history of practicing the dark arts. You dabbled once and felt something horrible clutch at your soul, whereupon you fled in terror.
+5|An oni took your sibling one cold, dark night, and you were unable to stop it.
+6|You were cursed with lycanthropy and later cured. You are now haunted by the innocents you slaughtered.
+7|A hag kidnapped and raised you. You escaped, but the hag still has a magical hold over you and fills your mind with evil thoughts.
+8|You opened an eldritch tome and saw things unfit for a sane mind. You burned the book, but its words and images are burned into your psyche.
+9|A fiend possessed you as a child. You were locked away but escaped. The fiend is still inside you, but now you try to keep it locked away
+10|You did terrible things to avenge the murder of someone you loved. You became a monster, and it haunts your waking dreams. 
+</script>
+<script id="Haunted One Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I don't run from evil. Evil runs from me.
+2|I like to read and memorize poetry. It keeps me calm and brings me fleeting moments of happiness
+3|I spend money freely and live life to the fullest, knowing that tomorrow I might die.
+4|I live for the thrill of the hunt.
+5|I don't talk about the thing that torments me. I'd rather not burden others with my curse
+6|I expect danger around every corner
+7|I refuse to become a victim, and I will not allow others to be victimized.
+8|I put no trust in divine beings.
+
+
+</script>
+<script id="Haunted One Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|I try to help those in need, no matter what the personal cost. (Good)
+2|I'll stop the spirits that haunt me or die trying. (Any)
+3|I kill monsters to make the world a safer place, and to exorcise my own demons. (Good)
+4|I have a dark calling that puts me above the law. (Chaotic)
+5|I like to know my enemy's capabilities and weaknesses before rushing into battle. (Lawful)
+6|I'm a monster that destroys other monsters, and anything else that gets in my way. (Evil)
+</script>
+<script id="Haunted One Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I keep my thoughts and discoveries in a journal. My journal is my legacy.
+2|I would sacrifice my life and my soul to protect the innocent.
+3|My torment drove away the person I love. I strive to win back the love I've lost.
+4|A terrible guilt consumes me. I hope that I can find redemption through my actions.
+5|There's evil in me, I can feel it. It must never be set free.
+6|I have a child to protect. I must make the world a safer place for him (or her).
+</script>
+<script id="Haunted One Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have certain rituals that I must follow every day. I can never break them.
+2|I assume the worst in people
+3|I feel no compassion for the dead. They're the lucky ones.
+4|I have an addiction.
+5|I am a purveyor of doom and gloom who lives in a world without hope.
+6|I talk to spirits that no one else can see.
+</script>
+<script id="Heretic Heretical Belief" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Heretical Belief
+1|Dark Moon. A doctrine that ascribes Selúne and Shar as two aspects of the same deity.
+2|Fatemakers. Tymorans who believe mortals can influence and control luck.
+3|Threefold God. A belief that Tyr, Helm and Torm are all the same god.
+4|Forsaken One. A conspiracy that Savras and Leira conceived and abandoned a god child.
+5|Three-Faced Sun. The sun is a tripartite deity, with divine aspects of dawn, noon and dusk.
+6|Shared Suffering. Flagellant Ilmatari who say all mortals must share their god's suffering.
+7|Entropy. Belief that dying gods sent a divine sphere of annihilation to Toril to kill wizards.
+8|Harlot's Coin. Belief that Waukeen sold her divinity to Graz'zt and he receives her prayers. 
+
+
+</script>
+<script id="Heretic Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I think I'm right even when I'm wrong.
+2|I pity those who deny the heresy.
+3|I always scope out the closest exits and position myself near them.
+4|Those who refute my beliefs are damned and not worth saving.
+5|I'm sure my god has chosen me for a greater destiny.
+6|I'm a natural orator, but once I start talking it's difficult for me to stop.
+7|I'm always looking over my shoulder and the slightest things startle me.
+8|I believe the end of the world is nigh.
+
+
+</script>
+<script id="Heretic Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Guidance. I must teach others my forbidden doctrine (Neutral).
+2|Caution. It's always better to be safe than sorry (Any).
+3|Knowledge. If this conspiracy is true, what else are we being lied to about? (Neutral)
+4|Insurrection. My old faith is corrupt and must be brought down by the new order (Chaotic).
+5|Honesty. I've been lied to enough, so now I'm sworn to always tell the truth (Lawful).
+6|Self-Knowledge. Those who seek the truth become wise beyond their years (Good).
+</script>
+<script id="Heretic Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The heretics who educated me were burned at the stake. I won't let that happen to me.
+2|Belief in my old faith still nags at me. Have I chosen the right path?
+3|I used to be friends with the cleric who's now hunting me.
+4|I carry a heretical treatise on my person. It mustn't be found!
+5|I protect the faithless so they can know enlightenment.
+6|One of my underworld contacts reports my movements to the superiors of my old temple.
+</script>
+<script id="Heretic Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'm suspicious of strangers, as they may be bounty hunters sent to arrest me.
+2|I sneer at those whom I deem unworthy of my time.
+3|I'm deeply superstitious, and have many rituals to avoid bad luck.
+4|I tend to misjudge the devotion of others.
+5|I'm obsessed with my studies, often to the detriment of other concerns.
+6|I'm deeply mistrustful of temple hierarchies.
+</script>
+<script id="Hermit Life of Seclusion" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Life of Seclusion
+1|I was searching for spiritual enlightenment.
+2|I was partaking of communal living in accordance with the dictates of a religious order.
+3|I was exiled for a crime I didn't commit.
+4|I retreated from society after a life-altering event.
+5|I needed a quiet place to work on my art, literature, music, or manifesto.
+6|I needed to commune with nature, far from civilization.
+7|I was the caretaker of an ancient ruin or relic.
+8|I was a pilgrim in search of a person, place, or relic of spiritual significance. 
+
+
+</script>
+<script id="Hermit Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I've been isolated for so long that I rarely speak, preferring gestures and the occasional grunt.
+2|I am utterly serene, even in the face of disaster.
+3|The leader of my community had something wise to say on every topic, and I am eager to share that wisdom.
+4|I feel tremendous empathy for all who suffer.
+5|I'm oblivious to etiquette and social expectations.
+6|I connect everything that happens to me to a grand, cosmic plan.
+7|I often get lost in my own thoughts and contemplation, becoming oblivious to my surroundings.
+8|I am working on a grand philosophical theory and love sharing my ideas.
+
+
+</script>
+<script id="Hermit Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Greater Good. My gifts are meant to be shared with all, not used for my own benefit. (Good)
+2|Logic. Emotions must not cloud our sense of what is right and true, or our logical thinking. (Lawful)
+3|Free Thinking. Inquiry and curiosity are the pillars of progress. (Chaotic)
+4|Power. Solitude and contemplation are paths toward mystical or magical power. (Evil)
+5|Live and Let Live. Meddling in the affairs of others only causes trouble. (Neutral)
+6|Self-Knowledge. If you know yourself, there's nothing left to know. (Any) 
+</script>
+<script id="Hermit Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|Nothing is more important than the other members of my hermitage, order, or association.
+2|I entered seclusion to hide from the ones who might still be hunting me. I must someday confront them.
+3|I'm still seeking the enlightenment I pursued in my seclusion, and it still eludes me.
+4|I entered seclusion because I loved someone I could not have.
+5|Should my discovery come to light, it could bring ruin to the world.
+6|My isolation gave me great insight into a great evil that only I can destroy.
+</script>
+<script id="Hermit Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|Now that I've returned to the world, I enjoy its delights a little too much.
+2|I harbor dark, bloodthirsty thoughts that my isolation and meditation failed to quell.
+3|I am dogmatic in my thoughts and philosophy.
+4|I let my need to win arguments overshadow friendships and harmony.
+5|I'd risk too much to uncover a lost bit of knowledge.
+6|I like keeping secrets and won't share them with anyone.
+</script>
+<script id="Inheritor Inheritance" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>||Inheritance
+1|1|A document such as a map, a letter, or a journal
+2|3|A trinket
+4|4|An article of clothing
+5|5|A piece of jewelry
+6|6|An arcane book or formulary
+7|7|A written story, song, poem, or secret
+8|8|A tattoo or other body marking 
+</script>
+<script id="Inheritor Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I judge people by their actions, not their words
+2|If someone is in trouble, I'm always ready to lend help
+3|When I set my mind to something, I follow through no matter what gets in my way.
+4|I have a strong sense of fair play and always try to find the most equitable solution to arguments.
+5|I'm confident in my own abilities and do what I can to instill confidence in others
+6|Thinking is for other people. I prefer action
+7|I misuse long words in an attempt to sound smarter.
+8|I get bored easily. When am I going to get on with my destiny?
+
+
+</script>
+<script id="Inheritor Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Respect. People deserve to be treated with dignity and respect. (Good)
+2|Fairness. No one should get preferential treatment before the law, and no one is above the law. (Lawful)
+3|Freedom. Tyrants must not be allowed to oppress the people. (Chaotic)
+4|Might. If I become strong, I can take what I want—what I deserve. (Evil)
+5|Sincerity. There's no good in pretending to be something I'm not. (Neutral)
+6|Destiny. Nothing and no one can steer me away from my higher calling. (Any) 
+</script>
+<script id="Inheritor Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I have a family, but I have no idea where they are. One day, I hope to see them again
+2|I worked the land, I love the land, and I will protect the land.
+3|A proud noble once gave me a horrible beating, and I will take my revenge on any bully I encounter.
+4|My tools are symbols of my past life, and I carry them so that I will never forget my roots.
+5|I protect those who cannot protect themselves
+6|I wish my childhood sweetheart had come with me to pursue my destiny
+</script>
+<script id="Inheritor Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The tyrant who rules my land will stop at nothing to see me killed
+2|I'm convinced of the significance of my destiny, and blind to my shortcomings and the risk of failure
+3|The people who knew me when I was young know my shameful secret, so I can never go home again
+4|I have a weakness for the vices of the city, especially hard drink
+5|Secretly, I believe that things would be better if I were a tyrant lording over the land.
+6|I have trouble trusting in my allies.
+</script>
+<script id="Inquisitor Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|It will all go smoothly if everyone just does as I say.
+2|Despair is an extravagance we can ill afford.
+3|I know the writings of my church backward and forward.
+4|I try to see the bright side in the very worst situations.
+5|It helps me feel better when others show sympathy or appreciation for the horrors I've endured.
+6|I prefer to face evil with a strong group of friends in front of me.
+7|I want to see the wicked burn for the evil they've brought on us.
+8|I feel the sin being purged from me as I help cleanse the world.
+
+
+</script>
+<script id="Inquisitor Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Honesty. The smallest deception paves the way to grievous sin. (Lawful)
+2|Piety. Devotion to the angels and the rites of the church is all that keeps the world from destruction. (Good)
+3|Order. The laws of the church are meant to preserve the social order—everything in its proper place. (Lawful)
+4|Humanity. Human life is to be cherished and preserved against the horrors of the night. (Good)
+5|Knowledge. The path to holiness comes through understanding of the world. (Any)
+6|Punishment. It is better for the innocent to suffer than for the guilty to escape their due. (Evil)
+
+
+
+
+</script>
+<script id="Inquisitor Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|Thraben is the heart of the world. The cathedral must stand even if the hinterlands are lost.
+2|One day, I will claim vengeance against the monster that took my family from me.
+3|My weapon is all I have to remember my beloved mentor by.
+4|The ghost of my beloved speaks to me sometimes.
+5|My dear sibling is now a werewolf.
+6|A small crossways chapel is my spiritual home.
+</script>
+<script id="Inquisitor Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am troubled by the wild rage and bloodlust that lurks in my own heart.
+2|I have come to believe that I executed an innocent person.
+3|I enjoy the prestige of my position more than service to the angels.
+4|I drink to forget the horrors I've seen.
+5|I might have made a promise to a demon that I can't keep.
+6|I'll do whatever grim task must be done, for my soul is already lost.
+</script>
+<script id="Insurgent Origin" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Origin
+1|Fisher 
+2|Hunter 
+3|Craftperson 
+4|Priest / Priestess 
+5|Cook
+6|City Watch
+7|Servant
+8|Unskilled laborer 
+
+
+</script>
+<script id="Insurgent Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|My patience knows no bounds, so long as my goal is in sight.
+2|In life and in struggle, the ends justify my actions.
+3|If you aren't helping me, you'd best at least stay out of my way.
+4|I long for the life that was taken away from me.
+5|Friends and family perished, tragically, before my eyes. I hope never to undergo that again.
+6|Making the right choices in life are important to me. The choices I make might save not just my life, but the lives of others as well.
+7|I can never allow my foes to get the drop on me.
+8|Time is a precious resource that I must spend wisely.
+
+
+</script>
+<script id="Insurgent Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Leadership. The oppressed need someone to inspire them to courageous acts. (Good)
+2|Unpredictability. Keeping the enemy guessing and off-balance is my tactical strength. (Chaos)
+3|Determination. Threats to my home must be eliminated at all costs. (Any)
+4|Freedom. Those who are enslaved and unjustly imprisoned deserve my aid. (Good)
+5|Resourcefulness. Our wits are our most valuable resource in troubled times. (Any)
+6|Unity. Working together, we can overcome all obstacles, even the most seemingly insurmountable ones. (Any)
+</script>
+<script id="Insurgent Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I'll never let my fellow insurgents down. They are my only remaining friends.
+2|I was separated from a loved one during my escape from town. I will find them.
+3|Someone in the occupying forces was a trusted friend, until the day they betrayed the city. They will pay harshly for their transgressions.
+4|An item I hold close is my last remaining connection to the family I lost during the fall.
+5|The invaders who took my past life away from me will feel the full extent of my vengeance.
+6|The knowledge in my hometown's library is an irreplaceable treasure that must be protected.
+</script>
+<script id="Insurgent Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I have no respect for those who flee. I harbor a deep grudge against the citizens who abandoned my hometown.
+2|Ale is the only way I can escape the desperation of my circumstances.
+3|It doesn't take much to get me into a fight.
+4|Being an insurgent means doing things that aren't always ethical. I'm still learning to live with that.
+5|My desire to liberate my hometown oftentimes clouds my judgment, despite my best efforts.
+6|I relentlessly despise the invaders and their allies. I'd abandon other goals in order to strike out at them.
+</script>
+<script id="Knight of the Order Order" type="text/csv">
+<span data-type="roll" data-sides="3">d3</span>|Order
+1|Knights of the Unicorn
+2|Knights of Myth Drannor
+3|Knights of the Silver Chalice 
+</script>
+<script id="Knight of the Order Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm always polite and respectful.
+2|I'm haunted by memories of war. I can't get the images of violence out of my mind.
+3|I've lost too many friends, and I'm slow to make new ones.
+4|I'm full of inspiring and cautionary tales from my military experience relevant to almost every combat situation.
+5|I can stare down a hell hound without flinching.
+6|I enjoy being strong and like breaking things.
+7|I have a crude sense of humor.
+8|I face problems head-on. A simple, direct solution is the best path to success.
+
+
+</script>
+<script id="Knight of the Order Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Greater Good. Our lot is to lay down our lives in defense of others. (Good)
+2|Responsibility. I do what I must and obey just authority. (Lawful)
+3|Independence. When people follow orders blindly, they embrace a kind of tyranny. (Chaotic)
+4|Might. In life as in war, the stronger force wins. (Evil)
+5|Live and Let Live. Ideals aren't worth killing over or going to war for. (Neutral)
+6|Nation. My city, nation, or people are all that matter. (Any)
+</script>
+<script id="Knight of the Order Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I would still lay down my life for the people I served with.
+2|Someone saved my life on the battlefield. To this day, I will never leave a friend behind.
+3|My honor is my life.
+4|I'll never forget the crushing defeat my company suffered or the enemies who dealt it.
+5|Those who fight beside me are those worth dying for.
+6|I fight for those who cannot fight for themselves.
+</script>
+<script id="Knight of the Order Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The monstrous enemy we faced in battle still leaves me quivering with fear.
+2|I have little respect for anyone who is not a proven warrior.
+3|I made a terrible mistake in battle cost many lives—and I would do anything to keep that mistake secret.
+4|My hatred of my enemies is blind and unreasoning.
+5|I obey the law, even if the law causes misery.
+6|I'd rather eat my armor than admit when I'm wrong.
+</script>
+<script id="Livestock Bandit Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|If people leave their gear unsecured, they must not want it very much.
+2|I feel more comfortable sleeping under the open sky.
+3|I always pre-plan my escape should things go bad; I always like to have an exit strategy.
+4|I tend to give animal owners breeding and care advice whether or not they want it.
+5|I lost a pet as a child and sadly reflect on it to this day.
+6|I always form a powerful, emotional bond with my mount.
+7|I recoil at the thought of killing someone else's pet or mount.
+8|I prefer to hang to the back of a scuffle or discussion. Better to have my enemies in front of me.
+
+
+</script>
+<script id="Livestock Bandit Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Loyalty. Never bite the hand that feeds. (Good)
+2|Unpredictability. Keep your enemy guessing and off-balance like a confused deer. (Chaotic)
+3|Power. I strive to become leader of the pack at all costs. (Lawful)
+4|Freedom. I bow to no one I don't respect. (Chaotic)
+5|Resourcefulness. Our wits are our most valuable resource in troubled times. (Any)
+6|Unity. Lone wolves fail where the pack succeeds. (Any)
+</script>
+<script id="Livestock Bandit Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I cannot leave a harmed animal behind; I must save it or put it out of its misery.
+2|I leave behind my own personal calling cards when I do a job.
+3|I do not trust people who do not have a pet, mount, or furry companion.
+4|The pelt I wear on my back was from an animal that died saving my life, I will always cherish it.
+5|If my pet does not like you, I do not like you!
+6|Once you've ridden with me and fought by my side, I'll be there for you odds be damned.
+</script>
+<script id="Livestock Bandit Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I talk to animals; I believe they understand me, even if they do not.
+2|I growl at and bite anyone who gets too close to my food while I am eating.
+3|I strongly dislike enclosed spaces and require intoxication or firm encouragement to enter them.
+4|I robbed the wrong caravan once. The owner is a powerful merchant who holds a grudge.
+5|I'm an inveterate gambler.
+6|I judge people based on how well they stand their ground in a fight. I got not time for cowards.
+</script>
+<script id="Mercenary Veteran Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm always polite and respectful.
+2|I'm haunted by memories of war. I can't get the images of violence out of my mind.
+3|I've lost too many friends, and I'm slow to make new ones.
+4|I'm full of inspiring and cautionary tales from my military experience relevant to almost every combat situation.
+5|I can stare down a hell hound without flinching.
+6|I enjoy being strong and like breaking things.
+7|I have a crude sense of humor.
+8|I face problems head-on. A simple, direct solution is the best path to success.
+
+
+</script>
+<script id="Mercenary Veteran Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Greater Good. Our lot is to lay down our lives in defense of others. (Good)
+2|Responsibility. I do what I must and obey just authority. (Lawful)
+3|Independence. When people follow orders blindly, they embrace a kind of tyranny. (Chaotic)
+4|Might. In life as in war, the stronger force wins. (Evil)
+5|Live and Let Live. Ideals aren't worth killing over or going to war for. (Neutral)
+6|Nation. My city, nation, or people are all that matter. (Any)
+</script>
+<script id="Mercenary Veteran Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I would still lay down my life for the people I served with.
+2|Someone saved my life on the battlefield. To this day, I will never leave a friend behind.
+3|My honor is my life.
+4|I'll never forget the crushing defeat my company suffered or the enemies who dealt it.
+5|Those who fight beside me are those worth dying for.
+6|I fight for those who cannot fight for themselves.
+</script>
+<script id="Mercenary Veteran Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The monstrous enemy we faced in battle still leaves me quivering with fear.
+2|I have little respect for anyone who is not a proven warrior.
+3|I made a terrible mistake in battle cost many lives—and I would do anything to keep that mistake secret.
+4|My hatred of my enemies is blind and unreasoning.
+5|I obey the law, even if the law causes misery.
+6|I'd rather eat my armor than admit when I'm wrong.
+</script>
+<script id="Merchant Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I fill my evenings with wine or mead and song.
+2|I greatly admire gladiators and enjoy the arena.
+3|I take my wealth for granted. It seldom occurs to me that others aren't rich themselves.
+4|I leave broken hearts all around the region.
+5|I work hard and seldom make time for fun.
+6|I am a particularly devout and pray often.
+7|A mercenary army caught me once. I hate them.
+8|I ask a lot of questions to get information about those with whom I am working and dealing.
+
+
+</script>
+<script id="Merchant Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Frugal. I spend my money very carefully. (Lawful)
+2|Profligate. I tend to spend extravagantly. (Chaotic)
+3|Honest. I deal with others above board. (Any)
+4|Sharp. I seek to make the best deal possible. (Any)
+5|Charitable. I give generously to others. (Good)
+6|Greedy. I do not share my wealth with others. (Evil)
+</script>
+<script id="Merchant Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I am fiercely loyal to those with whom I work.
+2|I must uphold the good name of my family.
+3|I will prove myself to my family as an adventurer.
+4|Deals are sacrosanct. I never go back on my word.
+5|I love making deals and negotiating agreements.
+6|I guard my wealth jealously.
+</script>
+<script id="Merchant Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am a braggart. I promote myself shamelessly.
+2|I am vain. I always wear the latest fashions.
+3|I am a glutton. I eat and drink to excess.
+4|I am a snob. I want only the finest things in life.
+5|I am lazy. I want others to take care of everything.
+6|I am overconfident. I overestimate my abilities.
+</script>
+<script id="Miner Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|Nothing bothers me for long.
+2|I hate the horrors of the Underdark with a passion. They took my friends and family, and almost got me.
+3|Anything worth doing takes time and patience. I have learned to plan and wait for the things I want and to be patient to achieve my goals.
+4|I can party with everyone. Whether with dwarves, or goliaths, or deep gnomes, I can find a way to have a good time.
+5|I'd rather be mining. This is okay; mining is better.
+6|I think that I will stumble upon great riches if I just keep looking.
+7|People who don't work with their hands and who live in houses are soft and weak.
+8|I wish I were more educated. I look up to people who are.
+
+
+</script>
+<script id="Miner Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Generosity. The riches of the earth are to be shared by all. (Good)
+2|Greed. Gems and precious metals, I want them all for myself. (Evil)
+3|Mooch. Property, schmoperty. If I need it, I take and use it. If I don't, I leave it for someone else. (Chaotic)
+4|Boundaries. Everything and everyone has it's prescribed place; I respect that and expect others to do the same. (Lawful)
+5|Let it Be. I don't meddle in the affairs of others if I can avoid it. They're none of my business. (Neutral)
+6|Materialist. I want riches to improve my life. (Any)
+</script>
+<script id="Miner Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The people of the mines are my family. I will do anything to protect them.
+2|A deep gnome saved my life when I was injured and alone. I owe his people a great debt.
+3|I must behold and preserve the natural beauty of places below the earth.
+4|Gems hold a special fascination for me, more than gold, land, magic, or power.
+5|I want to explore new depths and scale new heights.
+6|Someday I'm going to find the mother lode, then I'll spend the rest of my life in luxury.
+</script>
+<script id="Miner Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I'm uncomfortable spending time under the open sky. I'd rather be indoors or underground.
+2|I'm not used to being around other people much and sometimes get grouchy about it.
+3|Good tools are more reliable than people. In a cave in, I would save a sturdy pick before a stranger.
+4|I jealously guard my secrets, because I think others will take advantage of me if they learn what I know.
+5|I am obsessed with getting rich. I always have a scheme brewing for making it big.
+6|I'm afraid of the dark.
+</script>
+<script id="Noble Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|My eloquent flattery makes everyone I talk to feel like the most wonderful and important person in the world.
+2|The common folk love me for my kindness and generosity.
+3|No one could doubt by looking at my regal bearing that I am a cut above the unwashed masses.
+4|I take great pains to always look my best and follow the latest fashions.
+5|I don't like to get my hands dirty, and I won't be caught dead in unsuitable accommodations.
+6|Despite my noble birth, I do not place myself above other folk. We all have the same blood.
+7|My favor, once lost, is lost forever.
+8|If you do me an injury, I will crush you, ruin your name, and salt your fields.
+
+
+</script>
+<script id="Noble Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Respect. Respect is due to me because of my position, but all people regardless of station deserve to be treated with dignity. (Good)
+2|Responsibility. It is my duty to respect the authority of those above me, just as those below me must respect mine. (Lawful)
+3|Independence. I must prove that I can handle myself without the coddling of my family. (Chaotic)
+4|Power. If I can attain more power, no one will tell me what to do. (Evil)
+5|Family. Blood runs thicker than water. (Any)
+6|Noble Obligation. It is my duty to protect and care for the people beneath me. (Good)
+</script>
+<script id="Noble Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I will face any challenge to win the approval of my family.
+2|My house's alliance with another noble family must be sustained at all costs.
+3|Nothing is more important than the other members of my family.
+4|I am in love with the heir of a family that my family despises.
+5|My loyalty to my sovereign is unwavering.
+6|The common folk must see me as a hero of the people.
+</script>
+<script id="Noble Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I secretly believe that everyone is beneath me.
+2|I hide a truly scandalous secret that could ruin my family forever.
+3|I too often hear veiled insults and threats in every word addressed to me, and I'm quick to anger
+4|I have an insatiable desire for carnal pleasures.
+5|In fact, the world does revolve around me.
+6|By my words and actions, I often bring shame to my family.
+</script>
+<script id="Outlander Origin" type="text/csv">
+<span data-type="roll" data-sides="10">d10</span>|Origin
+1|Forester
+2|Trapper
+3|Homesteader
+4|Guide
+5|Exile or outcast
+6|Bounty hunter
+7|Pilgrim
+8|Tribal nomad
+9|Hunter-gatherer
+10|Tribal marauder 
+</script>
+<script id="Outlander Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm driven by a wanderlust that led me away from home.
+2|I watch over my friends as if they were a litter of newborn pups.
+3|I once ran twenty-five miles without stopping to warn to my clan of an approaching orc horde. I'd do it again if I had to.
+4|I have a lesson for every situation, drawn from observing nature
+5|I place no stock in wealthy or well-mannered folk. Money and manners won't save you from a hungry owlbear.
+6|I'm always picking things up, absently fiddling with them, and sometimes accidentally breaking them.
+7|I feel far more comfortable around animals than people.
+8|I was, in fact, raised by wolves.
+
+
+</script>
+<script id="Outlander Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Change. Life is like the seasons, in constant change, and we must change with it. (Chaotic)
+2|Greater Good. It is each person's responsibility to make the most happiness for the whole tribe. (Good)
+3|Honor. If I dishonor myself, I dishonor my whole clan. (Lawful)
+4|Might. The strongest are meant to rule. (Evil)
+5|Nature. The natural world is more important than all the constructs of civilization. (Neutral)
+6|Glory. I must earn glory in battle, for myself and my clan. (Any
+</script>
+<script id="Outlander Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My family, clan, or tribe is the most important thing in my life, even when they are far from me.
+2|An injury to the unspoiled wilderness of my home is an injury to me.
+3|I will bring terrible wrath down on the evildoers who destroyed my homeland.
+4|I am the last of my tribe, and it is up to me to ensure their names enter legend.
+5|I suffer awful visions of a coming disaster and will do anything to prevent it.
+6|It is my duty to provide children to sustain my tribe.
+</script>
+<script id="Outlander Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am too enamored of ale, wine, and other intoxicants
+2|There's no room for caution in a life lived to the fullest.
+3|I remember every insult I've received and nurse a silent resentment toward anyone who's ever wronged me.
+4|I am slow to trust members of other races, tribes, and societies.
+5|Violence is my answer to almost any challenge.
+6|Don't expect me to save those who can't save themselves. It is nature's way that the strong thrive and the weak perish.
+</script>
+<script id="Prisoner of War Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I am a bully; others will suffer as I have.
+2|I always say yes even when I mean no; it's just easier.
+3|I aim to misbehave.
+4|I go out of my way to frustrate or anger those in power.
+5|I strive to obey the law. I will never again make the mistake of going against authority.
+6|I always plan everything out. The one time I let others plan things it did not end well for me.
+7|I take blame to protect others from pain.
+8|I horde information, you never know what may come in handy. 
+
+
+</script>
+<script id="Prisoner of War Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Loss. I freely give those who offend me what was so brutally denied me, death. (Chaos)
+2|Dedication. I never betray those who trust me. (Law)
+3|Vengeance. I use any means to get information I need; I have been well taught. (Evil)
+4|Redemption. Everyone deserves a second chance. (Good)
+5|Resilience. I can survive any challenge (Any)
+6|Leadership. The best teams are made up of those that society has discarded. (Any) 
+</script>
+<script id="Prisoner of War Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I take up arms to help liberate my hometown.
+2|The horrors of my time as a prisoner of war haunt my dreams, only after a day of hard work can I find sleep.
+3|I am indebted to those who freed me from prison, I will repay this debt.
+4|My torturer survived the attack that set me free, I will find him/her.
+5|I will not rest while others suffer fates similar to mine.
+6|I am searching for a way to heal the scars of my ordeal, both physical and emotional. 
+</script>
+<script id="Prisoner of War Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|During stressful times, I find myself crying for no reason.
+2|My nerve endings are shot from the interrogations; I am numb to all but the harshest touch.
+3|I am incapable of standing up for myself.
+4|I folded under the torture, and gave information that I promised would be kept secret. My life would be in jeopardy if others found out.
+5|Survival is worth more than friendship.
+6|The ghosts from my past hinder my actions.
+</script>
+<script id="Refugee Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I may have lost everything I worked for most of my life, but there's work to be done, no time to linger on the past.
+2|I worked hard to get where I am and I refuse to let a little hardship stop me from succeeding.
+3|I protect those around me, you never know when one of them will be useful.
+4|I have always gotten ahead by giving, why change now?
+5|I prepare for everything, it paid off in my hometown and it will pay off again.
+6|I will reclaim my home, though the path may be long, I will never give up hope.
+7|I never cared for personal hygiene, and am amazed that it bothers others.
+8|I am always willing to volunteer my services, just as long as don't have to do anything.
+
+
+</script>
+<script id="Refugee Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Justice. Corruption brought my hometown down, I will not tolerate that any longer. (Lawful)
+2|Acceptance. Stability is a myth, to think you can control your future is futile. (Chaotic)
+3|Hope. I am guided by a higher power and I trust that everything will be right in the end. (Good)
+4|Restraint. I hate those who caused my loss. It is all I can do not to lash out at them. (Any)
+5|Strength. As shown in my hometown, the strong survive. If you are weak you deserve what you get (Evil)
+6|Openness. I am always willing to share my life story with anyone who will listen. (Any)
+</script>
+<script id="Refugee Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I have the chance at a new life and this time I am going to do things right.
+2|The Lord Regent brought this suffering upon his people. I will see him brought to justice.
+3|I await the day I will be able to return to my home.
+4|I will never forget the debt owed to someone. I will be ready to repay that debt when called upon.
+5|There was someone I cared about in my hometown, I will find out what happened to them.
+6|Some say my life wasn't worth saving, I will prove them wrong.
+</script>
+<script id="Refugee Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I used the lives of children to facilitate my escape from my hometown.
+2|I am a sucker for the underdog, and always bet on the loosing team.
+3|I am incapable of standing up for myself.
+4|I will borrow money from friends with no intention to repay it.
+5|I am unable to keep secrets. A secret is just an untold story.
+6|When something goes wrong, it's never my fault.
+</script>
+<script id="Sage Specialty" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Specialty
+1|Alchemist
+2|Astronomer
+3|Discredited academic
+4|Librarian
+5|Professor
+6|Researcher
+7|Wizard's apprentice
+8|Scribe 
+
+
+</script>
+<script id="Sage Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I use polysyllabic words that convey the impression of great erudition.
+2|I've read every book in the world's greatest libraries—or I like to boast that I have.
+3|I'm used to helping out those who aren't as smart as I am, and I patiently explain anything and everything to others.
+4|There's nothing I like more than a good mystery.
+5|I'm willing to listen to every side of an argument before I make my own judgment.
+6|I… speak… slowly… when talking… to idiots, … which… almost… everyone… is… compared… to me.
+7|I am horribly, horribly awkward in social situations.
+8|I'm convinced that people are always trying to steal my secrets. 
+
+
+</script>
+<script id="Sage Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Knowledge. The path to power and self-improvement is through knowledge. (Neutral)
+2|Beauty. What is beautiful points us beyond itself toward what is true. (Good)
+3|Logic. Emotions must not cloud our logical thinking. (Lawful)
+4|No Limits. Nothing should fetter the infinite possibility inherent in all existence. (Chaotic)
+5|Power. Knowledge is the path to power and domination. (Evil)
+6|Self-Improvement. The goal of a life of study is the betterment of oneself. (Any)
+</script>
+<script id="Sage Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|It is my duty to protect my students.
+2|I have an ancient text that holds terrible secrets that must not fall into the wrong hands.
+3|I work to preserve a library, university, scriptorium, or monastery.
+4|My life's work is a series of tomes related to a specific field of lore.
+5|I've been searching my whole life for the answer to a certain question.
+6|I sold my soul for knowledge. I hope to do great deeds and win it back.
+</script>
+<script id="Sage Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am easily distracted by the promise of information.
+2|Most people scream and run when they see a demon. I stop and take notes on its anatomy.
+3|Unlocking an ancient mystery is worth the price of a civilization.
+4|I overlook obvious solutions in favor of complicated ones.
+5|I speak without really thinking through my words, invariably insulting others.
+6|I can't keep a secret to save my life, or anyone else's.
+</script>
+<script id="Sailor Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|My friends know they can rely on me, no matter what.
+2|I work hard so that I can play hard when the work is done.
+3|I enjoy sailing into new ports and making new friends over a flagon of ale.
+4|I stretch the truth for the sake of a good story.
+5|To me, a tavern brawl is a nice way to get to know a new city.
+6|I never pass up a friendly wager.
+7|My language is as foul as an otyugh nest.
+8|I like a job well done, especially if I can convince someone else to do it.
+
+
+</script>
+<script id="Sailor Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Respect. The thing that keeps a ship together is mutual respect between captain and crew. (Good)
+2|Fairness. We all do the work, so we all share in the rewards. (Lawful)
+3|Freedom. The sea is freedom—the freedom to go anywhere and do anything. (Chaotic)
+4|Mastery. I'm a predator, and the other ships on the sea are my prey. (Evil)
+5|People. I'm committed to my crewmates, not to ideals. (Neutral)
+6|Aspiration. Someday I'll own my own ship and chart my own destiny. (Any)
+</script>
+<script id="Sailor Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I'm loyal to my captain first, everything else second.
+2|The ship is most important—crewmates and captains come and go.
+3|I'll always remember my first ship.
+4|In a harbor town, I have a paramour whose eyes nearly stole me from the sea.
+5|I was cheated out of my fair share of the profits, and I want to get my due.
+6|Ruthless pirates murdered my captain and crewmates, plundered our ship, and left me to die. Vengeance will be mine.
+</script>
+<script id="Sailor Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I follow orders, even if I think they're wrong.
+2|I'll say anything to avoid having to do extra work.
+3|Once someone questions my courage, I never back down no matter how dangerous the situation.
+4|Once I start drinking, it's hard for me to stop.
+5|I can't help but pocket loose coins and other trinkets I come across.
+6|My pride will probably lead to my destruction.
+</script>
+<script id="Secret Identity Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|Despite its problems, I love my city, it's the greatest city in the world. The only one for me.
+2|I move from place to place, never staying anywhere long and leaving nothing behind.
+3|I think flattery is the best way to direct attention away from me.
+4|I don't make friends easily. They're a liability I cannot afford.
+5|Risk and danger are exhilarate me. Pulling off schemes and deceptions is a rush.
+6|Humans are superior. I really admire them, despite the atrocities.
+7|I avoid people of my own race, as well as things associated with my race, lest they give me away.
+8|I live for the Arena. I admire gladiators and enjoy the thrill of blood on the sands!
+
+
+</script>
+<script id="Secret Identity Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Quisling. Supporting the rulers of the land and following the laws is the road to salvation. (Lawful)
+2|Scoflaw. The laws and lawmakers are corrupt. I follow laws only when it suits me. (Chaotic)
+3|Optimist. Everyone Is basically good. Though the government is misguided it will all be okay. (Any)
+4|Secretive. I am in the habit of not talking about myself. My business is none of yours. (Any)
+5|Heroic. I do everything I can to help non-humans, regardless of the personal cost to me. (Good)
+6|Depraved. I have lost my moral compass. The ends justify most any means. (Evil)
+</script>
+<script id="Secret Identity Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|The humans have inflicted terrible harm on me, my family, and my race. I will have revenge.
+2|I am part of an underground network that smuggles non-humans into and out of the city.
+3|I am a partisan. I commit minor acts of defiance against the government when I can.
+4|I am a spy. I report on events in and around the city.
+5|My secret identity is the only thing protecting me from the Arena. I will stop at nothing to maintain it.
+6|I am madly in love with a human who does not know my true identity, and I fear rejection if I reveal it.
+</script>
+<script id="Secret Identity Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|After years of denying who I am, I now despise myself and other members of my pathetic race.
+2|Years have hiding have made me somewhat paranoid. I trust no one.
+3|I've been lying so often and for so long that I can't help it anymore. I frequently lie for no reason at all.
+4|I am ashamed. I failed to protect a member of my family who was seized and thrown into the Area.
+5|I am struggling with maintaining my secret identity. I subconsciously want to get caught and therefore sometimes let my secret identity slip.
+6|Years of successfully deceiving others have made me cocky. I think no one can see through my lies.
+</script>
+<script id="Soldier Specialty" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Specialty
+1|Officer
+2|Scout
+3|Infantry
+4|Cavalry
+5|Healer
+6|Quartermaster
+7|Standard bearer
+8|Support staff (cook, blacksmith, or the like) 
+
+
+</script>
+<script id="Soldier Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm always polite and respectful.
+2|I'm haunted by memories of war. I can't get the images of violence out of my mind.
+3|I've lost too many friends, and I'm slow to make new ones.
+4|I'm full of inspiring and cautionary tales from my military experience relevant to almost every combat situation.
+5|I can stare down a hell hound without flinching.
+6|I enjoy being strong and like breaking things.
+7|I have a crude sense of humor.
+8|I face problems head-on. A simple, direct solution is the best path to success.
+
+
+</script>
+<script id="Soldier Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Greater Good. Our lot is to lay down our lives in defense of others. (Good)
+2|Responsibility. I do what I must and obey just authority. (Lawful)
+3|Independence. When people follow orders blindly, they embrace a kind of tyranny. (Chaotic)
+4|Might. In life as in war, the stronger force wins. (Evil)
+5|Live and Let Live. Ideals aren't worth killing over or going to war for. (Neutral)
+6|Nation. My city, nation, or people are all that matter. (Any)
+</script>
+<script id="Soldier Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I would still lay down my life for the people I served with.
+2|Someone saved my life on the battlefield. To this day, I will never leave a friend behind.
+3|My honor is my life.
+4|I'll never forget the crushing defeat my company suffered or the enemies who dealt it.
+5|Those who fight beside me are those worth dying for.
+6|I fight for those who cannot fight for themselves.
+</script>
+<script id="Soldier Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|The monstrous enemy we faced in battle still leaves me quivering with fear.
+2|I have little respect for anyone who is not a proven warrior.
+3|I made a terrible mistake in battle cost many lives—and I would do anything to keep that mistake secret.
+4|My hatred of my enemies is blind and unreasoning.
+5|I obey the law, even if the law causes misery.
+6|I'd rather eat my armor than admit when I'm wrong.
+</script>
+<script id="Touched by the Fey Fey Encounter" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Fey Encounter
+1|You reveled with the fey for 100 years but you didn't age, and when you came back no time had passed. (Seelie)
+2|You bested a fey in a riddle contest and saved your life, gaining the fey's respect. (Seelie or Unseelie)
+3|You stumbled into the Feywild, found the home of a fey, stole something from them, and escaped. (Seelie or Unseelie)
+4|You helped a fey survive a perilous situation and gained their friendship. (Seelie or Unseelie)
+5|You made a deal with a fey and managed to get out of it. That fey doesn't like you very much anymore. (Seelie or Unseelie)
+6|You were trapped by a fey who was planning on having you for dinner, but you escaped. (Unseelie) 
+</script>
+<script id="Touched by the Fey Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="4">d4</span>|Personality Trait
+1|I get a far off look in my eyes sometimes. I know the world is so much more than what most of us see, so I seem aloof when I'm just distracted.
+2|I'm more comfortable with those who are fey.
+3|I tell children fairy tales because fey truth is humanoid fiction.
+4|I may be touched by the fey, but I'm not fey and I get angry when people mistake me as such.
+</script>
+<script id="Touched by the Fey Ideal" type="text/csv">
+<span data-type="roll" data-sides="4">d4</span>|Ideal
+1|Hope. I'll use my fey insight to make the world a better place. (Good)
+2|Aspiration. The fey have given me a different way to see the world and I'll use that to make something of myself. (Neutral)
+3|Greed. Now that my eyes have been opened I will use my sight to take what I want. (Evil)
+4|Creativity. My art is the truest form of expression and freedom. (Chaotic)
+</script>
+<script id="Touched by the Fey Bond" type="text/csv">
+<span data-type="roll" data-sides="4">d4</span>|Bond
+1|My friends are what keep me grounded in this world. I don't know what I'd do without them.
+2|My family has accepted my different perspective on the world and still loves me. I don't know what I'd become without them.
+3|I saw a way to hurt a person and did. I need to make up for that injury.
+4|I fell in love with one of the fey and I will be with them.
+</script>
+<script id="Touched by the Fey Flaw" type="text/csv">
+<span data-type="roll" data-sides="4">d4</span>|Flaw
+1|I see people's problems and can't help but interfere.
+2|I've embraced my feyness and it annoys those who are fey and not fey equally.
+3|I tell people I'm friends with the fey and it's gotten me in trouble more than once.
+4|I take life a little slower than I should and don't always act decisively.
+</script>
+<script id="Trade Sheriff Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I am always polite and respectful.
+2|I let my actions speak for themselves.
+3|I am haunted by my past having seen the murder of a close friend or family member and it is the one case I always needed to solve but have not been able to.
+4|I am quick to judge and slow to vindicate.
+5|I can be very persuasive and am able to ask questions where others might not be able to.
+6|I have a quirky personality that seems to take others off their guard.
+7|My sense of humor is considered by most to be awkward.
+8|Everyone has a choice, and they can always make the right choice, mine!
+
+
+</script>
+<script id="Trade Sheriff Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Hope. My job is to speak for the victim (Good)
+2|Dedicated. Once I start an investigation, until told to do so, I do not quit, not matter where it leads. (Lawful)
+3|Nation. My city, nation, or people are all that matter (Any)
+4|Mercenary. When I do investigations, I expect answers immediately (Any)
+5|Eloquent. I use my words to sway others to give me answers. (Good)
+6|Might. It is through threats and force that I get my answers (Lawful)
+</script>
+<script id="Trade Sheriff Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|To this day an unsolved case will always leave me haunted and bother me.
+2|Through the might of my personality I will solve an investigation or puzzle.
+3|It is my right to believe what I will, just try and stop me.
+4|I need to prove my worth to my fellow Sherrifs.
+5|Someone I cared for died under suspicious circumstances. I will find out what happened to them and bring their killer to justice.
+6|I speak for those that cannot speak for themselves. 
+</script>
+<script id="Trade Sheriff Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I always over exaggerate my abilities.
+2|I cannot bear to let those I care for out of my sight.
+3|I took a bribe to tank an investigation and I would do anything to keep it secret.
+4|I have little respect for those that are of “low” intelligence/race.
+5|I always enjoy a good mug of ale … or five to cover up my past.
+6|I speak for the First Lord of the land and make sure everyone knows it.
+</script>
+<script id="Tribe Member Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I'm driven by a wanderlust that led me away from home.
+2|I watch over my friends as if they were a litter of newborn pups.
+3|I once ran twenty-five miles without stopping to warn to my clan of an approaching orc horde. I'd do it again if I had to.
+4|I have a lesson for every situation, drawn from observing nature
+5|I place no stock in wealthy or well-mannered folk. Money and manners won't save you from a hungry owlbear.
+6|I'm always picking things up, absently fiddling with them, and sometimes accidentally breaking them.
+7|I feel far more comfortable around animals than people.
+8|I was, in fact, raised by wolves.
+
+
+</script>
+<script id="Tribe Member Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Change. Life is like the seasons, in constant change, and we must change with it. (Chaotic)
+2|Greater Good. It is each person's responsibility to make the most happiness for the whole tribe. (Good)
+3|Honor. If I dishonor myself, I dishonor my whole clan. (Lawful)
+4|Might. The strongest are meant to rule. (Evil)
+5|Nature. The natural world is more important than all the constructs of civilization. (Neutral)
+6|Glory. I must earn glory in battle, for myself and my clan. (Any
+</script>
+<script id="Tribe Member Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My family, clan, or tribe is the most important thing in my life, even when they are far from me.
+2|An injury to the unspoiled wilderness of my home is an injury to me.
+3|I will bring terrible wrath down on the evildoers who destroyed my homeland.
+4|I am the last of my tribe, and it is up to me to ensure their names enter legend.
+5|I suffer awful visions of a coming disaster and will do anything to prevent it.
+6|It is my duty to provide children to sustain my tribe.
+</script>
+<script id="Tribe Member Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|I am too enamored of ale, wine, and other intoxicants
+2|There's no room for caution in a life lived to the fullest.
+3|I remember every insult I've received and nurse a silent resentment toward anyone who's ever wronged me.
+4|I am slow to trust members of other races, tribes, and societies.
+5|Violence is my answer to almost any challenge.
+6|Don't expect me to save those who can't save themselves. It is nature's way that the strong thrive and the weak perish.
+</script>
+<script id="Urban Bounty Hunter Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I always have a plan for what to do when things go wrong
+2|I am always calm, no matter what the situation. I never raise my voice or let my emotions control me.
+3|The first thing I do in a new place is note the locations of everything valuable—or where such things could be hidden
+4|I would rather make a new friend than a new enemy
+5|I am incredibly slow to trust. Those who seem the fairest often have the most to hide
+6|I don't pay attention to the risks in a situation. Never tell me the odds
+7|The best way to get me to do something is to tell me I can't do it
+8|I blow up at the slightest insult.
+
+
+</script>
+<script id="Urban Bounty Hunter Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Honor. I don't steal from others in the trade. (Lawful)
+2|Freedom. Chains are meant to be broken, as are those who would forge them. (Chaotic)
+3|Charity. I steal from the wealthy so that I can help people in need. (Good)
+4|Greed. I will do whatever it takes to become wealthy. (Evil)
+5|People. I'm loyal to my friends, not to any ideals, and everyone else can take a trip down the Styx for all I care. (Neutral)
+6|Redemption. There's a spark of good in everyone. (Good)
+</script>
+<script id="Urban Bounty Hunter Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|I'm trying to pay off an old debt I owe to a generous benefactor.
+2|My ill-gotten gains go to support my family.
+3|Something important was taken from me, and I aim to steal it back.
+4|I will become the greatest thief that ever lived.
+5|I'm guilty of a terrible crime. I hope I can redeem myself for it.
+6|Someone I loved died because of a mistake I made. That will never happen again.
+</script>
+<script id="Urban Bounty Hunter Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|When I see something valuable, I can't think about anything but how to steal it.
+2|When faced with a choice between money and my friends, I usually choose the money.
+3|If there's a plan, I'll forget it. If I don't forget it, I'll ignore it.
+4|I have a “tell” that reveals when I'm lying.
+5|I turn tail and run when things look bad.
+6|An innocent person is in prison for a crime that I committed. I'm okay with that.
+</script>
+<script id="Urchin Personality Trait" type="text/csv">
+<span data-type="roll" data-sides="8">d8</span>|Personality Trait
+1|I hide scraps of food and trinkets away in my pockets
+2|I ask a lot of questions.
+3|I like to squeeze into small places where no one else can get to me.
+4|I sleep with my back to a wall or tree, with everything I own wrapped in a bundle in my arms.
+5|I eat like a pig and have bad manners.
+6|I think anyone who's nice to me is hiding evil intent.
+7|I don't like to bathe.
+8|I bluntly say what other people are hinting at or hiding.
+
+
+</script>
+<script id="Urchin Ideal" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Ideal
+1|Respect. All people, rich or poor, deserve respect. (Good)
+2|Community. We have to take care of each other, because no one else is going to do it. (Lawful)
+3|Change. The low are lifted up, and the high and mighty are brought down. Change is the nature of things. (Chaotic)
+4|Retribution. The rich need to be shown what life and death are like in the gutters. (Evil)
+5|People. I help the people who help me—that's what keeps us alive. (Neutral)
+6|Aspiration. I'm going to prove that I'm worthy of a better life. (Any)
+</script>
+<script id="Urchin Bond" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Bond
+1|My town or city is my home, and I'll fight to defend it.
+2|I sponsor an orphanage to keep others from enduring what I was forced to endure.
+3|I owe my survival to another urchin who taught me to live on the streets.
+4|I owe a debt I can never repay to the person who took pity on me.
+5|I escaped my life of poverty by robbing an important person, and I'm wanted for it.
+6|No one else should have to endure the hardships I've been through. 
+</script>
+<script id="Urchin Flaw" type="text/csv">
+<span data-type="roll" data-sides="6">d6</span>|Flaw
+1|If I'm outnumbered, I will run away from a fight.
+2|Gold seems like a lot of money to me, and I'll do just about anything for more of it.
+3|I will never fully trust anyone other than myself.
+4|I'd rather kill someone in their sleep then fight fair.
+5|It's not stealing if I need it more than someone else.
+6|People who can't take care of themselves get what they deserve.
+</script>
+
 <style>
 .l-box {
 	padding: 0 0 0 1em;
