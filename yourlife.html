@@ -168,7 +168,7 @@
 </div>
 
 <div class="footer l-box is-center">
-	Last updated on 24/11/2017 23:15.
+	
 </div>
 
 <script>
@@ -363,6 +363,15 @@ function rollTable(table,root,caption)
 						{
 							//var subitem = $("<li>").text(subtitle+" "+i);
 							var subitem = $("<li>").append($("<a>").text(subtitle+" "+i));
+							subroot.append(subitem);
+
+							var subsubroot = $("<ul>");
+							subitem.append(subsubroot);
+							appendTo = subsubroot;
+						}
+						else if(subtitle && subtablenames.length > 1)
+						{
+							var subitem = $("<li>").append($("<a>").text( subtitle ));
 							subroot.append(subitem);
 
 							var subsubroot = $("<ul>");
@@ -1130,7 +1139,7 @@ $(document).ready(function()
 61|70|You were terribly frightened by something you encountered and ran away, abandoning your companions to their fate.
 71|80|You learned a great deal during your adventure. The next time you make an ability check or a saving throw, you have advantage on the roll.
 81|90|You found some treasure on your adventure. You have <span data-type="roll" data-dice="2" data-sides="6">2d6</span> gp left from your share of it.
-91|99|You found a considerable amount of treasure on your adventure. You have <span data-type="roll" data-sides="20" data-mod="50">ld20+50</span> gp left from your share of it.
+91|99|You found a considerable amount of treasure on your adventure. You have <span data-type="roll" data-sides="20" data-mod="50">1d20+50</span> gp left from your share of it.
 100|100|You came across a common magic item (of the DM's choice)
 </script>
 <script id="Arcane Matters" type="text/csv">
