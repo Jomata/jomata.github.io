@@ -285,7 +285,9 @@ function rollAll()
 	//var siblings = getTable();
 
 	//1. Race
-	var nodeRace = $("<li>").append($("<a>").text("Race"));
+	var nodeRace = $("<li>")
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> Race'))
+		.click(rerollChildren);
 	root.append(nodeRace);
 	var nodeRaceList = $("<ul>");
 	nodeRace.append(nodeRaceList);
@@ -295,12 +297,15 @@ function rollAll()
 	var parentsTable = getTable(myrace+" Parents");
 	if(parentsTable)
 	{
-		rollTable(parentsTable,root);
+		//rollTable(parentsTable,root);
+		rollTable(parentsTable,nodeRaceList);
 	}
 	["Mother","Father"].forEach(function(parent)
 	{
 		//var subnode = $("<li>").text(parent);
-		var subnode = $("<li>").append($("<a>").text(parent));
+		var subnode = $("<li>")
+			.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+parent))
+			.click(rerollChildren);
 		var sublist = $("<ul>");
 		root.append(subnode);
 		subnode.append(sublist);
@@ -322,7 +327,9 @@ function rollAll()
 		rollTable(getTable(tableName),root);
 	});
 	
-	var nodeBG = $("<li>").append($("<a>").text("Background"));
+	var nodeBG = $("<li>")
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+"Background"))
+		.click(rerollChildren);
 	root.append(nodeBG);
 	var nodeBGlist = $("<ul>");
 	nodeBG.append(nodeBGlist);
@@ -333,7 +340,9 @@ function rollAll()
 		rollTable(table,nodeBGlist);
 	});
 	
-	var nodeClass = $("<li>").append($("<a>").text("Class"));
+	var nodeClass = $("<li>")
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+"Class"))
+		.click(rerollChildren);
 	root.append(nodeClass);
 	var nodeClasslist = $("<ul>");
 	nodeClass.append(nodeClasslist);
@@ -368,7 +377,13 @@ function rollElement(diceElement)
 	//console.log(dice+"d"+sides+"+"+(mod+modvar),"=",total);
 	return total;
 }
-
+function rerollChildren()
+{
+	var sublist = $(this).children("ul").children("li").children("a");
+	sublist.click();
+	
+	return false;
+}
 function rollTable(table,root,caption,replaceElement)
 {
 	//console.log("Rolling table",table);
@@ -476,7 +491,15 @@ function rollTable(table,root,caption,replaceElement)
 						if(totalrolls > 1 && subtablenames.length > 1)
 						{
 							//var subitem = $("<li>").text(subtitle+" "+i);
-							var subitem = $("<li>").append($("<a>").text(subtitle+" "+i));
+							var subitem = $("<li>")
+								//.append($("<a>").text(subtitle+" "+i));
+								.append($("<a>",{href:"#"}).html
+								(
+									'<i class="fa fa-random" aria-hidden="true"></i> ' +
+									subtitle+" "+i
+								))
+								.click(rerollChildren);
+														
 							subroot.append(subitem);
 
 							var subsubroot = $("<ul>");
@@ -485,7 +508,13 @@ function rollTable(table,root,caption,replaceElement)
 						}
 						else if(subtitle && subtablenames.length > 1)
 						{
-							var subitem = $("<li>").append($("<a>").text( subtitle ));
+							var subitem = $("<li>")
+							.append($("<a>",{"href":"#"}).html
+							(
+								'<i class="fa fa-random" aria-hidden="true"></i> '
+								+ subtitle 
+							))
+							.click(rerollChildren);
 							subroot.append(subitem);
 
 							var subsubroot = $("<ul>");
@@ -917,7 +946,7 @@ $(document).ready(function()
 02|02|Institution, such as an asylum<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 03|03|Temple<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 04|05|Orphanage<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
-06|07|Guardian<span data-subtable='["Race","Alignment","Occupation"]'/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+06|07|Guardian<span data-caption="Guardian" data-subtable='["Race","Alignment","Occupation"]'/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 08|15|Paternal or maternal aunt, uncle, or both; or extended family such as a tribe or clan<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Aunt"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Uncle"/><span data-subtable="Absent Parent" data-caption="Missing Mother"/><span data-subtable="Absent Parent" data-caption="Missing Father"/>
 16|25|Paternal or maternal grandparent(s)<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandmother"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandfather"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 26|35|<span data-subtable="Race" data-caption="Adoptive Family Race"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>Adoptive family (same or different race)
@@ -4013,6 +4042,11 @@ h1
     padding: 0 0 0 135px;
     background: url(http://maxdesign.com.au/jobs/example-folder-metaphor/bullet2.png) no-repeat 90px 0;
     /*background: url(http://maxdesign.com.au/jobs/example-folder-metaphor/bullet4.png) no-repeat 30px 0;*/
+}
+li a
+{
+	width: fit-content;
+	cursor:pointer;
 }
 </style>
 </body>
