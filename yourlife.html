@@ -2,6 +2,7 @@
 <title>This is your life</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -157,6 +158,17 @@ TODOs:
 					This is your life
 					</a>
 				</div>
+				<br/>
+				<div class="pure-controls-group">
+					<a onclick="downloadAsTxt()"
+					   class="pure-button pure-button-success"
+					   style="display:none;"
+					   id="DownloadTXT"
+					   >
+					<i class="fa fa-download" aria-hidden="true"></i>
+					Download
+					</a>
+				</div>
 			</fieldset>
 		</form>
 
@@ -178,6 +190,71 @@ TODOs:
 
 <script>
 var racial_siblings_mod = 0;
+
+function downloadAsTxt()
+{
+	var filename = prompt("Please enter the file name", "My Life");
+	
+	var text = filename + "\n" + listToString('#your-life').trim();
+	if(filename != null && filename != "" && filename != undefined)
+	{
+		var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, filename+".txt");
+	}
+}
+function listToString(root,currentLevel)
+{
+	root = $(root);
+	currentLevel = currentLevel || 0;
+	
+	var lineBreak = "\n";
+	var indent = "\t";
+	
+	var text = "";
+	root.children().each(function(m,child)
+	{
+		//Si es <li>, line break
+		//Si es <ul>, recursive+1 indent
+		//Else, append to text as usual
+	
+		var myText = $(child).myText().trim();
+				
+		if(child.tagName == "UL")
+		{
+			//text += lineBreak;
+			text += listToString(child,1+currentLevel);
+		}
+		else if(child.tagName == "LI")
+		{
+			text += lineBreak;
+			text += indent.repeat(currentLevel);
+			text += listToString(child,currentLevel);
+			text += myText;
+		}
+		else if(child.tagName == "A")
+		{
+			text += $(child).text();
+		}
+		/*else 
+		{
+			text += listToString(child,currentLevel);
+			text += myText;
+		}*/
+	});
+
+	return text;
+}
+$.fn.myText = function() {
+    var str = '';
+
+    this.contents().each(function() {
+		if (this.nodeType == 3) {
+            str += this.textContent || this.innerText || '';
+        }
+    });
+
+    return str;
+};
 
 function getTable(name)
 {
@@ -211,7 +288,9 @@ function rollAll()
 	//1. Race
 	var nodeRace = $("<li>").append($("<a>").text("Race"));
 	root.append(nodeRace);
-	rollTable(getTable($('[name="myrace"]').val()),nodeRace);
+	var nodeRaceList = $("<ul>");
+	nodeRace.append(nodeRaceList);
+	rollTable(getTable($('[name="myrace"]').val()),nodeRaceList);
 	
 	//2. Parents
 	var parentsTable = getTable(myrace+" Parents");
@@ -246,20 +325,24 @@ function rollAll()
 	
 	var nodeBG = $("<li>").append($("<a>").text("Background"));
 	root.append(nodeBG);
+	var nodeBGlist = $("<ul>");
+	nodeBG.append(nodeBGlist);
 	var myBGval = $('[name="mybackground"]').val();
 	var bgTables = $('[name^="'+myBGval+'"]');
 	bgTables.each(function(n,table)
 	{
-		rollTable(table,nodeBG);
+		rollTable(table,nodeBGlist);
 	});
 	
 	var nodeClass = $("<li>").append($("<a>").text("Class"));
 	root.append(nodeClass);
+	var nodeClasslist = $("<ul>");
+	nodeClass.append(nodeClasslist);
 	var myClassval = $('[name="myclass"]').val();
 	var classTables = $('[name^="'+myClassval+'"]');
 	classTables.each(function(n,table)
 	{
-		rollTable(table,nodeClass);
+		rollTable(table,nodeClasslist);
 	});
 	//rollTable(getTable($('[name="myclass"]').val()),nodeClass);
 	
@@ -269,6 +352,8 @@ function rollAll()
 	{
 		rollTable(getTable(tableName),root);
 	});
+	
+	$('#DownloadTXT').show();
 }
 function rollElement(diceElement)
 {
@@ -690,7 +775,7 @@ $(document).ready(function()
 30|36|<span  data-subtable='["Druid","Druid Treasured Item","Druid Guiding Aspect","Druid Mentor"]'>Druid</span>
 37|52|<span  data-subtable='["Fighter","Fighter Heraldic Sign","Fighter Instructor","Fighter Signature Style"]'>Fighter</span>
 53|58|<span  data-subtable='["Monk","Monk Monastery","Monk Monastic Icon","Monk Master"]'>Monk</span>
-59|64|<span  data-subtable='["Paladin","Paladin Personal Goal","Paladin Symbol","Paladin Nemesis,"Paladin Temptation"]'>Paladin</span>
+59|64|<span  data-subtable='["Paladin","Paladin Personal Goal","Paladin Symbol","Paladin Nemesis","Paladin Temptation"]'>Paladin</span>
 65|70|<span  data-subtable='["Ranger","Ranger View of the World","Ranger Homeland","Ranger Sworn Enemy"]'>Ranger</span>
 71|84|<span  data-subtable='["Rogue","Rogue Guilty Pleasure","Rogue Adversary","Rogue Benefactor"]'>Rogue</span>
 85|89|<span  data-subtable='["Sorcerer","Sorcerer Arcane Origin","Sorcerer Reaction","Sorcerer Supernatural Mark","Sorcerer Sign of Sorcery"]'>Sorcerer</span>
@@ -3784,6 +3869,14 @@ $(document).ready(function()
 }
 .sitemap{
 	margin: 0;
+}
+.pure-button-success {
+	background: rgb(28, 184, 65); /* this is green */
+}
+.pure-button-success,
+.pure-button-primary {
+	border-radius: 5px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 table {width:100%}
