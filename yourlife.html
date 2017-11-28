@@ -971,6 +971,9 @@ $(document).ready(function()
 		//$('#TableTabs').append($("<div>",{"id":tab_id}).append(table));
 	});
 
+	//Sorting tables
+	accordionSort("#accordion");
+	
 	//$( "#TableTabs" ).tabs();
 	$( "#accordion" ).accordion({
       heightStyle: "content",
@@ -978,6 +981,28 @@ $(document).ready(function()
 	  collapsible: true,
     });
 });
+
+function accordionSort(accordion)
+{
+	var accordion = $(accordion);
+	
+	// Get an array of jQuery objects containing each h3 and the div that
+    // follows it
+    var entries = $.map(accordion.children("h3").get(), function(entry) {
+        var $entry = $(entry);
+        return $entry.add($entry.next());
+    });
+
+    // Sort the array by the h3's text
+    entries.sort(function(a, b) {
+        return a.filter("h3").text().localeCompare(b.filter("h3").text());
+    });
+
+    // Put them in the right order in the container
+    $.each(entries, function() {
+        this.detach().appendTo(accordion);
+    });
+}
 
 </script>
 
@@ -1030,7 +1055,7 @@ $(document).ready(function()
 <script id="Occupation" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Occupation
 01|05|Academic
-06|10|Adventurer (roll on the <span data-subtable="Class" data-caption="Class">Class</span> table)
+06|10|Adventurer<span data-subtable="Class" data-caption="Class"/>
 11|11|Aristocrat
 12|26|Artisan or guild member
 27|31|Criminal
@@ -1109,7 +1134,7 @@ $(document).ready(function()
 </script>
 <script id="Status" type="text/csv">
 <span data-type="roll" data-dice="3" data-sides="6">3d6</span>||Status
-3|3|Dead (roll on the <span data-subtable="Cause of Death">Cause of Death</span> table)
+3|3|Dead<span data-subtable="Cause of Death"/>
 4|5|Missing or unknown
 6|8|Alive, but doing poorly due to injury, financial trouble, or relationship difficulties
 9|12|Alive and well
@@ -1144,7 +1169,7 @@ $(document).ready(function()
 02|02|Institution, such as an asylum<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 03|03|Temple<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 04|05|Orphanage<span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
-06|07|Guardian<span data-caption="Guardian" data-subtable='["Race","Alignment","Occupation"]'/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
+06|07|Guardian<span data-caption="Guardian" data-subtable='["Race","Alignment","Occupation","Status"]'/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 08|15|Paternal or maternal aunt, uncle, or both; or extended family such as a tribe or clan<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Aunt"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Uncle"/><span data-subtable="Absent Parent" data-caption="Missing Mother"/><span data-subtable="Absent Parent" data-caption="Missing Father"/>
 16|25|Paternal or maternal grandparent(s)<span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandmother"/><span data-subtable='["Race","Alignment","Occupation","Status"]' data-caption="Grandfather"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>
 26|35|<span data-subtable="Race" data-caption="Adoptive Family Race"/><span data-subtable="Absent Parent" data-caption="Absent Mother"/><span data-subtable="Absent Parent" data-caption="Absent Father"/>Adoptive family (same or different race)
@@ -1156,7 +1181,7 @@ $(document).ready(function()
 </script>
 <script id="Absent Parent" type="text/csv">
 <span data-type="roll" data-sides="4">d4</span>|Fate
-1|Your parent died (roll on the <span data-subtable="Cause of Death" data-caption="Cause of Death">Cause of Death</span> supplemental table).
+1|Your parent died.<span data-subtable="Cause of Death" data-caption="Cause of Death"/>
 2|Your parent was imprisoned, enslaved, or otherwise taken away.
 3|Your parent abandoned you.
 4|Your parent disappeared to an unknown fate.
@@ -1455,19 +1480,19 @@ $(document).ready(function()
 </script>
 <script id="Life Events" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Event
-01|10|You suffered a tragedy. Roll on the <span data-subtable="Tragedies">Tragedies</span> table.
-11|20|You gained a bit of good fortune. Roll on the <span data-subtable="Boons">Boons</span> table.
+01|10|You suffered a tragedy.<span data-subtable="Tragedies"/>
+11|20|You gained a bit of good fortune.<span data-subtable="Boons"/>
 21|30|You fell in love or got married. If you get this result more than once, you can choose to have a child instead. Work with your DM to determine the identity of your love interest.<span data-caption="Partner or Child" data-subtable='["Race","Alignment","Occupation","Status","Relationship"]'>
-31|40|You made an enemy of an adventurer. Roll a <span data-type="roll" data-sides="6">d6</span>. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character's identity and the danger this enemy poses to you.<span data-caption="Enemy" data-subtable='["Race","Alignment","Class","Status"]'/>
-41|50|You made a friend of an adventurer. Use the supplemental tables and work with your DM to add more detail to this friendly character and establish how your friendship began.<span data-caption="Friend" data-subtable='["Race","Alignment","Class","Status"]'/>
+31|40|You made an enemy of an adventurer. Roll a <span data-type="roll" data-sides="6">d6</span>. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Work with your DM to determine this hostile character's identity and the danger this enemy poses to you.<span data-caption="Enemy" data-subtable='["Race","Alignment","Class","Status"]'/>
+41|50|You made a friend of an adventurer. Work with your DM to add more detail to this friendly character and establish how your friendship began.<span data-caption="Friend" data-subtable='["Race","Alignment","Class","Status"]'/>
 51|70|You spent time working in a job related to your background. Start the game with an extra <span data-type="roll" data-dice="2" data-sides="6">2d6</span> gp.
-71|75|You met someone important. Use the supplemental tables to determine this character's identity and how this individual feels about you. Work out additional details with your DM as needed to fit this character into your backstory.<span data-caption="VIP" data-subtable='["Race","Alignment","Occupation","Status","Relationship"]'/>
-76|80|You went on an adventure. Roll on the Adventures table to see what happened to you. Work with your DM to determine the nature of the adventure and the creatures you encountered.<span data-caption="Adventure" data-subtable='Adventures'/>
-81|85|You had a supernatural experience. Roll on the <span data-subtable='Supernatural Events'>Supernatural Events</span> table to find out what it was.
-86|90|You fought in a battle. Roll on the <span data-subtable="War"/>War table to learn what happened to you. Work with your DM to come up with the reason for the battle and the factions involved. It might have been a small conflict between your community and a band of orcs, or it could have been a major battle in a larger war.
-91|95|You committed a crime or were wrongly accused of doing so. Roll on the <span data-subtable="Crime"/>Crime table to determine the nature of the offense and on the <span data-subtable="Punishment"/>Punishment table to see what became of you.
-96|99|You encountered something magical. Roll on the <span data-subtable="Arcane Matters"/>Arcane Matters table.
-100|100|Something truly strange happened to you. Roll on the <span data-subtable="Weird Stuff"/>Weird Stuff table.
+71|75|You met someone important. Work out additional details with your DM as needed to fit this character into your backstory.<span data-caption="VIP" data-subtable='["Race","Alignment","Occupation","Status","Relationship"]'/>
+76|80|You went on an adventure. Work with your DM to determine the nature of the adventure and the creatures you encountered.<span data-caption="Adventure" data-subtable='Adventures'/>
+81|85|You had a supernatural experience.<span data-subtable='Supernatural Events'/>
+86|90|You fought in a battle. Work with your DM to come up with the reason for the battle and the factions involved. It might have been a small conflict between your community and a band of orcs, or it could have been a major battle in a larger war.<span data-subtable="War"/>
+91|95|You committed a crime or were wrongly accused of doing so.<span data-subtable="Crime"/><span data-subtable="Punishment"/>
+96|99|You encountered something magical.<span data-subtable="Arcane Matters"/>
+100|100|Something truly strange happened to you.<span data-subtable="Weird Stuff"/>
 </script>
 <script id="Adventures" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Outcome
@@ -1499,7 +1524,7 @@ $(document).ready(function()
 <script id="Boons" type="text/csv">
 <span data-type="roll" data-sides="10">d10</span>|Boon
 1|A friendly wizard gave you a spell scroll containing one cantrip (of the DM's choice).
-2|You saved the life of a commoner, who now owes you a life debt. This individual accompanies you on your travels and performs mundane tasks for you, but will leave if neglected, abused, or imperiled. Determine details about this character by using the supplemental tables and working with your DM.
+2|You saved the life of a commoner, who now owes you a life debt. This individual accompanies you on your travels and performs mundane tasks for you, but will leave if neglected, abused, or imperiled. Determine details about this character by working with your DM.<span data-caption="Commoner" data-subtable='["Race","Alignment","Occupation","Status"]'/>
 3|You found a riding horse.
 4|You found some money. You have <span data-type="roll" data-sides="20">1d20</span> gp in addition to your regular starting funds.
 5|A relative bequeathed you a simple weapon of your choice.
@@ -1547,7 +1572,7 @@ $(document).ready(function()
 </script>
 <script id="Tragedies" type="text/csv">
 <span data-type="roll" data-sides="12">d12</span>||Tragedy
-1|2|A family member or a close friend died. Roll on the <span data-subtable="Cause of Death">Cause of Death</span> supplemental table to find out how.
+1|2|A family member or a close friend died.<span data-subtable="Cause of Death"/>
 3|3|A friendship ended bitterly, and the other person is now hostile to you. The cause might have been a misunderstanding or something you or the former friend did.
 4|4|You lost all your possessions in a disaster, and you had to rebuild your life.
 5|5|You were imprisoned for a crime you didn't commit and spent <span data-type="roll" data-sides="6">1d6</span> years at hard labor, in jail, or shackled to an oar in a slave galley.
@@ -1557,7 +1582,7 @@ $(document).ready(function()
 9|9|You did something that brought terrible shame to you in the eyes of your family. You might have been involved in a scandal, dabbled in dark magic, or offended someone important. The attitude of your family members toward you becomes indifferent at best, though they might eventually forgive you.
 10|10|For a reason you were never told, you were exiled from your community. You then either wandered in the wilderness for a time or promptly found a new place to live.
 11|11|A romantic relationship ended. Roll <span data-type="roll" data-dice="3" data-sides="6">3d6</span>. An odd number means it ended with bad feelings, while an even number means it ended amicably.
-12|12|A current or prospective romantic partner of yours died. Roll on the <span data-subtable="Cause of Death">Cause of Death</span> supplemental table to find out how. If the result is murder, roll a <span data-type="roll" data-sides="12">d12</span>. On a 1, you were responsible, whether directly or indirectly
+12|12|A current or prospective romantic partner of yours died.<span data-subtable="Cause of Death"/> If the cause of death is murder, roll a <span data-type="roll" data-sides="12">d12</span>. On a 1, you were responsible, whether directly or indirectly
 </script>
 <script id="War" type="text/csv">
 <span data-type="roll" data-sides="12">d12</span>||War Outcome
@@ -1640,7 +1665,7 @@ $(document).ready(function()
 3|You were enslaved by a hag, a satyr, or some other being and lived in that creature's thrall for <span data-type="roll" data-sides="6">1d6</span> years.
 4|A dragon held you as a prisoner for <span data-type="roll" data-sides="4">1d4</span> months until adventurers killed it.
 5|You were taken captive by a race of evil humanoids such as drow, kuo-toa, or quaggoths. You lived as a slave in the Underdark until you escaped.
-6|You served a powerful adventurer as a hireling. You have only recently left that service. Use the supplemental tables and work with your DM to determine the basic details about your former employer.
+6|You served a powerful adventurer as a hireling. You have only recently left that service. Work with your DM to determine the basic details about your former employer.<span data-caption="Employer" data-subtable='["Race","Alignment","Class","Status","Relationship"]'/>
 7|You went insane for <span data-type="roll" data-sides="6">1d6</span> years and recently regained your sanity. A tic or some other bit of odd behavior might linger.
 8|A lover of yours was secretly a silver dragon.
 9|You were captured by a cult and nearly sacrificed on an altar to the foul being the cultists served. You escaped, but you fear they will find you.
