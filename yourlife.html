@@ -493,6 +493,20 @@ function rollName(root, race, gender, surname, saveTo)
 
 	race = evalRace(race);
 
+	switch (race)
+	{
+		case "Half-Elf":
+			race = "Elf";
+			break;
+		case "Orc":
+			race = "Half-Orc";
+			surname = "";
+			break;
+		case "Devil":
+			race = "Tiefling";
+			break;
+	}
+	
 	switch (gender)
 	{
 		case "curr.gender":
@@ -522,7 +536,10 @@ function rollName(root, race, gender, surname, saveTo)
 	}
 
 	if (surname)
+	{
 		tmp = surname;
+		saveTo.surname = tmp;
+	}
 	else
 	{
 		tmp = false;
@@ -546,7 +563,7 @@ function rollName(root, race, gender, surname, saveTo)
 	}
 	else
 	{
-		console.log("No name found for params:", arguments);
+		//console.log("No name found for params:", arguments);
 	}
 
 	//root.append($("<li>")
@@ -738,7 +755,7 @@ function rollTableSimple(table)
 	var table = $(table);
 	if (!table)
 	{
-		console.log("No table found");
+		//console.log("No table found");
 		return;
 	}
 
@@ -759,12 +776,12 @@ function rollTableSimple(table)
 	});
 	if (options.length == 0)
 	{
-		console.log("No options found for table", table);
+		//console.log("No options found for table", table);
 	}
-	if (!optionRolled && options.length > 0)
+	if (!optionRolled && options.length > 0 && table)
 	{
-		console.log("No record found for", total, "in", table);
-		alert("No record found for " + total + " in " + table);
+		//console.log("No record found for", total, "in", table);
+		alert("No record found for " + total + " in " + table.attr("id") + ".\nPlease let Cube know.");
 	}
 
 	return optionRolled;
@@ -775,7 +792,7 @@ function rollTable(table, root, caption, replaceElement)
 	//console.log("Rolling table",table);
 	if (!table || !root)
 	{
-		console.log("No table or root element received");
+		//console.log("No table or root element received");
 		return;
 	}
 	else
@@ -820,7 +837,7 @@ function rollTable(table, root, caption, replaceElement)
 					{
 						varNames.forEach(function(varName)
 						{
-							console.log(varName + "=" + varValue);
+							//console.log(varName + "=" + varValue);
 							eval(varName + "=" + varValue);
 						});
 					}
@@ -1454,10 +1471,10 @@ function accordionSort(accordion)
 <script id="Number of Siblings" type="text/csv">
 <span data-type="roll" data-sides="10">d10</span>||Siblings
 1|2|None
-3|4|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-modvar="racial_siblings_mod">1d3+racial adjustment</span>
-5|6|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="4" data-mod="1" data-modvar="racial_siblings_mod">1d4+1+racial adjustment</span>
-7|8|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="6" data-mod="2" data-modvar="racial_siblings_mod">1d6+2+racial adjustment</span>
-9|10|<span data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-mod="3" data-modvar="racial_siblings_mod">1d3+3+racial adjustment</span>
+3|4|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-modvar="racial_siblings_mod">1d3+racial adjustment</span>
+5|6|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="4" data-mod="1" data-modvar="racial_siblings_mod">1d4+1+racial adjustment</span>
+7|8|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="6" data-mod="2" data-modvar="racial_siblings_mod">1d6+2+racial adjustment</span>
+9|10|<span data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-mod="3" data-modvar="racial_siblings_mod">1d3+3+racial adjustment</span>
 </script>
 <script id="Relationship" type="text/csv">
 <span data-type="roll" data-dice="3" data-sides="4">3d4</span>||Attitude
@@ -5471,28 +5488,28 @@ function accordionSort(accordion)
 37|38|Kali
 39|40|Kallista
 41|42|Kasdeya
-43|44|Lenssa
-45|46|LHhh
+43|44|Lerissa
+45|46|Lilith
 47|48|Makaria
 49|50|Manea
 51|52|Markosian
-53|54|Mafiema
-55|56|Namnah
-57|58|Nemem
-59|60|Nfia
+53|54|Mastema
+55|56|Naamah
+57|58|Nemeia
+59|60|Nija
 61|62|Orianna
 63|64|Osah
-65|66|Phehna
-67|68|Prospenne
+65|66|Phelaia
+67|68|Prosperine
 69|70|Purah
 71|72|Pyra
-73|74|Rkfia
+73|74|Rieta
 75|76|Ronobe
 77|78|Ronwe
-79|80|Seddn
+79|80|Seddit
 81|82|Seere
-83|84|Sekhrnet
-85|86|Senwaza
+83|84|Sekhmet
+85|86|Semyaza
 87|88|Shava
 89|90|Shax
 91|92|Sorath
