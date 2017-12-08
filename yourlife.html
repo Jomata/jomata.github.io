@@ -381,6 +381,32 @@ function downloadAsTxt()
 	}
 }
 
+function validateRowNumbers()
+{
+	var firstCells = $("table tr td:first-child");
+	
+	firstCells.each(function(n,cell)
+	{
+		var cell = $(cell);
+		var nextCell = $(cell).closest("td").next();
+		
+		var a = parseInt(cell.text());
+		var b = parseInt(nextCell.text());		
+		
+		if(typeof a === 'number' && typeof b === 'number' && a > b)
+		{
+			console.log(a,">",b,cell.closest("table").attr("id"));
+		}
+		
+		var cellAbove = cell.parent().prev().find('td').eq(cell.index());
+		var c = parseInt(cellAbove.text());
+		if(typeof a === 'number' && typeof c === 'number' && a < c)
+		{
+			console.log(a,"<",c,cell.closest("table").attr("id"));
+		}
+	});
+}
+
 function listToString(root, currentLevel)
 {
 	root = $(root);
@@ -4551,8 +4577,8 @@ function accordionSort(accordion)
 71|72|Pufink
 73|74|Quarethon
 75|76|Rathkran
-77|73|Rhogar
-79|30|Rivaan
+77|78|Rhogar
+79|80|Rivaan
 81|82|Sethrekar
 83|84|Shamash
 85|86|Shedinn
@@ -4604,13 +4630,13 @@ function accordionSort(accordion)
 71|72|Qyxpahrgh
 73|74|Raghthroknaar
 75|76|Shestendeliath
-77|73|Skaarzborroosh
-79|30|Sumnarghthrysh
-31|32|Tiammanthyilish
-33|34|Turnuroth
-35|36|Umbyrphrael
-37|88|Vangdondalor
-39|90|Verthisathurgiesh
+77|78|Skaarzborroosh
+79|80|Sumnarghthrysh
+81|82|Tiammanthyilish
+83|84|Turnuroth
+85|86|Umbyrphrael
+87|88|Vangdondalor
+89|90|Verthisathurgiesh
 91|92|Wiwyrholdalphiax
 93|94|Wystongjiir
 95|96|Xephyrbahnor
@@ -4637,7 +4663,7 @@ function accordionSort(accordion)
 31|32|Finelien
 33|34|Gillydd
 35|36|Gunnloda
-37|33|Gurdis
+37|38|Gurdis
 39|40|Helgret
 41|42|Helja
 43|44|HHn
@@ -4695,7 +4721,7 @@ function accordionSort(accordion)
 41|42|Gimgen
 43|44|Gimurt
 45|46|Harbek
-47|43|Kildrak
+47|48|Kildrak
 49|50|Kilvar
 51|52|Morgran
 53|54|Morkral
@@ -4781,7 +4807,7 @@ function accordionSort(accordion)
 01|02|Ael
 03|04|Ang
 05|06|Ara
-07|03|Ari
+07|08|Ari
 09|10|Arn
 11|12|Aym
 13|14|Broe
@@ -5046,12 +5072,12 @@ function accordionSort(accordion)
 01|02|Alston
 03|04|Alvyn
 05|06|Anverth
-07|03|Arumawann
+07|08|Arumawann
 09|10|Bilbron
 11|12|Boddynock
 13|14|Brocc
 15|16|Burgell
-17|13|Cockaby
+17|18|Cockaby
 19|20|Crampernap
 21|22|Dabbledob
 23|24|Delebean
@@ -5066,12 +5092,12 @@ function accordionSort(accordion)
 41|42|Frug
 43|44|Gerbo
 45|46|Gimble
-47|43|Glim
+47|48|Glim
 49|50|Igden
 51|52|Jabble
 53|54|Jebeddo
 55|56|Kellen
-57|53|Kipper
+57|58|Kipper
 59|60|Namfoodle
 61|62|Oppleby
 63|64|Orryn
@@ -5082,12 +5108,12 @@ function accordionSort(accordion)
 73|74|Ribbles
 75|76|Rimple
 77|78|Roondar
-79|30|Sappw
+79|80|Sappw
 81|82|Seebo
 83|84|Senteq
 85|86|Sindri
-37|33|Umpen
-39|90|Warryn
+87|88|Umpen
+89|90|Warryn
 91|92|Wiggens
 93|94|Wobbles
 95|96|Wrenn
@@ -5180,7 +5206,7 @@ function accordionSort(accordion)
 57|58|Nikki
 59|60|Nora
 61|62|Olivia
-63|54|Paela
+63|64|Paela
 65|66|Pearl
 67|68|Pennie
 69|70|Philomena
@@ -5188,9 +5214,9 @@ function accordionSort(accordion)
 73|74|Robbie
 75|76|Rose
 77|78|Saral
-79|30|Seraphina
+79|80|Seraphina
 81|82|Sheena
-33|84|Stacee
+83|84|Stacee
 85|86|Tawna
 87|88|Thea
 89|90|Trym
@@ -5241,7 +5267,7 @@ function accordionSort(accordion)
 73|74|Ostran
 75|76|Oswalt
 77|78|Perrin
-79|30|Poppy
+79|80|Poppy
 81|82|Reed
 83|84|Roscoe
 85|86|Sam
@@ -5347,12 +5373,12 @@ function accordionSort(accordion)
 73|74|Reeza
 75|76|Shautha
 77|78|Silgre
-79|30|Sutha
+79|80|Sutha
 81|82|Tagga
 83|84|Tawar
 85|86|Tomph
 87|88|Ubada
-39|90|Vanchu
+89|90|Vanchu
 91|92|Vola
 93|94|Volen
 95|96|Vorka
@@ -5384,7 +5410,7 @@ function accordionSort(accordion)
 41|42|Keth
 43|44|Korag
 45|46|Krusk
-47|43|Lubash
+47|48|Lubash
 49|50|Megged
 51|52|Mhurren
 53|54|Mord
@@ -5394,7 +5420,7 @@ function accordionSort(accordion)
 61|62|Odorr
 63|64|Ohr
 65|66|Rendar
-67|63|Resh
+67|68|Resh
 69|70|Ront
 71|72|Rrath
 73|74|Sark
@@ -5523,7 +5549,7 @@ function accordionSort(accordion)
 01|02|Ambition
 03|04|Art
 05|06|Carrion
-07|03|Chant
+07|08|Chant
 09|10|Creed
 11|12|Death
 13|14|Debauchery
@@ -5533,7 +5559,7 @@ function accordionSort(accordion)
 21|22|Dread
 23|24|Ecstasy
 25|26|Ennui
-27|23|Entropy
+27|28|Entropy
 29|30|Excellence
 31|32|Fear
 33|34|Glory
