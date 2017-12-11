@@ -178,10 +178,16 @@ li a:hover i, li a:hover~ul li a i
 	color: gold;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
-li a:hover, li a:hover~ul li a
+li a:hover, li a:hover~ul li a:not(.noclick)
 {
 	color: black;
 	text-shadow: -1px 0 gold, 0 1px gold, 1px 0 gold, 0 -1px gold;
+}
+a.noclick, a.noclick:hover
+{
+	color: black;
+	cursor: default;
+	text-shadow:none;
 }
 </style>
 
@@ -190,7 +196,8 @@ li a:hover, li a:hover~ul li a
 <body>
 <!--
 TODOs:
-* 
+* If a race is rerolled, can we check what depends on that and reroll it?
+* At least, we can reroll the sibling name node
 -->
 
 <!--
@@ -475,12 +482,25 @@ function getTable(name)
 	return $('table[name="' + name + '"]').first();
 }
 
-function rollGender(root, race) //race just in case, mostly ignored
+function rollGender(root, race, replaceElement) //race just in case, mostly ignored
 {
+	var replaceElement = replaceElement || false;
+
 	var gender = Math.random() > 0.5 ? "Male" : "Female";
 	curr.gender = gender;
 
-	appendFlat(root, "Gender", gender);
+	var node = replaceElement 
+		? replaceFlat(replaceElement, "Gender", gender) 
+		: appendFlat (root          , "Gender", gender, true) ;
+	var nodeLink = node.children("a");
+	
+	nodeLink.click(function()
+	{
+		//$(this).parent().remove();
+		rollGender(root, race, $(this).parent());
+		
+		//console.log("TODO","If there's a sibling name node, reroll it");
+	});
 
 	//root.append($("<li>")
 	//	.append($("<a>").text("Gender:"))
@@ -512,12 +532,68 @@ function evalRace(race)
 
 function rollName(root, race, gender, surname, saveTo)
 {
-	var race = race || "curr.race";
-	var gender = gender || "curr.gender";
-	var saveTo = saveTo ||
-	{};
+	//console.log("rollName",arguments);
+	var argNode = arguments[0];
+	var argRace = arguments[1];
+	var argGndr = arguments[2];
+	var argSrnm = arguments[3];
+	var argSvTo = arguments[4];
+	
+	var updateRaceNode = false;
+	
+	//var race = race || "curr.race";
+	//If we don't have a race, we try to get a nearby "Race" node
+	//If there's none, we default to curr.race
+	var race = race;
+	if(!race)
+	{
+		var listSiblings = $(root).find("li a:contains(Race)");
+		if(listSiblings.length > 0)
+		{
+			race = listSiblings.siblings().text().trim();
+		}
+		else
+		{
+			race = curr.race;
+		}
+	}
+	else 
+	{
+		updateRaceNode = true;
+	}
+
+	//var gender = gender || curr.gender;
+	//If we don't have a gender, we try to get a nearby "Gender" node
+	//If there's none, we default to curr.gender
+	var gender = gender;
+	if(!gender)
+	{
+		var listSiblings = $(root).find("li a:contains(Gender)");
+		if(listSiblings.length > 0)
+		{
+			gender = listSiblings.siblings().text().trim();
+		}
+		else
+		{
+			gender = curr.gender;
+		}
+	}
+	
+	var saveTo = saveTo || {};
 
 	race = evalRace(race);
+	
+	//A bit ugly, but updating Race here is there's a nearby node
+	if(updateRaceNode)
+	{
+		var listSiblings = $(root).find("li a:contains(Race)");
+		if(listSiblings.length > 0)
+		{
+			listSiblings.siblings().text(race);
+		}
+	}
+	
+	if(surname) surname = eval(surname);
 
 	switch (race)
 	{
@@ -585,12 +661,30 @@ function rollName(root, race, gender, surname, saveTo)
 
 	if (name)
 	{
-		prependFlat(root, "Name", name);
+		
 	}
 	else
 	{
 		//console.log("No name found for params:", arguments);
+		name = "N/A";
 	}
+	
+	var node = prependFlat(root, "Name", name);
+	var nodeLink = node.children("a");
+	//console.log(nodeLink,arguments);
+	//For the rerolling, we can:
+	// - Use the same parameters we originally received
+	// - Try to find the nearest gender/race nodes
+	// - A mix? Try to find nearest gender/race and use the surname we received?
+	//   But what if the surname was rerolled? Forex, parents names
+	//   If the race was rerolled, getting the nearest race works
+	//   Unless it's PC parents, were they get the race from the PC
+	//   In that case, I think we need to eval the race
+	nodeLink.click(function()
+	{
+		$(this).parent().remove();
+		rollName(argNode, argRace, argGndr, argSrnm, argSvTo);
+	});
 
 	//root.append($("<li>")
 	//	.append($("<a>").text("Name:"))
@@ -601,23 +695,52 @@ function rollName(root, race, gender, surname, saveTo)
 function prependFlat(appendTo, label, text)
 {
 	var newEle = $("<li>")
-		.append($("<a>").text(label + ":"))
+		//.append($("<a>").text(label + ":"))
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+label+':'))
 		.append("&nbsp;")
-		.append(text);
+		.append($("<span>").text(text));
+		//.append("&nbsp;" + text);
 
-	appendTo.prepend(newEle);
+	$(appendTo).prepend(newEle);
 
 	return newEle;
 }
 
-function appendFlat(appendTo, label, text)
+function replaceFlat(replaceElement, label, text)
 {
 	var newEle = $("<li>")
-		.append($("<a>").text(label + ":"))
+		//.append($("<a>").text(label + ":"))
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+label+':'))
 		.append("&nbsp;")
-		.append(text);
+		.append($("<span>").text(text));
+		
+	$(replaceElement).replaceWith(newEle);
+	
+	return newEle;
+}
+function appendFlat(appendTo, label, text, includeLink)
+{
+	var newEleLabel = $("<a>").text(label+':');
+	if(includeLink)
+	{
+		newEleLabel.prepend('<i class="fa fa-random" aria-hidden="true"></i> ');
+	}
+	else
+	{
+		newEleLabel.addClass("noclick");
+	}
+	
+	var newEle = $("<li>")
+		//.append($("<a>").text(label + ":"))
+		//.append($("<a>").html(label+':'))
+		.append(newEleLabel)
+		.append("&nbsp;")
+		.append($("<span>").text(text));
+		//.append("&nbsp;" + text);
+	
+	//'<i class="fa fa-random" aria-hidden="true"></i> '
 
-	appendTo.append(newEle);
+	$(appendTo).append(newEle);
 
 	return newEle;
 }
@@ -690,13 +813,15 @@ function rollAll()
 
 		if (parent == "Mother")
 		{
-			rollName(sublist, mom.race, "Female", false, mom);
-			appendFlat(sublist, "Race", mom.race);
+			rollName(sublist, "mom.race", "Female", false, mom);
+			var momRaceNode = appendFlat(sublist, "Race", mom.race, false);
+			//momRaceNode.find("a i").remove();
 		}
 		else
 		{
-			rollName(sublist, dad.race, "Male", false, dad);
-			appendFlat(sublist, "Race", dad.race);
+			rollName(sublist, "dad.race", "Male", false, dad);
+			var dadRaceNode = appendFlat(sublist, "Race", dad.race, false);
+			//dadRaceNode.find("a i").remove();
 		}
 
 		rollTable(parents, sublist);
@@ -770,8 +895,11 @@ function rollElement(diceElement)
 
 function rerollChildren()
 {
+	//Need to reroll name last, the order of the others doesn't matter
 	var sublist = $(this).siblings("ul").children("li").children("a");
-	sublist.click();
+	//sublist.click();
+	sublist.filter(":not(:contains(Name))").click();
+	sublist.filter(":contains(Name)").click();
 
 	return false;
 }
@@ -1018,7 +1146,8 @@ function rollTable(table, root, caption, replaceElement)
 								var dataRace = subtable.data("race");
 								if (dataRace)
 								{
-									appendFlat(appendTo, "Race", evalRace(dataRace));
+									//Fixed race, no rerolling
+									var raceNode = appendFlat(appendTo, "Race", evalRace(dataRace), false);
 									return;
 								}
 							}
@@ -1034,7 +1163,8 @@ function rollTable(table, root, caption, replaceElement)
 								var dataGender = subtable.data("gender");
 								var dataRace = subtable.data("race");
 								var dataSurname = subtable.data("surname") || false;
-								if (dataSurname) dataSurname = eval(dataSurname);
+								//if (dataSurname) dataSurname = eval(dataSurname);
+								//if (dataSurname) dataSurname = eval(dataSurname);
 
 								rollName(appendTo, dataRace, dataGender, dataSurname);
 								return;
@@ -4666,8 +4796,8 @@ function accordionSort(accordion)
 37|38|Gurdis
 39|40|Helgret
 41|42|Helja
-43|44|HHn
-45|46|llde
+43|44|Hlin
+45|46|Ilde
 47|48|Jarana
 49|50|Kathra
 51|52|Kilia
@@ -5038,7 +5168,7 @@ function accordionSort(accordion)
 39|40|Mardnab
 41|42|Meena
 43|44|Menny
-45|45|Mumpena
+45|46|Mumpena
 47|48|Nissa
 49|50|Numba
 51|52|Nyx
@@ -5297,7 +5427,7 @@ function accordionSort(accordion)
 27|28|Goodearth
 29|30|Greenbottle
 31|32|Greenleaf
-33|34|High|hill
+33|34|High-hill
 35|36|Hilltopple
 37|38|Hogcollar
 39|40|Honeypot
@@ -5305,7 +5435,7 @@ function accordionSort(accordion)
 43|44|Kettlewhistle
 45|46|Leagallow
 47|48|Littlefoot
-49|50|Nimble|fingers
+49|50|Nimblefingers
 51|52|Porridgepot
 53|54|Quickstep
 55|56|Reedfellow
