@@ -497,17 +497,33 @@ function rollGender(root, race, replaceElement) //race just in case, mostly igno
 	nodeLink.click(function()
 	{
 		//$(this).parent().remove();
-		rollGender(root, race, $(this).parent());
-		
-		//console.log("TODO","If there's a sibling name node, reroll it");
+		var oldValue = $(this).parent().text();
+		var newNode = rollGender(root, race, $(this).parent());
+		var newValue = newNode.text();
+		//If we changed and there's a sibling name node, reroll it
+		if(oldValue != newValue)
+			$(root).find("li a:contains(Name)").click();
 	});
 
 	//root.append($("<li>")
 	//	.append($("<a>").text("Gender:"))
 	//	.append(" " + gender)
 	//	);
+	
+	return node;
 }
-
+function surnameSibling()
+{
+	return dad.surname ? dad.surname : mom.surname;
+}
+//Same as race PC, unless tiefling with human parents
+function raceSibling()
+{
+	if (mom.race == dad.race)
+		return mom.race;
+	else
+		return me.race;
+}
 function evalRace(race)
 {
 	switch (race)
@@ -516,14 +532,8 @@ function evalRace(race)
 		case "me.race":
 		case "mom.race":
 		case "dad.race":
+		case "raceSibling()":
 			race = eval(race);
-			break;
-		case "raceSibling":
-			//Same as race PC, unless tiefling with human parents
-			if (mom.race == dad.race)
-				race = mom.race;
-			else
-				race = me.race;
 			break;
 	}
 
@@ -593,6 +603,7 @@ function rollName(root, race, gender, surname, saveTo)
 		}
 	}
 	
+	var surnameVariable = surname;
 	if(surname) surname = eval(surname);
 
 	switch (race)
@@ -620,56 +631,66 @@ function rollName(root, race, gender, surname, saveTo)
 	var first = gender;
 	var last = ["Clan", "Family", "Virtue"]; //depending on race
 
-	var name = "";
+	var name = $("<span>");
 	var tmp = "";
 
 	tmp = rollTableSimple('table[name="Names, ' + race + ', ' + base + '"]');
 	if (tmp)
 	{
 		saveTo.base = tmp;
-		name += tmp + " ";
+		name.append($("<span>").text(tmp + " "));
 	}
 
 	tmp = rollTableSimple('table[name="Names, ' + race + ', ' + first + '"]');
 	if (tmp)
 	{
-		name += tmp + " ";
 		saveTo.first = tmp;
+		//name += tmp + " ";
+		name.append($("<span>").text(tmp + " "));
 	}
 
-	if (surname)
+	var tmpSurname = "";
+	
+	if(name.text().trim().length > 0)
 	{
-		tmp = surname;
-		saveTo.surname = tmp;
+		if (surname)
+		{
+			tmpSurname = surname;
+		}
+		else
+		{
+			last.forEach(function(lastName)
+			{
+				if(!tmpSurname)
+					tmpSurname = rollTableSimple('table[name="Names, ' + race + ', ' + lastName + '"]');
+			});
+			if(!tmpSurname)
+				tmpSurname = "";
+		}
 	}
 	else
 	{
-		tmp = false;
-		last.forEach(function(lastName)
-		{
-			tmp = tmp || rollTableSimple('table[name="Names, ' + race + ', ' + lastName + '"]');
-		});
+		tmpSurname = "";
 	}
+	
+	saveTo.surname = tmpSurname;
+	var surnameElement = $("<span>").text(tmpSurname);
+	name.append(surnameElement);
+	bindTo(surnameElement,surnameVariable);
 
-	if (tmp)
-	{
-		saveTo.surname = tmp;
-		name += tmp + " ";
-	}
+	//name = name.trim();
 
-	name = name.trim();
-
-	if (name)
+	if (name.text().trim())
 	{
 		
 	}
 	else
 	{
 		//console.log("No name found for params:", arguments);
-		name = "N/A";
+		//name = "N/A";
 	}
 	
-	var node = prependFlat(root, "Name", name);
+	var node = prependHtml(root, "Name", name);
 	var nodeLink = node.children("a");
 	//console.log(nodeLink,arguments);
 	//For the rerolling, we can:
@@ -685,6 +706,14 @@ function rollName(root, race, gender, surname, saveTo)
 		$(this).parent().remove();
 		rollName(argNode, argRace, argGndr, argSrnm, argSvTo);
 	});
+	
+	if(saveTo.affects)
+	{
+		saveTo.affects.split(";").forEach(function(affected)
+		{
+			updateBoundElements(affected);
+		});
+	}
 
 	//root.append($("<li>")
 	//	.append($("<a>").text("Name:"))
@@ -692,12 +721,26 @@ function rollName(root, race, gender, surname, saveTo)
 	//	);
 }
 
+function prependHtml(appendTo, label, html)
+{
+	var newEle = $("<li>")
+		//.append($("<a>").text(label + ":"))
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+label+': '))
+		//.append("&nbsp;")
+		.append(html);
+		//.append("&nbsp;" + text);
+
+	$(appendTo).prepend(newEle);
+
+	return newEle;
+}
+
 function prependFlat(appendTo, label, text)
 {
 	var newEle = $("<li>")
 		//.append($("<a>").text(label + ":"))
-		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+label+':'))
-		.append("&nbsp;")
+		.append($("<a>").html('<i class="fa fa-random" aria-hidden="true"></i> '+label+': '))
+		//.append("&nbsp;")
 		.append($("<span>").text(text));
 		//.append("&nbsp;" + text);
 
@@ -720,7 +763,7 @@ function replaceFlat(replaceElement, label, text)
 }
 function appendFlat(appendTo, label, text, includeLink)
 {
-	var newEleLabel = $("<a>").text(label+':');
+	var newEleLabel = $("<a>").text(label+': ');
 	if(includeLink)
 	{
 		newEleLabel.prepend('<i class="fa fa-random" aria-hidden="true"></i> ');
@@ -734,7 +777,7 @@ function appendFlat(appendTo, label, text, includeLink)
 		//.append($("<a>").text(label + ":"))
 		//.append($("<a>").html(label+':'))
 		.append(newEleLabel)
-		.append("&nbsp;")
+		//.append("&nbsp;")
 		.append($("<span>").text(text));
 		//.append("&nbsp;" + text);
 	
@@ -744,14 +787,44 @@ function appendFlat(appendTo, label, text, includeLink)
 
 	return newEle;
 }
+function updateBoundElements(variableName)
+{
+	//Update all the nodes that depend on this
+	var affected = $('[data-source="'+variableName+'"]');
+	//console.log(varName,affected);
+	//affected.find("a").click();
+	affected.text(eval(variableName));
+	
+	var myListItem = $(affected).closest("li")
+	
+	//If there's a sibling name, that does not include me?
+	//var listSiblings = $(affected).closest("ul").find("li a:contains(Name)");
+	var listSiblings = $(affected)
+		.closest("ul").find("li")
+		.not(myListItem)
+		.find("a:contains(Name)");
+	if(listSiblings.length > 0)
+	{
+		listSiblings.click();
+	}
+}
+function bindTo(element,variable)
+{
+	element.attr("data-source",variable);
+}
 
 function rollAll()
 {
+	me  = {'self':'me'};
+	mom = {'self':'mom','affects':'surnameSibling();mom.surname'};
+	dad = {'self':'dad','affects':'surnameSibling();dad.surname'};
+	curr = {'self':'curr'};
+
 	var myrace = $('[name="myrace"]').val();
 	me.race = myrace;
 	mom.race = me.race;
 	dad.race = me.race;
-
+	
 	racial_siblings_mod = 0;
 	cha_mod = $('[name="myCHA"]').val();
 	switch (myrace)
@@ -815,13 +888,26 @@ function rollAll()
 		{
 			rollName(sublist, "mom.race", "Female", false, mom);
 			var momRaceNode = appendFlat(sublist, "Race", mom.race, false);
+			
 			//momRaceNode.find("a i").remove();
+			bindTo(momRaceNode.find("span"),"mom.race");
+			//momRaceNode.attr("data-source","mom.race");
+			//momRaceNode.find("a").click(function()
+			//{
+			//	$(this).siblings("span").text(mom.race);
+			//});
 		}
 		else
 		{
 			rollName(sublist, "dad.race", "Male", false, dad);
 			var dadRaceNode = appendFlat(sublist, "Race", dad.race, false);
 			//dadRaceNode.find("a i").remove();
+			bindTo(dadRaceNode.find("span"),"dad.race");
+			//dadRaceNode.attr("data-source","dad.race");
+			//dadRaceNode.find("a").click(function()
+			//{
+			//	$(this).siblings("span").text(dad.race);
+			//});
 		}
 
 		rollTable(parents, sublist);
@@ -910,7 +996,7 @@ function rollTableSimple(table)
 	if (!table)
 	{
 		//console.log("No table found");
-		return;
+		return false;
 	}
 
 	var diceElement = table.find('th [data-type="roll"]').first();
@@ -992,7 +1078,16 @@ function rollTable(table, root, caption, replaceElement)
 						varNames.forEach(function(varName)
 						{
 							//console.log(varName + "=" + varValue);
-							eval(varName + "=" + varValue);
+							if(/^[a-z_\.]+$/i.test(varName))
+							{
+								eval(varName + "=" + varValue);
+							}
+							else
+							{
+								console.log(varName,"not assigned");
+							}
+							
+							updateBoundElements(varName);
 						});
 					}
 				});
@@ -1052,6 +1147,12 @@ function rollTable(table, root, caption, replaceElement)
 			if (replaceElement)
 			{
 				replaceElement.replaceWith(thisItem);
+				
+				//Rerolling name when race is rerolled
+				if (title == "Race")
+				{
+					$(thisItem).closest("ul").find("li a:contains(Name)").click();
+				}
 			}
 			else
 			{
@@ -1148,6 +1249,13 @@ function rollTable(table, root, caption, replaceElement)
 								{
 									//Fixed race, no rerolling
 									var raceNode = appendFlat(appendTo, "Race", evalRace(dataRace), false);
+									bindTo(raceNode.find("span"),dataRace);
+									//raceNode.data("source",dataRace);
+									//raceNode.attr("data-source",dataRace);
+									//raceNode.find("a").click(function()
+									//{
+									//	$(this).siblings("span").text(evalRace(dataRace));
+									//});
 									return;
 								}
 							}
@@ -1627,10 +1735,10 @@ function accordionSort(accordion)
 <script id="Number of Siblings" type="text/csv">
 <span data-type="roll" data-sides="10">d10</span>||Siblings
 1|2|None
-3|4|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-modvar="racial_siblings_mod">1d3+racial adjustment</span>
-5|6|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="4" data-mod="1" data-modvar="racial_siblings_mod">1d4+1+racial adjustment</span>
-7|8|<span  data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="6" data-mod="2" data-modvar="racial_siblings_mod">1d6+2+racial adjustment</span>
-9|10|<span data-type="roll" data-race="raceSibling" data-surname="dad.surname?dad.surname:mom.surname" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-mod="3" data-modvar="racial_siblings_mod">1d3+3+racial adjustment</span>
+3|4|<span  data-type="roll" data-race="raceSibling()" data-surname="surnameSibling()" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-modvar="racial_siblings_mod">1d3+racial adjustment</span>
+5|6|<span  data-type="roll" data-race="raceSibling()" data-surname="surnameSibling()" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="4" data-mod="1" data-modvar="racial_siblings_mod">1d4+1+racial adjustment</span>
+7|8|<span  data-type="roll" data-race="raceSibling()" data-surname="surnameSibling()" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="6" data-mod="2" data-modvar="racial_siblings_mod">1d6+2+racial adjustment</span>
+9|10|<span data-type="roll" data-race="raceSibling()" data-surname="surnameSibling()" data-caption="Sibling" data-subtable='["Gender","Race","Name","Birth Order","Occupation","Alignment","Status","Relationship"]' data-sides="3" data-mod="3" data-modvar="racial_siblings_mod">1d3+3+racial adjustment</span>
 </script>
 <script id="Relationship" type="text/csv">
 <span data-type="roll" data-dice="3" data-sides="4">3d4</span>||Attitude
@@ -1709,16 +1817,16 @@ function accordionSort(accordion)
 </script>
 <script id="RandomPCRace" title="Race" type="text/csv">
 <span data-type="roll" data-sides="100">d100</span>||Race and parents race
-01|40|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Human</span>
-41|50|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Dwarf</span><span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
-51|60|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Elf</span><span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
-61|70|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Halfling</span>
-71|75|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Dragonborn</span>
-76|80|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>Gnome</span>
-81|85|<span data-type="variable" data-name="me.race">Half-Elf</span><span data-subtable="Half-Elf Parents" />
-86|90|<span data-type="variable" data-name="me.race">Half-Orc</span><span data-subtable="Half-Orc Parents" />
-91|95|<span data-type="variable" data-name="me.race">Tiefling</span><span data-subtable="Tiefling Parents" />
-96|100|<span data-type="variable" data-name='["me.race","mom.race","dad.race"]'>DM's choice</span>
+01|40|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Human</span>
+41|50|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Dwarf</span><span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
+51|60|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Elf</span><span data-type="variable" data-name="racial_siblings_mod" data-value="-2"/>
+61|70|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Halfling</span>
+71|75|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Dragonborn</span>
+76|80|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>Gnome</span>
+81|85|<span data-type="variable" data-name='["me.race","raceSibling()"]'>Half-Elf</span><span data-subtable="Half-Elf Parents" />
+86|90|<span data-type="variable" data-name='["me.race","raceSibling()"]'>Half-Orc</span><span data-subtable="Half-Orc Parents" />
+91|95|<span data-type="variable" data-name='["me.race","raceSibling()"]'>Tiefling</span><span data-subtable="Tiefling Parents" />
+96|100|<span data-type="variable" data-name='["me.race","mom.race","dad.race","raceSibling()"]'>DM's choice</span>
 </script>
 <script id="Family Lifestyle" type="text/csv">
 <span data-type="roll" data-dice="3" data-sides="6">3d6</span>||Lifestyle
@@ -4855,7 +4963,7 @@ function accordionSort(accordion)
 49|50|Kilvar
 51|52|Morgran
 53|54|Morkral
-55|55|Nalral
+55|56|Nalral
 57|58|Nordak
 59|60|Nuraval
 61|62|Oloric
